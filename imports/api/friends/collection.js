@@ -1,17 +1,17 @@
-import FriendSchema from './schema.js';
+import FriendsSchema from './schema.js';
 
-const Friend = new Mongo.Collection('friendRequest');
-export default Friend;
+const Friends = new Mongo.Collection('friends');
+export default Friends;
 
-Friend.attachSchema(FriendSchema);
+Friends.attachSchema(FriendsSchema);
 
-Friend.allow({
+Friends.allow({
     insert: () => true,
     update: () => true,
     remove: () => true
 });
 
-Friend.deny({
+Friends.deny({
     insert: () => false,
     update: () => false,
     remove: () => false

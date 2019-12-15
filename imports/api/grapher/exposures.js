@@ -2,5 +2,5 @@
 // when the server starts.
 
 import '/imports/api/users/expose.js';
-import '/imports/api/posts/expose.js';
-import '/imports/api/groups/expose.js';
+// import '/imports/api/posts/expose.js';
+// import '/imports/api/groups/expose.js';

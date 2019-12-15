@@ -1,18 +1,12 @@
-// import Comments from './collection.js';
+// import Friends from './friends.js';
 // import Users from '/imports/api/users/collection.js';
-// import Posts from '/imports/api/posts/collection.js';
+import {Users, Friends} from '../cols.js'
 
-// Comments.addLinks({
-//     user: {
-//         type: 'one',
-//         collection: Users,
-//         field: 'userId',
-//         index: true
-//     },
-//     post: {
-//         type: 'one',
-//         collection: Posts,
-//         field: 'postId',
-//         index: true
-//     }
-// });
+Friends.addLinks({
+    friends: {
+        type: 'many',
+        collection: Users,
+        field: 'users',
+        index: true
+    },
+});
