@@ -1,3 +1,10 @@
-// Import client startup through a single index entry point
+// Imports all required things for grapher to run
+import '/imports/api/grapher';
 
-import './routes.js';
+// Routes for our app
+import '/imports/routing';
+import './user-presence';
+
+// Styling
+import '/node_modules/bootstrap/dist/css/bootstrap.min.css'
+import '/imports/styling/main.less';
