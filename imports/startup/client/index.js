@@ -2,7 +2,8 @@
 import '/imports/api/grapher';
 
 // Routes for our app
-import '/imports/routing';
+// import '/imports/routing';
+import '/imports/routing/blaze.js'
 import './user-presence';
 
 // Styling
