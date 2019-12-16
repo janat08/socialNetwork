@@ -1,3 +1,8 @@
 <template name="findFriend">
-root
+{{#each friend in findFriends}}
+    {{friend.name}}
+    <button class="requestFriendJs">Request</button>
+    {{else}}
+    Loading
+{{/each}}
 </template>

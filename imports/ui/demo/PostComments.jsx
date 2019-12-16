@@ -30,5 +30,4 @@ const Comment = ({comment}) => {
 
 export default withQuery(({postId}) => query.clone({_id: postId}), {
     reactive: true,
-    single: true
 })(Comments)

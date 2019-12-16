@@ -1,5 +1,5 @@
 import './post.html';
-
+import { FlowRouter } from 'meteor/kadira:flow-router';
 Template.post.onCreated(function() {
   
 });

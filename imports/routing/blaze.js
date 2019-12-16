@@ -13,7 +13,7 @@ import '/imports/ui/pages/post/post.js'
 import '/imports/ui/pages/not-found/not-found.js'
 
 
-window.SubsCache = new SubsCache(5, 10);
+// window.SubsCache = new SubsCache(5, 10);
 
 
 // Set up all routes in the app
