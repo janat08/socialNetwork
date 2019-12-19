@@ -1,7 +1,7 @@
-import {friendRequests} from '../cols.js'
+import {FriendRequests} from '../cols.js'
 
 Meteor.methods({
-    "friendRequests.request"({requestee}){
-        Meteor.user()
+    "friendRequests.insert"(doc){
+        FriendRequests.insert(doc)
     }
 })

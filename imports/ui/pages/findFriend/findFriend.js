@@ -1,5 +1,6 @@
 import './findFriend.html';
 import { findFriends } from '/imports/api/queries.js'
+import {Posts} from '/imports/api/cols.js'
 
 Template.findFriend.onCreated(function() {
     this.autorun(() => {

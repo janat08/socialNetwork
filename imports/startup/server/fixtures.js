@@ -35,137 +35,57 @@ Meteor.startup(() => {
 
     let users = [];
     _.each(_.range(USERS), (idx) => {
-        createUser(`asdf${idx + 1}@asdf`, 'asdfasdf')
-
+        users.push(createUser(`asdf${idx + 1}@asdf`, 'asdfasdf'))
     });
 
-
-    users = Users.find().fetch()
-    users = users.map(x => {
-        x.links = {
-            PostLink: Users.getLink(x, 'posts'),
-            FriendsLink: Users.getLink(x, 'friends'),
-            RequestsLink: Users.getLink(x, 'requests'),
-            WallLink: Users.getLink(x, 'wall'),
-        }
-        return x
-    })
-
-
     _.each(users, (user) => {
-        const { PostLink, RequestsLink, FriendsLink, WallLink } = user.links
 
         asdf()
 
-        function asdf(i = 0, requests = 0, friends = 0) {
-            const { links } = users[i]
+        function asdf(i = 0, requests = 0, friends = 0, none = 0) {
             const target = users[i]
-            console.log(i, 111111, typeof target, typeof user)
             if (i == users.length - 1) {
                 return
             }
 
-            if (Friends.createQuery({
-                    target: 1,
-                    owner: {
-                        // $filters: { _id: target._id },
-                        createdAt: 1,
-                    }
-                }).fetch().length  ||
-                RequestsLink.fetch({ $or: [{ requestee: target._id }, { requestee: user._id }] }).length || target._id == user._id) {
-                console.log("skipping")
-                return asdf(i + 1, requests, friends)
+            if (FriendRequests.find({ $or: [{ requestee: target._id }, { requestee: user._id }] }).count() ||
+                Friends.find({owner: {$in: [target._id, user._id]}}).count()
+                || target._id == user._id) {
+                return asdf(i + 1)
             }
             else {
-                if (requests >= friends) {
-                    const friend = {
-                        target: target._id,
-                        type: "asdf",
-                    }
-                    FriendsLink.add(friend)
-                    const friend1 = {
-                        target: user._id,
-                        type: "asdf",
-                    }
-                    links.FriendsLink.add(friend1)
-                    friends += 1
+                if (i%3 == 0) {
+                    Meteor.call('friends.insert', {firstId: target._id, secondId: user._id})
                 }
-                else {
+                else if (i%3 == 1){
                     const friend = {
                         status: "bad",
                         date: new Date(),
                         requestee: target._id,
                         requester: user._id,
                     }
-                    RequestsLink.add(friend)
-                    requests += 1
+                    Meteor.call('friendRequests.insert', friend)
                 }
-                return asdf(i + 1, requests, friends)
+                return asdf(i + 1)
             }
         }
         // console.log(Friends.find().fetch(), Users.find().fetch())
 
         const user1 = Users.findOne(user._id)
         // console.log(user1)
-        // _.each(user1.friendsIds, (idx, i) => {
+        _.each(user1.friendsIds, (idx, i) => {
 
-        //     let post = {
-        //         title: `User Post - ${idx._id}`,
-        //         content: _.sample(POSTS),
-        //         // ownerIds: user1.friendsIds.map(x => x._id),
-        //         approved: false,
-        //         authorId: user1._id,
-        //     };
-        //     post = PostLink.add(post);
-        //     const owners = Posts.getLink(post, 'owners')
+            let post = {
+                title: `User Post - ${idx._id}`,
+                content: _.sample(POSTS),
+                ownerIds: user1.friendsIds.map(x => x._id),
+                approved: false,
+                authorId: user1._id,
+            };
+            post = Meteor.call('posts.insert', post)
 
-        //     let item
-        //     if (i % 2) {
-        //         item = owners.add({ approved: true })
-        //     }
-        //     else {
-        //         item = owners.add({ approved: false })
-        //     }
-        //     console.log(item.object.object._id, idx)
-
-        //     const uOwners = Users.getLink(idx._id, 'wall')
-        //     uOwners.add(item.object._id) 
-
-        // })
-
-        // _.each(_.range(POST_PER_USER), (idx) => {
-        //     let post = {
-        //         title: `User Post - ${idx}`
-        //     }; 
-
-        //     userPostLink.add(post);
-        //     const postCommentsLink = Posts.getLink(post, 'comments');
-        //     const postTagsLink = Posts.getLink(post, 'tags');
-        //     const postGroupLink = Posts.getLink(post, 'group');
-        //     postGroupLink.set(_.sample(groups), {random: Random.id()});
-
-        //     postTagsLink.add(_.sample(tags));
-
-        //     _.each(_.range(COMMENTS_PER_POST), (idx) => {
-        //         let comment = {
-        //             text: _.sample(COMMENT_TEXT_SAMPLES)
-        //         };
-
-        //         postCommentsLink.add(comment);
-        //         Comments.getLink(comment, 'user').set(_.sample(users));
-        //     })
-        // })
+        })
     });
-    // console.log('query', wall.clone, wall.fetch())
 
-    console.log(users[0]._id, );
-    const id = users[0]._id
-    console.log(Friends.createQuery({
-        owner: {
-            $filters: { _id: id },
-            _id: 1,
-        }
-    }).fetch())
-    // console.log(Users.getLink(users[0], 'friends').fetch())
 
 });

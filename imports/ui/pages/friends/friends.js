@@ -1,5 +1,6 @@
 import './friends.html';
 import { friends } from '/imports/api/queries.js'
+import {Posts} from '/imports/api/cols.js'
 
 Template.friends.onCreated(function() {
     this.autorun(() => {

@@ -1,10 +1,11 @@
 import './redis';
 
-// Imports all needed by grapher to be used
-import '/imports/api/grapher';
+import '/imports/api/friendRequests/frMethods.js'
+import '/imports/api/friends/fMethods.js'
+import '/imports/api/owners/oMethods.js'
+import '/imports/api/posts/pMethods.js'
 
-// Note: the file below is not added on the client, exposure is a server-side concern.
-import '/imports/api/grapher/exposures';
+import '/imports/api/publications.js'
 
 // Loads the demo data
 import './fixtures.js';

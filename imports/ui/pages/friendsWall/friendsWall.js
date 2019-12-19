@@ -1,5 +1,7 @@
 import './friendsWall.html';
 import { FlowRouter } from 'meteor/kadira:flow-router';
+import {Posts} from '/imports/api/cols.js'
+
 Template.friendsWall.onCreated(function() {
 
     
