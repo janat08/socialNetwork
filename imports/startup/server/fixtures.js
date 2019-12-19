@@ -3,7 +3,7 @@
 import { Users, Posts, Friends, FriendRequests, Owners } from '/imports/api/cols.js'
 import { createQuery } from 'meteor/cultofcoders:grapher';
 
-const USERS = 3;
+const USERS = 10;
 const POST_PER_USER = 10;
 const REQUESTS = 10
 const FRIENDS = 10
@@ -35,8 +35,8 @@ Meteor.startup(() => {
 
     let users = [];
     _.each(_.range(USERS), (idx) => {
-            createUser(`asdf${idx + 1}@asdf`, 'asdfasdf')
-        
+        createUser(`asdf${idx + 1}@asdf`, 'asdfasdf')
+
     });
 
 
@@ -60,13 +60,20 @@ Meteor.startup(() => {
         function asdf(i = 0, requests = 0, friends = 0) {
             const { links } = users[i]
             const target = users[i]
+            console.log(i, 111111, typeof target, typeof user)
             if (i == users.length - 1) {
                 return
             }
 
-            if (FriendsLink.fetch({ owner: target._id }).length ||
-                RequestsLink.fetch({ $or: [{ requestee: target._id }, { requestee: user._id }] }).length) {
-
+            if (Friends.createQuery({
+                    target: 1,
+                    owner: {
+                        // $filters: { _id: target._id },
+                        createdAt: 1,
+                    }
+                }).fetch().length  ||
+                RequestsLink.fetch({ $or: [{ requestee: target._id }, { requestee: user._id }] }).length || target._id == user._id) {
+                console.log("skipping")
                 return asdf(i + 1, requests, friends)
             }
             else {
@@ -96,35 +103,35 @@ Meteor.startup(() => {
                 return asdf(i + 1, requests, friends)
             }
         }
-        console.log(Friends.find().fetch(), Users.find().fetch())
+        // console.log(Friends.find().fetch(), Users.find().fetch())
 
         const user1 = Users.findOne(user._id)
-        console.log(user1)
-        _.each(user1.friendsIds, (idx, i) => {
+        // console.log(user1)
+        // _.each(user1.friendsIds, (idx, i) => {
 
-            let post = {
-                title: `User Post - ${idx._id}`,
-                content: _.sample(POSTS),
-                // ownerIds: user1.friendsIds.map(x => x._id),
-                approved: false,
-                authorId: user1._id,
-            };
-            post = PostLink.add(post);
-            const owners = Posts.getLink(post, 'owners')
+        //     let post = {
+        //         title: `User Post - ${idx._id}`,
+        //         content: _.sample(POSTS),
+        //         // ownerIds: user1.friendsIds.map(x => x._id),
+        //         approved: false,
+        //         authorId: user1._id,
+        //     };
+        //     post = PostLink.add(post);
+        //     const owners = Posts.getLink(post, 'owners')
 
-            let item
-            if (i % 2) {
-                item = owners.add({ approved: true })
-            }
-            else {
-                item = owners.add({ approved: false })
-            }
-            console.log(item.object.object._id, idx)
+        //     let item
+        //     if (i % 2) {
+        //         item = owners.add({ approved: true })
+        //     }
+        //     else {
+        //         item = owners.add({ approved: false })
+        //     }
+        //     console.log(item.object.object._id, idx)
 
-            const uOwners = Users.getLink(idx._id, 'wall')
-            uOwners.add(item.object._id) 
+        //     const uOwners = Users.getLink(idx._id, 'wall')
+        //     uOwners.add(item.object._id) 
 
-        })
+        // })
 
         // _.each(_.range(POST_PER_USER), (idx) => {
         //     let post = {
@@ -150,5 +157,15 @@ Meteor.startup(() => {
         // })
     });
     // console.log('query', wall.clone, wall.fetch())
-    console.log('[ok] fixtures have been loaded.');
+
+    console.log(users[0]._id, );
+    const id = users[0]._id
+    console.log(Friends.createQuery({
+        owner: {
+            $filters: { _id: id },
+            _id: 1,
+        }
+    }).fetch())
+    // console.log(Users.getLink(users[0], 'friends').fetch())
+
 });
