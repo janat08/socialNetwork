@@ -7,7 +7,7 @@ Template.dashboard.onCreated(function() {
             _id: Meteor.userId(),
             approved: false,
         }
-        this.query = wall.clone({ params });
+        this.query = wall.clone( params );
 
         this.handle = this.query.subscribe(); // handle.ready()
     })
@@ -17,7 +17,10 @@ Template.dashboard.helpers({
     posts(){
         const templ = Template.instance()
         const {query, handle} = templ
-        return query.fetch().posts
+        const res = query.fetch()[0].wall
+                console.log(res, query.fetch())
+
+        return res
     }
 });
 

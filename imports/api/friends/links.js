@@ -3,10 +3,8 @@
 import {Users, Friends} from '../cols.js'
 
 Friends.addLinks({
-    friends: {
-        type: 'many',
+    owner: {
         collection: Users,
-        field: 'users',
-        index: true
+        inversedBy: "friends",
     },
 });

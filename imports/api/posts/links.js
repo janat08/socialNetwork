@@ -3,13 +3,13 @@
 // import Comments from '/imports/api/comments/collection.js';
 // import Tags from '/imports/api/tags/collection.js';
 // import Groups from '/imports/api/groups/collection.js';
-import {Users, Posts} from '../cols.js'
+import {Owners, Posts, Users} from '../cols.js'
 
 Posts.addLinks({
-    owner: {
-        type: 'one',
-        collection: Users,
-        field: 'ownerId',
+    owners: {
+        type: 'many',
+        collection: Owners,
+        field: 'ownerIds',
         index: true
     },
     author: {

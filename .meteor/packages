@@ -26,6 +26,7 @@ kadira:blaze-layout     # Layout manager for blaze (works well with FlowRouter)
 session@1.2.0
 accounts-base@1.4.5
 accounts-password@1.5.1
+accounts-ui
 react-meteor-data
 alanning:roles
 aldeed:simple-schema

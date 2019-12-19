@@ -1,15 +1,13 @@
 import SimpleSchema from 'simpl-schema';
 
 export default new SimpleSchema({
-    _id: {type: String},
-    emails: {type: Array},
-    'emails.$': {type: Object},
-    'emails.$.address': {type: String},
-    'emails.$.verified': {type: Boolean},
-    createdAt: {type: Date},
-    services: {type: Object, blackbox: true},
-    roles: {type: Array},
-    'roles.$': {type: String},
+    _id: { type: String },
+    emails: { type: Array },
+    'emails.$': { type: Object },
+    'emails.$.address': { type: String },
+    'emails.$.verified': { type: Boolean },
+    createdAt: { type: Date },
+    services: { type: Object, blackbox: true },
     profile: {
         type: Object,
         optional: true
@@ -22,12 +20,22 @@ export default new SimpleSchema({
         type: String,
         optional: true
     },
-
-    groupIds: {
-        type: Array,
-        optional: true,
+    friendsIds: {
+        type: Array
     },
-    'groupIds.$': {
-        type: String,
+    "friendsIds.$": {
+        type: SimpleSchema.RegEx.Id
+    },
+    requestsIds: {
+        type: Array
+    },
+    "requestsIds.$": {
+        type: SimpleSchema.RegEx.Id
+    },
+    wallIds: {
+        type: Array
+    },
+    "wallIds.$": {
+        type: SimpleSchema.RegEx.Id
     },
 });

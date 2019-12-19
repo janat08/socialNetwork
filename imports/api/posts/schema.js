@@ -1,12 +1,13 @@
 import SimpleSchema from 'simpl-schema';
 export default new SimpleSchema({
-    ownerId: {
-        type: SimpleSchema.RegEx.Id
+    ownerIds: {
+        type: Array,
+        optional: true,
     },
-    approved: {
-        type: Boolean
+    "ownerIds.$": {
+        type: SimpleSchema.RegEx.Id,
     },
-    author: {
+    authorId: {
         type: SimpleSchema.RegEx.Id
     },
     content: {
@@ -16,5 +17,8 @@ export default new SimpleSchema({
     imageId: {
         type: SimpleSchema.RegEx.Id,
         optional: true,
+    },
+    title: {
+        type: String,
     }
 })

@@ -2,28 +2,28 @@
 // import Comments from '/imports/api/comments/collection.js';
 // import Posts from '/imports/api/posts/collection.js';
 // import Groups from '/imports/api/groups/collection.js';
-import { Users, Friends, Posts, FriendRequests } from '../cols.js'
+import { Users, Friends, Posts, FriendRequests, Owners } from '../cols.js'
 
 Users.addLinks({
     posts: {
-        inversedBy: 'wall',
+        inversedBy: 'author',
         collection: Posts
     },
     friends: {
         collection: Friends,
-        field: 'friends',
+        field: 'friendsIds',
         type: 'many',
         metadata: true,
     },
     requests: {
         collection: FriendRequests,
-        field: 'requestor',
+        field: 'requestsIds',
         type: 'many',
     },
     wall: {
-        collection: Posts,
-        field: 'recipient',
+        collection: Owners,
         type: 'many',
+        field: 'wallIds'
     }
 });
 

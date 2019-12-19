@@ -2,12 +2,20 @@ import { createQuery } from 'meteor/cultofcoders:grapher';
 
 export const wall = createQuery({
     users: {
-        $filter({ filters, params }) {
-            filters._id = params._id
-            filters.approved = params.approved
+        $filter({ filters, options, params }) {
+            const { _id, approved } = params
+            if (_id) {
+                filters._id = params._id
+            }
+            if (approved) {
+                filters.approved = params.approved
+            }
+            console.log(params, filters)
         },
-        postsIds: 1,
-        posts: {
+        profile: 1,
+        createdAt: 1,
+        services: 1,
+        wall: {
             type: 1,
             author: {
                 name: 1
@@ -62,5 +70,4 @@ export const findFriends = createQuery({
             }
         }
     }
-}
 })

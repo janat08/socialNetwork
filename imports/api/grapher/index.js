@@ -7,7 +7,7 @@
 // import '/imports/api/posts/collection';
 // import '/imports/api/tags/collection';
 // import '/imports/api/users/collection';
-import {Posts, Users, Friends, FriendRequest} from '../cols.js'
+import {Posts, Users, Friends, FriendRequest, Owners} from '../cols.js'
 
 // Links are imported outside collection level
 // The reason is that we may have two collections referencing each other, and this results
@@ -17,6 +17,7 @@ import '/imports/api/posts/links';
 import '/imports/api/users/links';
 import '/imports/api/friends/links';
 import '/imports/api/friendRequests/links';
+import '/imports/api/owners/links';
 
 // We also need to import the named queries
 // Otherwise they will be unusable without specifically importing them.

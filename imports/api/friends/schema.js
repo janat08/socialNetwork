@@ -1,12 +1,13 @@
 import SimpleSchema from 'simpl-schema';
 export default new SimpleSchema({
-    kind: {
+    type: {
         type: String
     },
-    users: {
-        type: Array,
-        minCount: 2,
-        maxCount: 2
+    owner: {
+        type: String,
+        optional: true,
     },
-    "users.$": SimpleSchema.RegEx.Id
+    target: {
+        type: String
+    }
 });
