@@ -14,10 +14,14 @@ Template.dashboard.helpers({
     posts() {
         const templ = Template.instance()
         const { query, handle } = templ
-        const res = Owners.find({ ownerId: Meteor.userId(), approved: false }).map(x => {
-            return Posts.find(x.postId)
-        })
-
+        const owners = Owners.find({ ownerId: Meteor.userId(), approved: false }).fetch().map(x=>x)
+        console.log(owners)
+        const res = Posts.find({
+            _id: {
+                $in: owners
+            }
+        }).fetch()
+        console.log(res)
         return res
     }
 });

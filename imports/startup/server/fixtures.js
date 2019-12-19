@@ -3,7 +3,7 @@
 import { Users, Posts, Friends, FriendRequests, Owners } from '/imports/api/cols.js'
 import { createQuery } from 'meteor/cultofcoders:grapher';
 
-const USERS = 10;
+const USERS = 20;
 const POST_PER_USER = 10;
 const REQUESTS = 10
 const FRIENDS = 10
@@ -39,25 +39,29 @@ Meteor.startup(() => {
     });
 
     _.each(users, (user) => {
-
+        var skipped = 0
+        var written = 0
         asdf()
 
-        function asdf(i = 0, requests = 0, friends = 0, none = 0) {
+        function asdf(i = 0,) {
             const target = users[i]
             if (i == users.length - 1) {
                 return
             }
 
             if (FriendRequests.find({ $or: [{ requestee: target._id }, { requestee: user._id }] }).count() ||
-                Friends.find({owner: {$in: [target._id, user._id]}}).count()
-                || target._id == user._id) {
+                Friends.find({ owner: target._id, target: user._id}).count() ||
+                target._id == user._id) {
+                //  skipped+=1
+// console.log('skipping', Friends.find({ owner: target._id, target: user._id}).count(), FriendRequests.find({ $or: [{ requestee: target._id }, { requestee: user._id }] }).count())
                 return asdf(i + 1)
             }
             else {
-                if (i%3 == 0) {
-                    Meteor.call('friends.insert', {firstId: target._id, secondId: user._id})
+                // written+=1
+                if (i % 2 == 0) {
+                    Meteor.call('friends.insert', { firstId: target._id, secondId: user._id })
                 }
-                else if (i%3 == 1){
+                else if (i % 2 == 1) {
                     const friend = {
                         status: "bad",
                         date: new Date(),
@@ -69,23 +73,21 @@ Meteor.startup(() => {
                 return asdf(i + 1)
             }
         }
-        // console.log(Friends.find().fetch(), Users.find().fetch())
-
-        const user1 = Users.findOne(user._id)
-        // console.log(user1)
-        _.each(user1.friendsIds, (idx, i) => {
-
+        // console.log(skipped, written)
+    });
+    users = Users.find().fetch()
+    _.each(users, (idx, i) => {
+        if (idx.friendIds) {
             let post = {
                 title: `User Post - ${idx._id}`,
                 content: _.sample(POSTS),
-                ownerIds: user1.friendsIds.map(x => x._id),
+                ownerIds: idx.friendIds.map(x=>Users.findOne(Friends.findOne(x).target)._id),
                 approved: false,
-                authorId: user1._id,
+                authorId: idx._id,
             };
             post = Meteor.call('posts.insert', post)
+        }
 
-        })
-    });
-
+    })
 
 });
