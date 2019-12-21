@@ -4,7 +4,7 @@ Meteor.methods({
     "friends.insert" ({ firstId, secondId, type = 'basic' }) {
         const first = Friends.insert({ owner: firstId, target: secondId, type })
         const second = Friends.insert({ owner: secondId, target: firstId, type })
-        Users.update(firstId, { $addToSet: { friendIds: first } })
+        Users.update(firstId, { $addToSet: { friendIds: first } }) 
         Users.update(secondId, { $addToSet: { friendIds: second } })
     }
 })

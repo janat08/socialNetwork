@@ -10,9 +10,10 @@ const FRIENDS = 10
 const POSTS = [
     'Good', 'Bad', 'Neutral'
 ];
+const FRIEND_TYPES = ['basic', 'family']
 
-const createUser = (email, password) => {
-    const userId = Accounts.createUser({ email, password });
+const createUser = (email, password, username) => {
+    const userId = Accounts.createUser({ email, password, username });
     return Users.findOne(userId);
 };
 
@@ -27,67 +28,70 @@ const wall = createQuery({
 });
 
 Meteor.startup(() => {
-    Posts.remove({})
-    Owners.remove({})
-    Users.remove({})
-    Friends.remove({})
-    FriendRequests.remove({})
+    if (!Users.find().count() || !true) {
+        Posts.remove({})
+        Owners.remove({})
+        Users.remove({})
+        Friends.remove({})
+        FriendRequests.remove({})
 
-    let users = [];
-    _.each(_.range(USERS), (idx) => {
-        users.push(createUser(`asdf${idx + 1}@asdf`, 'asdfasdf'))
-    });
 
-    _.each(users, (user) => {
-        var skipped = 0
-        var written = 0
-        asdf()
+        let users = [];
+        _.each(_.range(USERS), (idx) => {
+            users.push(createUser(`asdf${idx + 1}@asdf`, 'asdfasdf', idx + 1 + "user"))
+        });
 
-        function asdf(i = 0,) {
-            const target = users[i]
-            if (i == users.length - 1) {
-                return
-            }
+        _.each(users, (user) => {
+            var skipped = 0
+            var written = 0
+            asdf()
 
-            if (FriendRequests.find({ $or: [{ requestee: target._id }, { requestee: user._id }] }).count() ||
-                Friends.find({ owner: target._id, target: user._id}).count() ||
-                target._id == user._id) {
-                //  skipped+=1
-// console.log('skipping', Friends.find({ owner: target._id, target: user._id}).count(), FriendRequests.find({ $or: [{ requestee: target._id }, { requestee: user._id }] }).count())
-                return asdf(i + 1)
-            }
-            else {
-                // written+=1
-                if (i % 2 == 0) {
-                    Meteor.call('friends.insert', { firstId: target._id, secondId: user._id })
+            function asdf(i = 0, ) {
+                const target = users[i]
+                if (i == users.length - 1) {
+                    return
                 }
-                else if (i % 2 == 1) {
-                    const friend = {
-                        status: "bad",
-                        date: new Date(),
-                        requestee: target._id,
-                        requester: user._id,
+
+                if (FriendRequests.find({ $or: [{ requestee: target._id }, { requestee: user._id }] }).count() ||
+                    Friends.find({ owner: target._id, target: user._id }).count() ||
+                    target._id == user._id) {
+                    //  skipped+=1
+                    // console.log('skipping', Friends.find({ owner: target._id, target: user._id}).count(), FriendRequests.find({ $or: [{ requestee: target._id }, { requestee: user._id }] }).count())
+                    return asdf(i + 1)
+                }
+                else {
+                    // written+=1
+                    if (i % 2 == 0) {
+                        Meteor.call('friends.insert', { firstId: target._id, secondId: user._id, type: _.sample(FRIEND_TYPES) })
                     }
-                    Meteor.call('friendRequests.insert', friend)
+                    else if (i % 2 == 1) {
+                        const request = {
+                            status: "bad",
+                            date: new Date(),
+                            requestee: target._id,
+                            requester: user._id,
+                        }
+                        Meteor.call('friendRequests.insert', request)
+                    }
+                    return asdf(i + 1)
                 }
-                return asdf(i + 1)
             }
-        }
-        // console.log(skipped, written)
-    });
-    users = Users.find().fetch()
-    _.each(users, (idx, i) => {
-        if (idx.friendIds) {
-            let post = {
-                title: `User Post - ${idx._id}`,
-                content: _.sample(POSTS),
-                ownerIds: idx.friendIds.map(x=>Users.findOne(Friends.findOne(x).target)._id),
-                approved: false,
-                authorId: idx._id,
-            };
-            post = Meteor.call('posts.insert', post)
-        }
+        });
+        users = Users.find().fetch()
+        _.each(users, (idx, i) => {
+            if (idx.friendIds) {
+                let post = {
+                    title: `User Post - ${idx._id}`,
+                    content: _.sample(POSTS),
+                    friendIds: idx.friendIds,
+                    authorId: idx._id,
+                };
+                post = Meteor.call('posts.insert', post)
+            }
+        })
 
-    })
-
+        _.each(Owners.find().fetch(), (owner) => {
+            Owners.update(owner._id, { $set: { approved: _.sample([false, true]) } })
+        })
+    }
 });

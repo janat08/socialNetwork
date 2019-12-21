@@ -1,10 +1,16 @@
 <template name="dashboard">
-{{#each post in posts}}
-    {{post.title}}
-    {{post.content}}
-    {{post.imageId}}
-    {{post.author.name}}
+        <ul>
+    {{#each posts}}
+<li>
+    {{title}}
+    {{content}}
+    {{imageId}}
+    {{username}}
+    <button class='approveJs'>approve</button>
+    <button class='rejectJs'>reject</button>
+</li>
     {{else}}
     Loading
 {{/each}}
+    </ul>
 </template>

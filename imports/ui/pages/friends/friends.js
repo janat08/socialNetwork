@@ -1,26 +1,16 @@
 import './friends.html';
-import { friends } from '/imports/api/queries.js'
-import {Posts} from '/imports/api/cols.js'
+import { Friends } from '/imports/api/cols.js'
 
 Template.friends.onCreated(function() {
-    this.autorun(() => {
-        const params = {
-            _id: Meteor.userId(),
-        }
-        this.query = friends.clone({ params });
-
-        this.handle = this.query.subscribe(); // handle.ready()
-    })
+    SubsCache.subscribe('friends.all')
 });
 
 Template.friends.helpers({
-    posts() {
-        const templ = Template.instance()
-        const { query, handle } = templ
-        return query.fetch().friends.reduce((a,x)=>{
-            a[x.type] = x
-            return a
-        }, {})
+    friends() {
+        const basic = Friends.find({ owner: Meteor.userId() }).fetch().filter(x => x.type == 'basic').map(mapUser)
+        const family = Friends.find({ owner: Meteor.userId() }).fetch().filter(x => x.type == 'family').map(mapUser)
+
+        return {family, basic}
     }
 });
 
@@ -29,3 +19,9 @@ Template.friends.events({
 });
 
 Template.friends.onDestroyed(function() {})
+
+
+function mapUser(friend) {
+    friend.target = Meteor.users.findOne(friend.target)
+    return friend
+}

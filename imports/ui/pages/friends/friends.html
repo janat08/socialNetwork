@@ -1,10 +1,22 @@
 <template name="friends">
-{{#each post in posts}}
-    {{post.title}}
-    {{post.content}}
-    {{post.imageId}}
-    {{post.author.name}}
+    <ul>
+        {{#each friends.family}}
+        <li>
+{{type}}
+<a href='friendsWall/{{_id}}'>{{target.username}}</a>
+</li>
     {{else}}
     Loading
 {{/each}}
+    </ul>
+    <ul>
+        {{#each friends.basic}}
+        <li>
+{{type}}
+<a href='friendsWall/{{_id}}'>{{target.username}}</a>
+</li>
+    {{else}}
+    Loading
+{{/each}}
+    </ul>
 </template>

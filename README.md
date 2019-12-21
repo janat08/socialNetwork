@@ -4,3 +4,6 @@ update readme for flatpickr to import styles
 
 approved is being denormalized quite a lot, perhaps it would be best to create 
 separate collection with just two documents, or something.
+
+
+add friend types, and these types in friends list
