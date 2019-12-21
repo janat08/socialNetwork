@@ -11,20 +11,24 @@ Template.friendsWall.onCreated(function() {
     this.autorun(() => {
         const friend = FlowRouter.getParam('friendId')
         const target = Friends.findOne(friend)
-        this.friendship.set(target)
-        this.target.set(Users.findOne(target.target))
+        if (target) {
+            this.friendship.set(target)
+        }
     })
 });
 
 Template.friendsWall.helpers({
     posts() {
-        const { target, friendship } = Template.instance()
+        const { friendship } = Template.instance()
         if (friendship.get()) {
-            return Owners.find({ ownerId: friendship.get().target, approved: true })
-
+            const owners = Owners.find({ ownerId: friendship.get().target, approved: true }).fetch()
+            const posts = Posts.find({ _id: { $in: owners.map(x => x.postId) } })
+            return posts
         }
     },
-
+    friendship(){
+        return Template.instance().friendship.get()
+    }
 });
 
 Template.friendsWall.events({

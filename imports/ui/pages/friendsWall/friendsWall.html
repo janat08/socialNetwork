@@ -1,5 +1,14 @@
 <template name="friendsWall">
-{{#each posts}}
-sdf
+    {{#with friendship}}
+        <a href='/post/{{_id}}'>Post to this friend</a>
+        {{/with}}
+    <ul>
+        {{#each posts}}
+        <li>
+            {{title}}
+{{content}}
+        </li>
 {{/each}}
+    </ul>
+
 </template>

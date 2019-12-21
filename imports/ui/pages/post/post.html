@@ -1,3 +1,23 @@
 <template name="post">
-root
+
+<form id='post'>
+    {{#each currentUpload}}
+        {{#if upload}}
+    Uploading <b>{{upload.file.name}}</b>:
+    <span id="progress">{{upload.progress.get}}%</span>
+    {{else}}
+        <img src="{{link}}" alt="{{name}}" />
+        <button class='jsRemovePic'>Remove</button>
+    {{/if}}
+  {{/each}}
+        <input id="fileInput" type="file" multiple/>
+      Don't forget to click save Product, after adding images
+      
+      
+   <input name='title'>
+<input name='content'>
+<input type='submit'  value="submit">
+</form>
+
+
 </template>
