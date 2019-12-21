@@ -1,30 +1,32 @@
 import './findFriend.html';
 import { findFriends } from '/imports/api/queries.js'
-import {Posts} from '/imports/api/cols.js'
+import {Posts, Users} from '/imports/api/cols.js'
 
 Template.findFriend.onCreated(function() {
-    this.autorun(() => {
-        const params = {
-            _id: Meteor.userId(),
-        }
-        this.query = findFriends.clone({ params });
-
-        this.handle = this.query.subscribe(); // handle.ready()
-    })
+    SubsCache.subscribe('users.all')
+    this.username = new ReactiveVar("")
 });
 
 Template.findFriend.helpers({
     findFriends() {
-        const templ = Template.instance()
-        const { query, handle } = templ
-        return query.fetch().friends
+        const {username} = Template.instance()
+        const reg = new RegExp(escapeRegex(username.get()), 'gi')
+        return Users.find({username: reg})
     }
 });
 
 Template.findFriend.events({
     'click .requestFriendJs'(ev, templ){
-        Meteor.call('requestFriend.request', {requestee: this._id})
+        Meteor.call('requestFriend.request', {requester: Meteor.userId(), requestee: this._id})
     },
+    'keyup .searchJs'(ev, templ){
+        console.log(ev.target.value)
+        templ.username.set(ev.target.value)
+    }
 });
 
 Template.findFriend.onDestroyed(function() {})
+
+function escapeRegex(text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+};

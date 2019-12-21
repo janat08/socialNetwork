@@ -18,11 +18,9 @@ Template.requests.helpers({
 
 Template.requests.events({
     'click .ignoreJs'(ev, templ) {
-        console.log(this)
         Meteor.call('friendRequests.ignore', this)
     },
     'click .acceptJs'(ev, templ) {
-        console.log(this)
         Meteor.call('friendRequests.accept', this)
 
     },

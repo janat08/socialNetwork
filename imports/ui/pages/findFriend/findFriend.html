@@ -1,6 +1,7 @@
 <template name="findFriend">
-{{#each friend in findFriends}}
-    {{friend.name}}
+Search by username: <input class='searchJs'>
+{{#each findFriends}}
+    {{username}}
     <button class="requestFriendJs">Request</button>
     {{else}}
     Loading
