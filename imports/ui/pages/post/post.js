@@ -44,12 +44,12 @@ Template.post.events({
             title: { value: tV },
             content: { value: cV },
         } = target
-        var date = templ.selected.get()
 
         const images = templ.currentUpload
 
         var document = {
             imageIds: images.map(x => x.doc._id),
+            friendIds: [FlowRouter.getParam('friendId')],
             title: tV,
             content: cV
         }
@@ -59,7 +59,7 @@ Template.post.events({
                 alert(err)
             }
             else {
-                // FlowRouter.go('App.auction', { auctionId: res })
+                FlowRouter.go('App.friends')
             }
         });
     },

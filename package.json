@@ -18,6 +18,7 @@
     "bootstrap": "^3.3.7",
     "faker": "^3.1.0",
     "meteor-node-stubs": "~0.2.0",
+    "moment": "^2.24.0",
     "object-sizeof": "^1.1.1",
     "prop-types": "^15.6.0",
     "react-ace": "^3.5.0",

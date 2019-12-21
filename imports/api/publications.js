@@ -1,4 +1,4 @@
-import {Friends, Posts, Users, Owners, FriendRequests } from './cols.js'
+import {Friends, Posts, Users, Owners, FriendRequests, ImagesCollection } from './cols.js'
 
 Meteor.publish('friends.all', function(){
     return Friends.find()
@@ -14,4 +14,7 @@ Meteor.publish('owners.all', function(){
 })
 Meteor.publish('friendRequests.all', function(){
     return FriendRequests.find()
+})
+Meteor.publish('images.all', function(){
+    return ImagesCollection.find()
 })

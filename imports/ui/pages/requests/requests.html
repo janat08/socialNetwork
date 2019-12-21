@@ -1,3 +1,15 @@
 <template name="requests">
-root
+<ul>
+    {{#each requests}}
+    <li>
+        {{status}}
+        {{date}}
+        {{username}}
+        <button class='acceptJs'>accept</button>
+        <button class='rejectJs'>reject</button>
+        <button class='ignoreJs'>ignore</button>
+    </li>
+    {{/each}}
+</ul>
+
 </template>

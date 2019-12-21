@@ -62,7 +62,7 @@ Meteor.startup(() => {
                 else {
                     // written+=1
                     if (i % 2 == 0) {
-                        Meteor.call('friends.insert', { firstId: target._id, secondId: user._id, type: _.sample(FRIEND_TYPES) })
+                        Meteor.call('friends.insert', { firstId: target._id, requesteeId: user._id, type: _.sample(FRIEND_TYPES) })
                     }
                     else if (i % 2 == 1) {
                         const request = {

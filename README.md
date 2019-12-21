@@ -7,3 +7,6 @@ separate collection with just two documents, or something.
 
 
 add friend types, and these types in friends list
+posts, make sure those only work between friends
+add post to whole list functionality
+remove allow/deny?

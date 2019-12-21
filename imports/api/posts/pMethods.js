@@ -2,8 +2,10 @@ import { Posts, Users, Friends } from '../cols.js'
 
 Meteor.methods({
     "posts.insert" ({ friendIds, authorId, ...rest }) {
+        if (this.connection){
+            authorId = this.userId
+        }
         const postId = Posts.insert({ authorId, ...rest })
-        console.log(friendIds)
         friendIds.map(x => {
             const friend = Friends.findOne(x)
             if (friend.owner == this.userId || !this.connection) {

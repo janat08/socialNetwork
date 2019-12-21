@@ -1,7 +1,7 @@
 import SimpleSchema from 'simpl-schema';
 export default new SimpleSchema({
     status: {
-        type: String
+        type: String //accepted, rejected, ignored, pending
     },
     date: {
         type: String

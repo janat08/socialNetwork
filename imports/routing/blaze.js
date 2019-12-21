@@ -24,42 +24,42 @@ FlowRouter.route('/', {
   },
 });
 FlowRouter.route('/dashboard', {
-  name: 'App.auctions',
+  name: 'App.dashboard',
   action() {
     BlazeLayout.render('App_body', { main: 'dashboard' });
   },
 });
 
 FlowRouter.route('/requests', {
-  name: 'App.auctions',
+  name: 'App.requests',
   action() {
     BlazeLayout.render('App_body', { main: 'requests' });
   },
 });
 
 FlowRouter.route('/friends', {
-  name: 'App.createAuction',
+  name: 'App.friends',
   action() {
     BlazeLayout.render('App_body', { main: 'friends' });
   },
 });
 
 FlowRouter.route('/findFriend', {
-  name: 'App.createAuction',
+  name: 'App.findFriend',
   action() {
     BlazeLayout.render('App_body', { main: 'findFriend' });
   },
 });
 
 FlowRouter.route('/friendsWall/:friendId', {
-  name: 'App.auction',
+  name: 'App.friendWall',
   action() {
     BlazeLayout.render('App_body', { main: 'friendsWall' });
   },
 });
 
 FlowRouter.route('/post/:friendId', {
-  name: 'App.auction',
+  name: 'App.post',
   action() {
     BlazeLayout.render('App_body', { main: 'post' });
   },

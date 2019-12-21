@@ -52,8 +52,9 @@ coffeescript
 aldeed:collection2-core
 underscore
 
-autopublish
+
 babrahams:constellation
 ccorcos:subs-cache
 manuel:reactivearray
 ostrio:files
+littledata:synced-cron
