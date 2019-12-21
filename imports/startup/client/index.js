@@ -9,3 +9,7 @@ import './user-presence';
 // Styling
 import '/node_modules/bootstrap/dist/css/bootstrap.min.css'
 import '/imports/styling/main.less';
+
+Meteor.startup(function() {
+  Meteor.typeahead.inject();
+});

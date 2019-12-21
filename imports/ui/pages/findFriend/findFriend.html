@@ -1,9 +1,20 @@
 <template name="findFriend">
 Search by username: <input class='searchJs'>
-{{#each findFriends}}
-    {{username}}
-    <button class="requestFriendJs">Request</button>
-    {{else}}
-    Loading
-{{/each}}
+<input class="form-control typeahead searchJs" name="team" type="text"
+       placeholder="Users by username"
+       autocomplete='true'/>
+<ul>
+    <!--{{#each findFriends}}-->
+
+    <!--<li>-->
+    <!--        {{username}}-->
+    <!--<button class="requestFriendJs">Request</button>-->
+
+    <!--</li>-->
+    <!--    {{else}}-->
+    <!--No results-->
+    <!--{{/each}}-->
+
+</ul>
+
 </template>
