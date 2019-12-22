@@ -4,5 +4,3 @@ Meteor.methods({
         Users.update(this.userId, {$set: {profile: doc}})
     }
 })
-
-// {first,last,avatar}

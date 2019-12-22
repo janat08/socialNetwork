@@ -8,7 +8,7 @@ Template.requests.onCreated(function() {
 
 Template.requests.helpers({
     requests() {
-        const requests = FriendRequests.find({ requestee: Meteor.userId() }).fetch()
+        const requests = FriendRequests.find({ requestee: Meteor.userId(), status: { $ne: "erase" } }).fetch()
         return requests.map(x => {
             x.username = Users.findOne(x.requester).username
             return x
@@ -17,15 +17,21 @@ Template.requests.helpers({
 });
 
 Template.requests.events({
-    'click .ignoreJs'(ev, templ) {
+    'click .ignoreJs' (ev, templ) {
         Meteor.call('friendRequests.ignore', this)
     },
-    'click .acceptJs'(ev, templ) {
+    'click .acceptJs' (ev, templ) {
         Meteor.call('friendRequests.accept', this)
 
     },
-    'click .rejectJs'(ev, templ) {
+    'click .rejectJs' (ev, templ) {
         Meteor.call('friendRequests.reject', this)
+    },
+    'click .blockJs' (ev, templ) {
+        Meteor.call('friendRequests.block', this)
+    },
+    'click .eraseJs' (ev, templ) {
+        Meteor.call('friendRequests.erase', this)
     }
 });
 

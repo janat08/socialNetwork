@@ -11,22 +11,39 @@ Meteor.methods({
             if (FriendRequests.findOne({ requester, requestee })) throw new Meteor.Error("You've already made friend request in past 30 days.")
         }
         doc.status = 'pending'
-        doc.date = new Date()
+        doc.dateSent = new Date()
         FriendRequests.insert(doc)
     },
     'friendRequests.ignore' ({ _id }) {
-        requesteeCheck(_id)
-        FriendRequests.update(_id, { $set: { status: 'ignore' } })
-        removeRequest(_id)
+        FriendRequests.update({ _id, requestee: this.userId }, { $set: { status: 'ignore', dateReplied: new Date() } }, (err, res) => {
+            if (res == 1) {
+                removeRequest(_id)
+            }
+        })
     },
     'friendRequests.reject' ({ _id }) {
-        requesteeCheck(_id)
-        FriendRequests.update(_id, { $set: { status: 'reject' } })
-        removeRequest(_id)
+        FriendRequests.update({ _id, requestee: this.userId }, { $set: { status: 'reject', dateReplied: new Date() } }, (err, res) => {
+            if (res == 1) {
+                removeRequest(_id)
+            }
+        })
+    },
+    'friendRequests.block' ({ _id }) {
+        FriendRequests.update({ _id, requestee: this.userId }, { $set: { status: 'block', dateReplied: new Date() } }, (err, res) => {
+            if (res == 1) {
+                removeRequest(_id)
+            }
+        })
+    },
+    'friendRequests.erase' ({ _id }) {
+        FriendRequests.update({ _id, requestee: this.userId }, { $set: { status: 'erase', dateReplied: new Date() } }, (err, res) => {
+            if (res == 1) {
+                removeRequest(_id)
+            }
+        })
     },
     'friendRequests.accept' ({ _id, requestee, requester }) {
-        requesteeCheck(requestee)
-        FriendRequests.remove(_id)
+        FriendRequests.remove({ _id, requestee: this.userId })
         Meteor.call('friends.insert', { firstId: requester, requesteeId: requestee })
     },
 })
@@ -42,21 +59,4 @@ function removeRequest(id) {
             FriendRequests.remove(id)
         }
     });
-}
-
-function requesteeCheck({ _id, requestee }) {
-    if (!requestee) {
-        requestee = FriendRequests.findOne(_id)
-        if (!requestee) {
-            throw new Meteor.Error('500')
-        }
-        else {
-            requestee = requestee.requestee
-        }
-    }
-    if (this.connection) {
-        if (this.userId != requestee) {
-            throw new Meteor.Error('500')
-        }
-    }
 }

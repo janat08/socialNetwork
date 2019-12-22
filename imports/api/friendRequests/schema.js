@@ -3,7 +3,7 @@ export default new SimpleSchema({
     status: {
         type: String //accepted, rejected, ignored, pending
     },
-    date: {
+    dateSent: {
         type: String
     },
     requestee: {
@@ -11,5 +11,8 @@ export default new SimpleSchema({
     },
     requester: {
         type: SimpleSchema.RegEx.Id
+    },
+    dateReplied: {
+        type: String
     }
 });

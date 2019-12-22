@@ -1,6 +1,6 @@
 // // import { Random } from 'meteor/random';
 
-import { Users, Posts, Friends, FriendRequests, Owners } from '/imports/api/cols.js'
+import { Users, Posts, Friends, FriendRequests, Owners, friendTypes } from '/imports/api/cols.js'
 import { createQuery } from 'meteor/cultofcoders:grapher';
 
 const USERS = 20;
@@ -10,7 +10,7 @@ const FRIENDS = 10
 const POSTS = [
     'Good', 'Bad', 'Neutral'
 ];
-const FRIEND_TYPES = ['friends', 'family', 'besties', 'colleague']
+const FRIEND_TYPES = friendTypes
 
 const createUser = (email, password, username) => {
     const userId = Accounts.createUser({ email, password, username });
@@ -28,7 +28,7 @@ const wall = createQuery({
 });
 
 Meteor.startup(() => {
-    if (!Users.find().count() || true) {
+    if (!Users.find().count() || !true) {
         Posts.remove({})
         Owners.remove({})
         Users.remove({})
@@ -67,7 +67,7 @@ Meteor.startup(() => {
                     else if (i % 2 == 1) {
                         const request = {
                             status: "bad",
-                            date: new Date(),
+                            dateSent: new Date(),
                             requestee: target._id,
                             requester: user._id,
                         }

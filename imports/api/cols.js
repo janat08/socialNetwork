@@ -5,4 +5,8 @@ import Posts from './posts/collection'
 import Owners from './owners/collection'
 import {ImagesFiles, ImagesCollection} from './images/images.js'
 
-export {Posts, Users, Owners, Friends, FriendRequests, ImagesFiles, ImagesCollection}
+const friendTypes = ['friends', 'family', 'besties', 'colleague']
+
+export {Posts, Users, Owners, Friends, FriendRequests, ImagesFiles, ImagesCollection,
+    friendTypes
+}

@@ -9,5 +9,9 @@ export default new SimpleSchema({
     },
     target: {
         type: String
+    },
+    blocked: {
+        type: Boolean,
+        optional: true,
     }
 });

@@ -2,48 +2,51 @@
     
     <ul>
     {{#each friends.family}}
-        <li>
-        {{type}}
-        <a href='friendsWall/{{_id}}'>{{target.username}}</a>
-        <button>{{blockButton}}</button>
-        {{fullName}}
-        move categories
-        avatar
-        {{startDate}}
-        </li>
+        {{>friendItem}}
     {{else}}
-        Loading
+        Empty/Loading
     {{/each}}
     </ul>
     <ul>
     {{#each friends.besties}}
-        <li>
-        {{type}}
-        <a href='friendsWall/{{_id}}'>{{target.username}}</a>
-        </li>
+              {{>friendItem}}
+
     {{else}}
-        Loading
+        Empty/Loading
     {{/each}}
     </ul>
         <ul>
     
     {{#each friends.friends}}
-        <li>
-        {{type}}
-        <a href='friendsWall/{{_id}}'>{{target.username}}</a>
-        </li>
+              {{>friendItem}}
     {{else}}
         Loading
     {{/each}}
     </ul>
     <ul>
     {{#each friends.colleagues}}
-        <li>
-    {{type}}
-    <a href='friendsWall/{{_id}}'>{{target.username}}</a>
-    </li>
+              {{>friendItem}}
     {{else}}
     Loading
     {{/each}}
     </ul>
+</template>
+
+
+<template name="friendItem">
+            {{type}}
+        <a href='friendsWall/{{_id}}'>{{target.username}}</a>
+        <button class='blockJs'>{{blockStatus}}</button>
+        {{target.profile.first}}{{target.profile.last}}
+        {{#with target.profile.avatar}}
+        {{> imageShow}}
+        {{/with}}
+        
+<select class='selectTypeJs' value="{{type}}">
+    {{#each val in friendTypes}}a
+    <option {{selectedType val}} value="{{val}}">{{val}}</option>
+    {{/each}}
+</select>
+    {{startDate}}
+    <br>
 </template>

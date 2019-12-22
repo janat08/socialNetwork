@@ -3,11 +3,14 @@
     {{#each requests}}
     <li>
         {{status}}
-        {{date}}
+        {{dateSent}}
+        {{dateReplied}}
         {{username}}
         <button class='acceptJs'>accept</button>
         <button class='rejectJs'>reject</button>
         <button class='ignoreJs'>ignore</button>
+        <button class='eraseJs'>erase</button>
+        <button class='blockJs'>block</button>
     </li>
     {{/each}}
 </ul>
