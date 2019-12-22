@@ -1,22 +1,49 @@
 <template name="friends">
+    
     <ul>
-        {{#each friends.family}}
+    {{#each friends.family}}
         <li>
-{{type}}
-<a href='friendsWall/{{_id}}'>{{target.username}}</a>
-</li>
+        {{type}}
+        <a href='friendsWall/{{_id}}'>{{target.username}}</a>
+        <button>{{blockButton}}</button>
+        {{fullName}}
+        move categories
+        avatar
+        {{startDate}}
+        </li>
     {{else}}
-    Loading
-{{/each}}
+        Loading
+    {{/each}}
     </ul>
     <ul>
-        {{#each friends.basic}}
+    {{#each friends.besties}}
         <li>
-{{type}}
-<a href='friendsWall/{{_id}}'>{{target.username}}</a>
-</li>
+        {{type}}
+        <a href='friendsWall/{{_id}}'>{{target.username}}</a>
+        </li>
+    {{else}}
+        Loading
+    {{/each}}
+    </ul>
+        <ul>
+    
+    {{#each friends.friends}}
+        <li>
+        {{type}}
+        <a href='friendsWall/{{_id}}'>{{target.username}}</a>
+        </li>
+    {{else}}
+        Loading
+    {{/each}}
+    </ul>
+    <ul>
+    {{#each friends.colleagues}}
+        <li>
+    {{type}}
+    <a href='friendsWall/{{_id}}'>{{target.username}}</a>
+    </li>
     {{else}}
     Loading
-{{/each}}
+    {{/each}}
     </ul>
 </template>

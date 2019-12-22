@@ -10,6 +10,7 @@ import '/imports/ui/pages/dashboard/dashboard.js'
 import '/imports/ui/pages/findFriend/findFriend.js'
 import '/imports/ui/pages/friendsWall/friendsWall.js'
 import '/imports/ui/pages/post/post.js'
+import '/imports/ui/pages/userInfo/userInfo.js'
 import '/imports/ui/pages/not-found/not-found.js'
 
 
@@ -62,6 +63,13 @@ FlowRouter.route('/post/:friendId', {
   name: 'App.post',
   action() {
     BlazeLayout.render('App_body', { main: 'post' });
+  },
+});
+
+FlowRouter.route('/userInfo', {
+  name: 'App.userInfo',
+  action() {
+    BlazeLayout.render('App_body', { main: 'userInfo' });
   },
 });
 

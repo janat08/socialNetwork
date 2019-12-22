@@ -7,8 +7,9 @@ Meteor.methods({
                 throw new Meteor.Error('500')
             }
         }
-        const first = Friends.insert({ owner: firstId, target: requesteeId, type })
-        const second = Friends.insert({ owner: requesteeId, target: firstId, type })
+        const startDate = new Date()
+        const first = Friends.insert({ owner: firstId, target: requesteeId, type, startDate })
+        const second = Friends.insert({ owner: requesteeId, target: firstId, type, startDate })
         Users.update(firstId, { $addToSet: { friendIds: first } }) 
         Users.update(requesteeId, { $addToSet: { friendIds: second } })
     }

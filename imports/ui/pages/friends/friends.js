@@ -8,14 +8,16 @@ Template.friends.onCreated(function() {
 
 Template.friends.helpers({
     friends() {
-        const basic = Friends.find({ owner: Meteor.userId() }).fetch().filter(x => x.type == 'basic').map(mapUser)
+        const friends = Friends.find({ owner: Meteor.userId() }).fetch().filter(x => x.type == 'friends').map(mapUser)
         const family = Friends.find({ owner: Meteor.userId() }).fetch().filter(x => x.type == 'family').map(mapUser)
-        return {family, basic}
+        const colleagues = Friends.find({ owner: Meteor.userId() }).fetch().filter(x => x.type == 'colleague').map(mapUser)
+        const besties = Friends.find({ owner: Meteor.userId() }).fetch().filter(x => x.type == 'besties').map(mapUser)
+        return { family, friends, besties, colleagues }
     }
 });
 
 Template.friends.events({
-
+    
 });
 
 Template.friends.onDestroyed(function() {})

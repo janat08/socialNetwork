@@ -10,7 +10,7 @@ const FRIENDS = 10
 const POSTS = [
     'Good', 'Bad', 'Neutral'
 ];
-const FRIEND_TYPES = ['basic', 'family']
+const FRIEND_TYPES = ['friends', 'family', 'besties', 'colleague']
 
 const createUser = (email, password, username) => {
     const userId = Accounts.createUser({ email, password, username });
@@ -28,7 +28,7 @@ const wall = createQuery({
 });
 
 Meteor.startup(() => {
-    if (!Users.find().count() || !true) {
+    if (!Users.find().count() || true) {
         Posts.remove({})
         Owners.remove({})
         Users.remove({})

@@ -1,6 +1,7 @@
-<template name="post">
+<template name="userInfo">
+    <form id="profile">
+        {{#with user}}
 
-<form id='post'>
     {{#each currentUpload}}
         {{#if upload}}
     Uploading <b>{{upload.file.name}}</b>:
@@ -12,11 +13,11 @@
   {{/each}}
         <input id="fileInput" type="file" multiple/>
 
-      
-Title:   <input name='title'>
-Content: <input name='content'>
-<input type='submit'  value="submit">
-</form>
+<input name='first' value="{{user.profile.first}}">
+<input name='last'  value="{{user.profile.last}}">
+<input type='submit' value='submit'>
+{{/with}}
 
+    </form>
 
 </template>

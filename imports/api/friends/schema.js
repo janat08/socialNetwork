@@ -1,7 +1,7 @@
 import SimpleSchema from 'simpl-schema';
 export default new SimpleSchema({
     type: {
-        type: String
+        type: String //besties, family, friends, colleague
     },
     owner: {
         type: String,
