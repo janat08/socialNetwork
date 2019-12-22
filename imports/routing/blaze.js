@@ -1,6 +1,6 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { BlazeLayout } from 'meteor/kadira:blaze-layout';
-
+import { Friends } from '/imports/api/cols.js'
 // Import needed templates
 import '/imports/ui/layouts/body/body.js';
 import '/imports/ui/pages/home/home.js'
@@ -19,7 +19,7 @@ window.SubsCache = new SubsCache(5, 10);
 
 // Set up all routes in the app
 FlowRouter.route('/', {
-  name: 'App.auctions',
+  name: 'App.home',
   action() {
     BlazeLayout.render('App_body', { main: 'home' });
   },
@@ -78,3 +78,4 @@ FlowRouter.notFound = {
     BlazeLayout.render('App_body', { main: 'App_notFound' });
   },
 };
+

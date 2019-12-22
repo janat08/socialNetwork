@@ -33,10 +33,10 @@ Template.dashboard.helpers({
 
 Template.dashboard.events({
     'click .rejectJs' () {
-        Meteor.call('posts.reject', this)
+        Meteor.call('owners.reject', this)
     },
     'click .approveJs' () {
-        Meteor.call('posts.approve', this)
+        Meteor.call('owners.approve', this)
     },
 });
 

@@ -12,3 +12,18 @@ Meteor.methods({
     return ImagesFiles.remove(id);
   },
 });
+
+SyncedCron.add({
+    name: 'deleteImages',
+    schedule: function(parser) {
+        return parser.text('every day')
+    },
+    job: function() {
+        Users.find({ "profile.avatar": { $exists: true } }).fetch().map(x => {
+            const cursor = ImagesCollection.find({ "meta.uploader": x._id })
+            if (cursor.count() > 1) {
+                FilesCollection.remove(cursor.fetch().filter(y => y._id != x.profile.avatar))
+            }
+        })
+    }
+});

@@ -1,35 +1,35 @@
 <template name="friends">
-    
-    <ul>
+    <button class="familyJs">Message all of family</button>    <br>
+
     {{#each friends.family}}
         {{>friendItem}}
     {{else}}
         Empty/Loading
     {{/each}}
-    </ul>
-    <ul>
-    {{#each friends.besties}}
-              {{>friendItem}}
+    
+    <button class="bestiesJs">Message all of besties</button>    <br>
 
+    {{#each friends.besties}}
+        {{>friendItem}}
     {{else}}
         Empty/Loading
     {{/each}}
-    </ul>
-        <ul>
-    
+
+    <button class="friendsJs">Message all of friends</button>    <br>
+
     {{#each friends.friends}}
-              {{>friendItem}}
+        {{>friendItem}}
     {{else}}
         Loading
     {{/each}}
-    </ul>
-    <ul>
+
+    <button class="colleaguesJs">Message all of colleagues</button>    <br>
+
     {{#each friends.colleagues}}
-              {{>friendItem}}
+        {{>friendItem}}
     {{else}}
-    Loading
+        Loading
     {{/each}}
-    </ul>
 </template>
 
 

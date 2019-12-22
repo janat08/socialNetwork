@@ -1,6 +1,7 @@
 import './friends.html';
 import { Friends, friendTypes } from '/imports/api/cols.js'
 import '/imports/ui/components/imageShow/imageShow.js'
+import { FlowRouter } from 'meteor/kadira:flow-router';
 
 Template.friends.onCreated(function() {
     SubsCache.subscribe('friends.all')
@@ -18,32 +19,51 @@ Template.friends.helpers({
 });
 
 Template.friendItem.helpers({
-    friendTypes(){
+    friendTypes() {
         return friendTypes
     },
-    selectedType(val){
-        if (this.type == val){
+    selectedType(val) {
+        if (this.type == val) {
             return 'selected'
         }
     },
-    blockStatus(){
-        if (this.blocked){
+    blockStatus() {
+        if (this.blocked) {
             return "Unblock"
-        } else {
+        }
+        else {
             return "Block"
         }
     }
 });
 
 Template.friends.events({
-    'change .selectTypeJs'(e, t){
-        Meteor.call('friends.typeSelect', {...this, selected: e.target.value})
+    'change .selectTypeJs' (e, t) {
+        Meteor.call('friends.typeSelect', { ...this, selected: e.target.value })
     },
-    'click .blockJs'(e, t){
+    'click .blockJs' (e, t) {
         Meteor.call('friends.toggleBlock', this)
-    }
+    },
+    'click .bestiesJs' (e, t) {
+        messageAll('besties')
+
+    },
+    'click .familyJs' (e, t) {
+        messageAll('family')
+
+    },
+    'click .colleaguesJs' (e, t) {
+        messageAll('colleagues')
+
+    },
+    'click .friendsJs' (e, t) {
+        messageAll('friends')
+    },
 });
 
+function messageAll(type) {
+    FlowRouter.go("/post/"+type)
+}
 Template.friends.onDestroyed(function() {})
 
 

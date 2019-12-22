@@ -13,6 +13,7 @@ export default new SimpleSchema({
         type: SimpleSchema.RegEx.Id
     },
     dateReplied: {
-        type: String
+        type: String,
+        optional: true,
     }
 });

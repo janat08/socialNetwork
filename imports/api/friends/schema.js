@@ -13,5 +13,8 @@ export default new SimpleSchema({
     blocked: {
         type: Boolean,
         optional: true,
+    },
+    startDate: {
+        type: String
     }
 });

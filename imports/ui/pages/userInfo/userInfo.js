@@ -5,17 +5,23 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 Template.userInfo.onCreated(function() {
     SubsCache.subscribe('users.all')
     SubsCache.subscribe('images.all')
-    const user = Users.findOne(Meteor.userId())
-    var avatar = []
-    if (user && user.profile && user.profile.avatar){
-        avatar = [{doc: {_id: Users.findOne(Meteor.userId()).profile.avatar}}]
-    }
-    this.currentUpload = new ReactiveArray(avatar)
+
+    this.currentUpload = new ReactiveArray()
     //meant to cause reactivity on object updates in current upload
     this.insertedUploads = new ReactiveVar(0)
     //used to assign ids to files, so that there're unique ids between consequtive upload batches
     this.numberOfRuns = 0
 
+    this.autorun((comp) => {
+        const user = Users.findOne(Meteor.userId())
+        if (user && user.profile && user.profile.avatar) {
+            const avatar = { doc: { _id: ImagesFiles.findOne(user.profile.avatar) } }
+            
+            this.currentUpload.push(avatar)
+            comp.stop()
+            console.log(ImagesFiles.findOne(user.profile.avatar))
+        }
+    })
 });
 
 Template.userInfo.helpers({
@@ -48,8 +54,8 @@ Template.userInfo.events({
             first: fV,
             last: lV
         }
-        
-        if (images[0]){
+
+        if (images[0]) {
             document.avatar = images[0].doc._id
         }
 
@@ -58,6 +64,7 @@ Template.userInfo.events({
                 alert(err)
             }
             else {
+                alert('data saved')
                 // FlowRouter.go('App.friends')
             }
         });

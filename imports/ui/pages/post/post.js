@@ -10,8 +10,6 @@ Template.post.onCreated(function() {
     //used to assign ids to files, so that there're unique ids between consequtive upload batches
     this.numberOfRuns = 0
 
-
-
     this.friendship = new ReactiveVar()
     this.target = new ReactiveVar()
     this.autorun(() => {
@@ -49,7 +47,7 @@ Template.post.events({
 
         var document = {
             imageIds: images.map(x => x.doc._id),
-            friendIds: [FlowRouter.getParam('friendId')],
+            friendId: FlowRouter.getParam('friendId'),
             title: tV,
             content: cV
         }

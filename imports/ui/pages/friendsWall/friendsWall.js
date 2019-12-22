@@ -6,6 +6,7 @@ Template.friendsWall.onCreated(function() {
     SubsCache.subscribe('friends.all')
     SubsCache.subscribe('posts.all')
     SubsCache.subscribe('owners.all')
+    SubsCache.subscribe('users.all')
     this.friendship = new ReactiveVar()
     this.target = new ReactiveVar()
     this.autorun(() => {
@@ -13,6 +14,15 @@ Template.friendsWall.onCreated(function() {
         const target = Friends.findOne(friend)
         if (target) {
             this.friendship.set(target)
+        }
+    })
+    this.autorun(() => {
+        const friend = Friends.findOne(FlowRouter.getParam('friendId'))
+        if (SubsCache.ready()) {
+            if (!friend || !Meteor.userId() || friend.owner != Meteor.userId()) {
+                FlowRouter.go('App.home')
+                return
+            }
         }
     })
 });
@@ -23,10 +33,20 @@ Template.friendsWall.helpers({
         if (friendship.get()) {
             const owners = Owners.find({ ownerId: friendship.get().target, approved: true }).fetch()
             const posts = Posts.find({ _id: { $in: owners.map(x => x.postId) } })
-            return posts
+            return posts.fetch().map((x, i) => {
+                const user = Users.findOne(x.authorId)
+                const { profile } = user
+                if (!profile || !profile.first) {
+                    x.name = user.username
+                }
+                else {
+                    x.name = profile.first + " " + profile.last
+                }
+                return x
+            })
         }
     },
-    friendship(){
+    friendship() {
         return Template.instance().friendship.get()
     }
 });
