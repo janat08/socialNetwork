@@ -32,9 +32,12 @@ Template.userInfo.helpers({
         //meant for object reactivity
         Template.instance().insertedUploads.get()
         const curUpload = Template.instance().currentUpload.list()
-        const ids = curUpload.filter(x => x.doc).map(x => x.doc._id)
-        const query = [{ _id: { $in: ids } }]
-        return ImagesFiles.find({ $or: query }).each().concat(curUpload.filter(x => !x.doc));
+        const ids = curUpload.filter(x=>x.doc).map(x=>x.doc._id)
+        const uId = Meteor.userId()
+        const query = [{_id: {$in: ids}}]
+        if (uId) query.push({"meta.userId": uId})
+        console.log(query)
+        return ImagesFiles.find({$or: query}).each().concat(curUpload.filter(x=>!x.doc));
     },
 });
 
@@ -70,7 +73,7 @@ Template.userInfo.events({
         });
     },
     'click .jsRemovePic' (e, templ) {
-        console.log(this)
+        console.log(this, "removing")
         Meteor.call('images.remove', this._id)
         const st = templ.currentUpload
         st.splice(st.findIndex(x => x.doc._id == this._id), 1)

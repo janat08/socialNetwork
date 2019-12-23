@@ -13,9 +13,7 @@ import '/imports/ui/pages/post/post.js'
 import '/imports/ui/pages/userInfo/userInfo.js'
 import '/imports/ui/pages/not-found/not-found.js'
 
-
 window.SubsCache = new SubsCache(5, 10);
-
 
 // Set up all routes in the app
 FlowRouter.route('/', {
@@ -24,6 +22,7 @@ FlowRouter.route('/', {
     BlazeLayout.render('App_body', { main: 'home' });
   },
 });
+
 FlowRouter.route('/dashboard', {
   name: 'App.dashboard',
   action() {
@@ -70,6 +69,13 @@ FlowRouter.route('/userInfo', {
   name: 'App.userInfo',
   action() {
     BlazeLayout.render('App_body', { main: 'userInfo' });
+  },
+});
+
+FlowRouter.route('/sentRequests', {
+  name: 'App.userInfo',
+  action() {
+    BlazeLayout.render('App_body', { main: 'sentRequests' });
   },
 });
 

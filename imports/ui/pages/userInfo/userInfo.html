@@ -1,14 +1,14 @@
 <template name="userInfo">
     <form id="profile">
         {{#with user}}
-
+Only the first image from left will be your avatar.
     {{#each currentUpload}}
         {{#if upload}}
     Uploading <b>{{upload.file.name}}</b>:
     <span id="progress">{{upload.progress.get}}%</span>
     {{else}}
         <img src="{{link}}" alt="{{name}}" />
-        <button class='jsRemovePic'>Remove</button>
+        <button type="button" class='jsRemovePic'>Remove</button>
     {{/if}}
   {{/each}}
         <input id="fileInput" type="file" multiple/>

@@ -1,18 +1,42 @@
 <template name="requests">
+    Requests to you
 <ul>
     {{#each requests}}
     <li>
         {{status}}
         {{dateSent}}
         {{dateReplied}}
-        {{username}}
+        {{user.profile.first}} {{user.profile.last}}
         <button class='acceptJs'>accept</button>
         <button class='rejectJs'>reject</button>
-        <button class='ignoreJs'>ignore</button>
         <button class='eraseJs'>erase</button>
         <button class='blockJs'>block</button>
     </li>
     {{/each}}
+</ul>
+Requests from you
+<ul>
+        {{#each myRequests}}
+    <li>
+        {{status}}
+        {{dateSent}}
+        {{dateReplied}}
+        {{user.profile.first}} {{user.profile.last}}
+    </li>
+    {{/each}}
+    
+</ul>
+Requests from you that are blocked
+<ul>
+        {{#each myRequestsBlocked}}
+    <li>
+        {{status}}
+        {{dateSent}}
+        {{dateReplied}}
+        {{user.profile.first}} {{user.profile.last}}
+    </li>
+    {{/each}}
+    
 </ul>
 
 </template>

@@ -45,10 +45,10 @@ coffeescript
 aldeed:collection2-core
 underscore@1.0.10
 
-
+twbs:bootstrap
 babrahams:constellation
 ccorcos:subs-cache
 manuel:reactivearray
 ostrio:files
 littledata:synced-cron
-sergeyt:typeahead
+#sergeyt:typeahead

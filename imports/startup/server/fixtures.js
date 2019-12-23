@@ -2,7 +2,7 @@
 
 import { Users, Posts, Friends, FriendRequests, Owners, friendTypes } from '/imports/api/cols.js'
 
-const USERS = 20;
+const USERS = 30;
 const POST_PER_USER = 10;
 const REQUESTS = 10
 const FRIENDS = 10
@@ -13,6 +13,7 @@ const FRIEND_TYPES = friendTypes
 
 const createUser = (email, password, username) => {
     const userId = Accounts.createUser({ email, password, username });
+    Users.update(userId, {$set: {profile: {first: "first", last: "last"}}})
     return Users.findOne(userId);
 };
 
@@ -51,10 +52,10 @@ Meteor.startup(() => {
                 }
                 else {
                     // written+=1
-                    if (i % 2 == 0) {
+                    if (i % 3 == 0) {
                         Meteor.call('friends.insert', { firstId: target._id, requesteeId: user._id, type: _.sample(FRIEND_TYPES) })
                     }
-                    else if (i % 2 == 1) {
+                    else if (i % 3 == 1) {
                         const request = {
                             status: "bad",
                             dateSent: new Date(),
