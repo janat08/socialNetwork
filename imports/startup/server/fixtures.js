@@ -1,7 +1,6 @@
 // // import { Random } from 'meteor/random';
 
 import { Users, Posts, Friends, FriendRequests, Owners, friendTypes } from '/imports/api/cols.js'
-import { createQuery } from 'meteor/cultofcoders:grapher';
 
 const USERS = 20;
 const POST_PER_USER = 10;
@@ -17,15 +16,6 @@ const createUser = (email, password, username) => {
     return Users.findOne(userId);
 };
 
-const wall = createQuery({
-    users: {
-        $filter({ filters, params }) {
-            filters._id = params._id
-            filters.approved = params.approved
-        },
-        profile: 1
-    }
-});
 
 Meteor.startup(() => {
     if (!Users.find().count() || !true) {
