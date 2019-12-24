@@ -12,16 +12,16 @@ Template.userInfo.onCreated(function() {
     //used to assign ids to files, so that there're unique ids between consequtive upload batches
     this.numberOfRuns = 0
 
-    // this.autorun((comp) => {
-    //     const user = Users.findOne(Meteor.userId())
-    //     if (user && user.profile && user.profile.avatar) {
-    //         const avatar = { doc: { _id: ImagesFiles.findOne(user.profile.avatar) } }
+    this.autorun((comp) => {
+        const user = Users.findOne(Meteor.userId())
+        if (user && user.profile && user.profile.avatar) {
+            const avatar = { doc: { _id: ImagesFiles.findOne(user.profile.avatar) } }
             
-    //         this.currentUpload.push(avatar)
-    //         comp.stop()
-    //         console.log(ImagesFiles.findOne(user.profile.avatar))
-    //     }
-    // })
+            this.currentUpload.push(avatar)
+            comp.stop()
+            console.log(ImagesFiles.findOne(user.profile.avatar))
+        }
+    })
 });
 
 Template.userInfo.helpers({
@@ -49,25 +49,13 @@ Template.userInfo.events({
         const {
             last: { value: lV },
             first: { value: fV },
-            startedWork: { value: swV },
-            company: { value: cV },
-            occupation: { value: oV },
-            street: { value: sV },
-            city: { value: ciV },
-            country: { value: coV },
         } = target
 
         const images = templ.currentUpload
 
         var document = {
             first: fV,
-            last: lV,
-            startedWork: swV,
-            company: cV,
-            occupation: oV,
-            street: sV,
-            city: ciV,
-            country: coV,
+            last: lV
         }
 
         if (images[0]) {
