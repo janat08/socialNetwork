@@ -12,16 +12,12 @@ Template.userInfo.onCreated(function() {
     //used to assign ids to files, so that there're unique ids between consequtive upload batches
     this.numberOfRuns = 0
 
-    // this.autorun((comp) => {
-    //     const user = Users.findOne(Meteor.userId())
-    //     if (user && user.profile && user.profile.avatar) {
-    //         const avatar = { doc: { _id: ImagesFiles.findOne(user.profile.avatar) } }
-            
-    //         this.currentUpload.push(avatar)
-    //         comp.stop()
-    //         console.log(ImagesFiles.findOne(user.profile.avatar))
-    //     }
-    // })
+    this.currentUpload1 = new ReactiveArray()
+    //meant to cause reactivity on object updates in current upload
+    this.insertedUploads1 = new ReactiveVar(0)
+    //used to assign ids to files, so that there're unique ids between consequtive upload batches
+    this.numberOfRuns1 = 0
+
 });
 
 Template.userInfo.helpers({
@@ -32,12 +28,23 @@ Template.userInfo.helpers({
         //meant for object reactivity
         Template.instance().insertedUploads.get()
         const curUpload = Template.instance().currentUpload.list()
-        const ids = curUpload.filter(x=>x.doc).map(x=>x.doc._id)
+        const ids = curUpload.filter(x => x.doc).map(x => x.doc._id)
         const uId = Meteor.userId()
-        const query = [{_id: {$in: ids}}]
-        if (uId) query.push({"meta.userId": uId})
+        const query = [{ _id: { $in: ids } }]
+        if (uId) query.push({ "meta.userId": uId })
         console.log(query)
-        return ImagesFiles.find({$or: query}).each().concat(curUpload.filter(x=>!x.doc));
+        return ImagesFiles.find({ $or: query }).each().concat(curUpload.filter(x => !x.doc));
+    },
+    currentUpload1() {
+        //meant for object reactivity
+        Template.instance().insertedUploads1.get()
+        const curUpload = Template.instance().currentUpload1.list()
+        const ids = curUpload.filter(x => x.doc).map(x => x.doc._id)
+        const uId = Meteor.userId()
+        const query = [{ _id: { $in: ids } }]
+        if (uId) query.push({ "meta.backgroundUserId": uId })
+        console.log(query)
+        return ImagesFiles.find({ $or: query }).each().concat(curUpload.filter(x => !x.doc));
     },
 });
 
@@ -58,7 +65,7 @@ Template.userInfo.events({
         } = target
 
         const images = templ.currentUpload
-
+        const backgrounds = templ.currentUpload1
         var document = {
             first: fV,
             last: lV,
@@ -72,6 +79,9 @@ Template.userInfo.events({
 
         if (images[0]) {
             document.avatar = images[0].doc._id
+        }
+        if (backgrounds[0]) {
+            document.background = backgrounds[0].doc._id
         }
 
         Meteor.call('users.updateProfile', document, (err, res) => {
@@ -90,9 +100,13 @@ Template.userInfo.events({
         const st = templ.currentUpload
         st.splice(st.findIndex(x => x.doc._id == this._id), 1)
     },
+    'click .jsRemovePic1' (e, templ) {
+        console.log(this, "removing")
+        Meteor.call('images.remove', this._id)
+        const st = templ.currentUpload1
+        st.splice(st.findIndex(x => x.doc._id == this._id), 1)
+    },
     'change #fileInput' (e, template) {
-        console.log(e.currentTarget.files)
-        const uploadPush = template.currentUpload.push
         const st = template.currentUpload
         const stRuns = template.numberOfRuns + ""
         template.numberOfRuns += 1
@@ -125,6 +139,45 @@ Template.userInfo.events({
                     }
                     st[st.findIndex(x => x._id == itemId)].doc = fileObj
                     template.insertedUploads.set(stRuns + i)
+                });
+
+                upload.start();
+            })
+
+        }
+    },
+    'change #fileInput1' (e, template) {
+        const st = template.currentUpload1
+        const stRuns = template.numberOfRuns1 + ""
+        template.numberOfRuns1 += 1
+        if (e.currentTarget.files && e.currentTarget.files[0]) {
+            Array.from(e.currentTarget.files).forEach((x, i) => {
+                // We upload only one file, in case
+                // multiple files were selected
+                const upload = ImagesFiles.insert({
+                    file: e.currentTarget.files[i],
+                    streams: 'dynamic',
+                    chunkSize: 'dynamic',
+                    meta: {
+                        uploader: Meteor.userId(),
+                    },
+                }, false);
+
+                const itemId = stRuns + i
+
+                upload.on('start', function() {
+                    st.push({ upload: this, _id: itemId })
+                });
+
+                upload.on('end', function(error, fileObj) {
+                    if (error) {
+                        alert('Error during upload: ' + error);
+                    }
+                    else {
+                        // alert('File "' + fileObj.name + '" successfully uploaded');
+                    }
+                    st[st.findIndex(x => x._id == itemId)].doc = fileObj
+                    template.insertedUploads1.set(stRuns + i)
                 });
 
                 upload.start();

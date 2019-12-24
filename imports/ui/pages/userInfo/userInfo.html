@@ -1,5 +1,6 @@
 <template name="userInfo">
     <form id="profile">
+        <h3>avatar</h3>
         {{#with user}}
 Only the first image from left will be your avatar.
     {{#each currentUpload}}
@@ -12,9 +13,22 @@ Only the first image from left will be your avatar.
     {{/if}}
   {{/each}}
         <input id="fileInput" type="file" multiple/>
+        
+<h3>wall background</h3>
+Only the first image from left will be your background.
+    {{#each currentUpload1}}
+        {{#if upload}}
+    Uploading <b>{{upload.file.name}}</b>:
+    <span id="progress">{{upload.progress.get}}%</span>
+    {{else}}
+        <img src="{{link}}" alt="{{name}}" />
+        <button type="button" class='jsRemovePic1'>Remove</button>
+    {{/if}}
+  {{/each}}
+        <input id="fileInput1" type="file" multiple/>
 
-<input name='first' value="{{user.profile.first}}">
-<input name='last'  value="{{user.profile.last}}">
+first: <input name='first' value="{{user.profile.first}}">
+last: <input name='last'  value="{{user.profile.last}}">
 
 street: <input name='street' value="{{user.street}}">
 city: <input name="city" value="{{user.city}}">
@@ -27,6 +41,6 @@ startedWork: <input name="startedWork" value="{{user.startedWork}}">
 <input type='submit' value='submit'>
 {{/with}}
 
-    </form>
+</form>
 
 </template>
