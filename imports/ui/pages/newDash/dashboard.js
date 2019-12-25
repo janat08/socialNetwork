@@ -1,15 +1,16 @@
 import './dashboard.html';
 import { Posts, Owners, Users } from '/imports/api/cols.js'
 // import data from './data.json'
-import './polaroid-gallery.js'
+// import './polaroid-gallery.js'
 import './polaroid-gallery.css'
 import sett from './data.json'
 
 var data = sett
 
-var dataSize = {};
+var dataSize = [];
 var dataLength = 0;
 var currentData = null;
+var currentIndex = 0
 var navbarHeight = 60;
 var resizeTimeout = null;
 
@@ -19,7 +20,6 @@ function polaroidGallery(data) {
     init()
     console.log(dataSize, dataLength, currentData, navbarHeight, resizeTimeout)
 }
-window.polaroidGallery = polaroidGallery
 
 function setGallery(arr) {
     var out = "";
@@ -55,7 +55,7 @@ function observe() {
 
     observeDOM(document.getElementById('gallery'), function(mutations) {
         var gallery = [].slice.call(mutations[0].addedNodes);
-        gallery.forEach(function(item) {
+        gallery.forEach(function(item, i) {
             var img = item.getElementsByTagName('img')[0];
             var fig = item.getElementsByTagName('figure')[0];
             var first = true;
@@ -64,26 +64,26 @@ function observe() {
                 item.style.height = (fig.offsetHeight).toString() + 'px';
                 item.style.width = (fig.offsetWidth).toString() + 'px';
 
-                dataSize[item.id] = { item: item, width: item.offsetWidth, height: img.offsetHeight };
+                dataSize.push({ item: item, width: item.offsetWidth, height: img.offsetHeight })
 
                 if (first) {
-                    currentData = dataSize[item.id];
+                    currentData = dataSize[i];
                     first = false;
                 }
 
                 dataLength++;
 
                 item.addEventListener('click', function() {
-                    if ((currentData != dataSize[item.id]) || (currentData == null)) {
-                        select(dataSize[item.id]);
+                    if ((currentData != dataSize[i]) || (currentData == null)) {
+                        select(dataSize[i]);
                         shuffleAll();
                     }
                     else {
                         item.classList.contains('flipped') === true ? item.classList.remove('flipped') : item.classList.add('flipped');
                     }
                 });
-
-                shuffle(dataSize[item.id]);
+                console.log(dataSize, i)
+                shuffle(dataSize[i]);
             })
         });
     });
@@ -139,8 +139,10 @@ function shuffle(data) {
 }
 
 function shuffleAll() {
+
     for (var id in dataSize) {
-        if (id != currentData.item.id) {
+        if (id != currentIndex) {
+            console.log("shuffle", id)
             shuffle(dataSize[id]);
         }
     }
@@ -151,7 +153,7 @@ function navigation() {
     var preview = document.getElementById('preview');
 
     next.addEventListener('click', function() {
-        var currentIndex = Number(currentData.item.id) + 1;
+        var currentIndex = Number(currentIndex) + 1;
         if (currentIndex >= dataLength) {
             currentIndex = 0
         }
@@ -160,7 +162,7 @@ function navigation() {
     });
 
     preview.addEventListener('click', function() {
-        var currentIndex = Number(currentData.item.id) - 1;
+        var currentIndex = Number(currentIndex) - 1;
         if (currentIndex < 0) {
             currentIndex = dataLength - 1
         }
@@ -175,44 +177,43 @@ Template.dashboard.onCreated(function() {
         SubsCache.subscribe('owners.all')
         SubsCache.subscribe('users.all')
     })
-    this.autorun(() => {
-        const templ = Template.instance()
-        const { query, handle } = templ
-        const owners = Owners.find({ ownerId: Meteor.userId(), approved: false }).fetch()
 
-        const res = Posts.find({
-            _id: {
-                $in: owners.map(x => x.postId)
-            }
-        }).fetch().map((x, i) => {
-            x.username = Users.findOne(x.authorId).username
-            return x
-        })
-        this.data = res
-    })
+
+
 });
 
 Template.dashboard.onRendered(function() {
-    new polaroidGallery(data)
-})
-
-Template.dashboard.helpers({
-    posts() {
-        const templ = Template.instance()
-        const { query, handle } = templ
+    this.autorun(() => {
+        const { query, handle } = this
         const owners = Owners.find({ ownerId: Meteor.userId(), approved: false }).fetch()
-        console.log('owners', owners)
 
         const res = Posts.find({
             _id: {
                 $in: owners.map(x => x.postId)
             }
         }).fetch().map((x, i) => {
-            x.username = Users.findOne(x.authorId).username
+            var user = Users.findOne(x.authorId)
+            x.caption = `From: ${user.profile.first} ${user.profile.last}, ` + x.title
+            x.description = x.content
+            x.name = "https://image.freepik.com/free-photo/image-human-brain_99433-298.jpg"
             return x
         })
-        return res
-    }
+
+        var a = {
+            "name": "img/img02.jpg",
+            "caption": "Amis",
+            "description": "Le temps confirme l'amitié.<br> — Henri Lacordaire"
+        }
+        if (res.length) {
+            console.log(res)
+            polaroidGallery(res)
+
+        }
+    })
+})
+
+Template.dashboard.helpers({
+
 });
 
 Template.dashboard.events({
@@ -223,8 +224,17 @@ Template.dashboard.events({
         Meteor.call('owners.approve', this)
     },
     'click #delete' () {
-        data = data.slice(1)
-        new polaroidGallery(data)
+        // currentIndex = Number(currentData.item.id) + 1;
+        const prev = dataSize[currentIndex]
+        prev.item.remove()
+        dataSize = dataSize.splice(currentIndex, 1)
+        dataLength -= 1
+        if (currentIndex >= dataLength - 1) {
+            currentIndex = 0
+        }
+        select(dataSize[currentIndex]);
+
+        shuffleAll();
     }
 });
 

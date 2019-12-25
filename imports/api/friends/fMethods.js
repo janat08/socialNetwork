@@ -22,7 +22,6 @@ Meteor.methods({
     },
     "friends.toggleBlock" ({ _id, blocked }) {
         if (!this.userId) throw new Meteor.Error("logged out")
-        console.log(blocked)
         return Friends.update({ _id, owner: this.userId }, { $set: { blocked: !blocked } })
     }
 })

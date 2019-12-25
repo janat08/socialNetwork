@@ -26,7 +26,6 @@ Template.dashboard.helpers({
             return x
         })
 
-        console.log(res)
         return res
     }
 });
