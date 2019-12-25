@@ -7,12 +7,13 @@ import sett from './data.json'
 
 var data = sett
 
-var dataSize = [];
+var dataSize = {};
 var dataLength = 0;
 var currentData = null;
-var currentIndex = 0
 var navbarHeight = 60;
 var resizeTimeout = null;
+var deleted = {}
+var currentIndex = 0
 
 function polaroidGallery(data) {
     observe();
@@ -55,7 +56,7 @@ function observe() {
 
     observeDOM(document.getElementById('gallery'), function(mutations) {
         var gallery = [].slice.call(mutations[0].addedNodes);
-        gallery.forEach(function(item, i) {
+        gallery.forEach(function(item) {
             var img = item.getElementsByTagName('img')[0];
             var fig = item.getElementsByTagName('figure')[0];
             var first = true;
@@ -64,26 +65,26 @@ function observe() {
                 item.style.height = (fig.offsetHeight).toString() + 'px';
                 item.style.width = (fig.offsetWidth).toString() + 'px';
 
-                dataSize.push({ item: item, width: item.offsetWidth, height: img.offsetHeight })
+                dataSize[item.id] = { item: item, width: item.offsetWidth, height: img.offsetHeight };
 
                 if (first) {
-                    currentData = dataSize[i];
+                    currentData = dataSize[item.id];
                     first = false;
                 }
 
                 dataLength++;
 
                 item.addEventListener('click', function() {
-                    if ((currentData != dataSize[i]) || (currentData == null)) {
-                        select(dataSize[i]);
+                    if ((currentData != dataSize[item.id]) || (currentData == null)) {
+                        select(dataSize[item.id]);
                         shuffleAll();
                     }
                     else {
                         item.classList.contains('flipped') === true ? item.classList.remove('flipped') : item.classList.add('flipped');
                     }
                 });
-                console.log(dataSize, i)
-                shuffle(dataSize[i]);
+
+                shuffle(dataSize[item.id]);
             })
         });
     });
@@ -108,7 +109,7 @@ function init() {
 
 function select(data) {
     var scale = 1.8;
-
+    currentIndex = data.item.id
     var x = (window.innerWidth - data.item.offsetWidth) / 2;
     var y = (window.innerHeight - navbarHeight - data.item.offsetHeight) / 2;
 
@@ -139,10 +140,8 @@ function shuffle(data) {
 }
 
 function shuffleAll() {
-
     for (var id in dataSize) {
-        if (id != currentIndex) {
-            console.log("shuffle", id)
+        if (id != currentData.item.id) {
             shuffle(dataSize[id]);
         }
     }
@@ -152,20 +151,23 @@ function navigation() {
     var next = document.getElementById('next');
     var preview = document.getElementById('preview');
 
-    next.addEventListener('click', function() {
-        var currentIndex = Number(currentIndex) + 1;
+    next.addEventListener('click', function next() {
+        var currentIndex = Number(currentData.item.id) + 1;
         if (currentIndex >= dataLength) {
             currentIndex = 0
         }
+        if (deleted[currentIndex]) next()
         select(dataSize[currentIndex]);
         shuffleAll();
     });
 
-    preview.addEventListener('click', function() {
-        var currentIndex = Number(currentIndex) - 1;
+    preview.addEventListener('click', function previous() {
+        var currentIndex = Number(currentData.item.id) - 1;
         if (currentIndex < 0) {
             currentIndex = dataLength - 1
         }
+        if (deleted[currentIndex]) previous()
+
         select(dataSize[currentIndex]);
         shuffleAll();
     })
@@ -205,9 +207,7 @@ Template.dashboard.onRendered(function() {
             "description": "Le temps confirme l'amitié.<br> — Henri Lacordaire"
         }
         if (res.length) {
-            console.log(res)
             polaroidGallery(res)
-
         }
     })
 })
@@ -223,19 +223,24 @@ Template.dashboard.events({
     'click .approveJs' () {
         Meteor.call('owners.approve', this)
     },
-    'click #delete' () {
-        // currentIndex = Number(currentData.item.id) + 1;
-        const prev = dataSize[currentIndex]
-        prev.item.remove()
-        dataSize = dataSize.splice(currentIndex, 1)
-        dataLength -= 1
-        if (currentIndex >= dataLength - 1) {
+    'click #delete': function deleteClick() {
+        const prev = currentData
+        currentIndex = Number(currentData.item.id) + 1;
+        console.log(currentIndex, deleted[currentIndex], dataSize[currentIndex])
+        if (typeof dataSize[currentIndex] == 'undefined') {
             currentIndex = 0
         }
-        select(dataSize[currentIndex]);
+        if (Object.keys(dataSize) == Object.keys(deleted)) return
+        if (deleted[currentIndex]) deleteClick()
 
+        select(dataSize[currentIndex]);
         shuffleAll();
+        // prev.item.zIndex(-1)
+        prev.item.remove()
+        deleted[prev.item.id] = true
     }
 });
+
+
 
 Template.dashboard.onDestroyed(function() {})
