@@ -19,13 +19,13 @@ const createUser = (email, password, username) => {
 
 
 Meteor.startup(() => {
-    if (!Users.find().count() || !true) {
+    if (!Users.find().count() || true) {
         Posts.remove({})
         Owners.remove({})
         Users.remove({})
         Friends.remove({})
         FriendRequests.remove({})
-
+    
 
         let users = [];
         _.each(_.range(USERS), (idx) => {
@@ -70,6 +70,7 @@ Meteor.startup(() => {
         });
         users = Users.find().fetch()
         _.each(users, (idx, i) => {
+            console.log('first', idx.friendIds)
             if (idx.friendIds) {
                 let post = {
                     title: `User Post - ${idx._id}`,

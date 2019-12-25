@@ -4,20 +4,12 @@ var polaroidGallery = (function () {
     var currentData = null;
     var navbarHeight = 60;
     var resizeTimeout = null;
-    var xmlhttp = new XMLHttpRequest();
 
-    function polaroidGallery(url) {
+    function polaroidGallery(data) {
         observe();
-        xmlhttp.onreadystatechange = function () {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                var myArr = JSON.parse(xmlhttp.responseText);
-                setGallery(myArr);
-
-                init();
-            }
-        };
-        xmlhttp.open("GET", url, true);
-        xmlhttp.send();
+        setGallery(data)
+        init()
+        console.log(dataSize, dataLength, currentData, navbarHeight, resizeTimeout)
     }
     window.polaroidGallery = polaroidGallery
 

@@ -2,6 +2,7 @@ import { Owners } from '../cols.js'
 
 Meteor.methods({
     "owners.insert" ({ postId, ownerId }) {
+        console.log('inserting')
         Owners.insert({ postId, ownerId, approved: false })
     },
     'owners.approve' (post) {

@@ -32,7 +32,6 @@ Template.userInfo.helpers({
         const uId = Meteor.userId()
         const query = [{ _id: { $in: ids } }]
         if (uId) query.push({ "meta.userId": uId })
-        console.log(query)
         return ImagesFiles.find({ $or: query }).each().concat(curUpload.filter(x => !x.doc));
     },
     currentUpload1() {
@@ -43,7 +42,6 @@ Template.userInfo.helpers({
         const uId = Meteor.userId()
         const query = [{ _id: { $in: ids } }]
         if (uId) query.push({ "meta.backgroundUserId": uId })
-        console.log(query)
         return ImagesFiles.find({ $or: query }).each().concat(curUpload.filter(x => !x.doc));
     },
 });

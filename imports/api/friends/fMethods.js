@@ -7,6 +7,8 @@ Meteor.methods({
                 throw new Meteor.Error('500')
             }
         }
+        if (friendTypes.indexOf(type) == -1) throw new Meteor.Error('500')
+
         const startDate = new Date()
         const first = Friends.insert({ owner: firstId, target: requesteeId, type, startDate })
         const second = Friends.insert({ owner: requesteeId, target: firstId, type, startDate })
@@ -16,7 +18,6 @@ Meteor.methods({
     "friends.typeSelect" ({ _id, selected }) {
         if (!this.userId) throw new Meteor.Error("logged out")
         if (friendTypes.indexOf(selected) == -1) throw new Meteor.Error('500')
-
         return Friends.update({ _id, owner: this.userId }, { $set: { type: selected } })
     },
     "friends.toggleBlock" ({ _id, blocked }) {
