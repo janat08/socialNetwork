@@ -67,12 +67,16 @@ Template.userInfo.events({
         var document = {
             first: fV,
             last: lV,
-            startedWork: swV,
-            company: cV,
-            occupation: oV,
-            street: sV,
-            city: ciV,
-            country: coV,
+            work: {
+                startedWorkYear: swV,
+                company: cV,
+                occupation: oV,
+            },
+            address: {
+                street: sV,
+                city: ciV,
+                country: coV,
+            }
         }
 
         if (images[0]) {

@@ -5,14 +5,13 @@ Meteor.methods({
     "friendRequests.insert" (doc) {
         const { requester, requestee } = doc
         if (this.connection) {
-            console.log(this.connection)
             if (!this.userId) throw new Meteor.Error('logged out')
             if (this.userId != requester) throw new Meteor.Error('500')
             if (FriendRequests.findOne({ requester, requestee })) throw new Meteor.Error("You've already made friend request in past 30 days.")
         }
         doc.status = 'pending'
         doc.dateSent = new Date()
-        FriendRequests.insert(doc)
+        return FriendRequests.insert(doc)
     },
     'friendRequests.reject' ({ _id }) {
         FriendRequests.update({ _id, requestee: this.userId }, { $set: { status: 'reject', dateReplied: new Date() } }, (err, res) => {

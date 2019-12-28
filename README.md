@@ -1,6 +1,13 @@
-make real images
-autocomplete wont work https://github.com/sergeyt/meteor-typeahead
+add autocomplete styles
 
+
+
+
+make real images
+
+done:
+
+embedded fields for work/adress
 blocked requests aren't ever reset (so after 30 days, request can't be remade)
 
 Schema

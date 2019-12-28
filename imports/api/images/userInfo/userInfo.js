@@ -16,7 +16,7 @@ Template.userInfo.onCreated(function() {
     //     const user = Users.findOne(Meteor.userId())
     //     if (user && user.profile && user.profile.avatar) {
     //         const avatar = { doc: { _id: ImagesFiles.findOne(user.profile.avatar) } }
-            
+
     //         this.currentUpload.push(avatar)
     //         comp.stop()
     //         console.log(ImagesFiles.findOne(user.profile.avatar))
@@ -32,12 +32,12 @@ Template.userInfo.helpers({
         //meant for object reactivity
         Template.instance().insertedUploads.get()
         const curUpload = Template.instance().currentUpload.list()
-        const ids = curUpload.filter(x=>x.doc).map(x=>x.doc._id)
+        const ids = curUpload.filter(x => x.doc).map(x => x.doc._id)
         const uId = Meteor.userId()
-        const query = [{_id: {$in: ids}}]
-        if (uId) query.push({"meta.userId": uId})
+        const query = [{ _id: { $in: ids } }]
+        if (uId) query.push({ "meta.userId": uId })
         console.log(query)
-        return ImagesFiles.find({$or: query}).each().concat(curUpload.filter(x=>!x.doc));
+        return ImagesFiles.find({ $or: query }).each().concat(curUpload.filter(x => !x.doc));
     },
 });
 
@@ -62,12 +62,16 @@ Template.userInfo.events({
         var document = {
             first: fV,
             last: lV,
-            startedWork: swV,
-            company: cV,
-            occupation: oV,
-            street: sV,
-            city: ciV,
-            country: coV,
+            work: {
+                startedWork: swV,
+                company: cV,
+                occupation: oV,
+            },
+            address: {
+                street: sV,
+                city: ciV,
+                country: coV,
+            }
         }
 
         if (images[0]) {

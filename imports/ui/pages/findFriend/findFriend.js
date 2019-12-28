@@ -13,37 +13,99 @@ Template.findFriend.onCreated(function() {
 
 Template.findFriend.onRendered(function() {
     console.log($('.typeahead').typeahead)
+    // { "profile.first": reg }, { "profile.last": reg }, { 'address.street': reg }, { 'address.city': reg }, { 'address.country': reg }, { 'work.occupation': reg }, { 'work.company': reg }, { 'work.startedWorkYear': reg }
 
-    function mySource(query, sync, aasync) {
-        const username = query
+    function sourcesFactory(queryMod) {
+        return function(query, sync, aasync) {
+            const username = query
 
-        if (username == "") {
-            return []
+            if (username == "") {
+                return []
+            }
+            const reg = new RegExp(escapeRegex(username), 'gi')
+            const nonRequested = FriendRequests.find({ requester: Meteor.userId() }).fetch().map(x => Users.findOne(x.requestee)._id)
+            const nonFriend = Friends.find({ owner: Meteor.userId() }).fetch().map(x => Users.findOne(x.target)._id)
+            const res = Users.find({
+                    _id: { $nin: nonRequested.concat(nonFriend) },
+                    $or: [{
+                        [queryMod]: reg
+                    }]
+                }).fetch()
+                // .map(x => (x._id))
+                .map(x => ({ ...x, value: `${x.profile.first} ${x.profile.last}` }))
+            sync(res)
         }
-        const reg = new RegExp(escapeRegex(username), 'gi')
-        const nonRequested = FriendRequests.find({ requester: Meteor.userId() }).fetch().map(x => Users.findOne(x.requestee)._id)
-        const nonFriend = Friends.find({ owner: Meteor.userId() }).fetch().map(x => Users.findOne(x.target)._id)
-        console.log(nonFriend.length, nonRequested.length, reg)
-        const res = Users.find({
-                _id: { $nin: nonRequested.concat(nonFriend) },
-                $or: [{ "profile.last": reg }, { "profile.first": reg }]
-            }).fetch()
-            // .map(x => (x._id))
-            .map(x => ({ ...x, value: `${x.profile.first} ${x.profile.last}` }))
-        console.log('res', res)
-        sync(res)
-        // return ['abcd', 'abte', 'abxd', 'abersssssssss']
     }
-    // Meteor.typeahead($('.typeahead'))
-    $('.typeahead').typeahead({}, {
-        name: 'my-dataset',
-        source: mySource,
+
+    // function allSources(query, sync, aasync) {
+    //     const username = query
+
+    //     if (username == "") {
+    //         return []
+    //     }
+    //     const reg = new RegExp(escapeRegex(username), 'gi')
+    //     const nonRequested = FriendRequests.find({ requester: Meteor.userId() }).fetch().map(x => Users.findOne(x.requestee)._id)
+    //     const nonFriend = Friends.find({ owner: Meteor.userId() }).fetch().map(x => Users.findOne(x.target)._id)
+    //     const res = Users.find({
+    //             _id: { $nin: nonRequested.concat(nonFriend) },
+    //             $or: [{ "profile.first": reg }, { "profile.last": reg },
+    //                 { 'address.street': reg }, { 'address.city': reg },
+    //                 { 'address.country': reg }, { 'work.occupation': reg },
+    //                 { 'work.company': reg }, { 'work.startedWorkYear': reg }
+    //             ]
+    //         }).fetch()
+    //         // .map(x => (x._id))
+    //         .map(x => ({ ...x, value: `${x.profile.first} ${x.profile.last}` }))
+    //     sync(res)
+    // }
+
+
+    // $('.typeahead').typeahead({}, {
+    //     name: 'last',
+    //     source: allSources,
+    //     display: 'value',
+    // });
+
+    $('.typeahead ').typeahead({}, {
+        name: 'last',
+        source: sourcesFactory("profile.last"),
+        display: 'value',
+    }, {
+        name: 'first',
+        source: sourcesFactory("profile.first"),
+        display: 'value',
+    }, {
+        name: 'street',
+        source: sourcesFactory("address.street"),
+        display: 'value',
+    }, {
+        name: 'city',
+        source: sourcesFactory("address.city"),
+        display: 'value',
+    }, {
+        name: 'country',
+        source: sourcesFactory("address.country"),
+        display: 'value',
+    }, {
+        name: 'occupation',
+        source: sourcesFactory("work.occupation"),
+        display: 'value',
+    }, {
+        name: 'company',
+        source: sourcesFactory("work.company"),
+        display: 'value',
+    }, {
+        name: 'startedWorkYear',
+        source: sourcesFactory("work.startedWorkYear"),
         display: 'value',
     });
 
     $('.typeahead').bind('typeahead:select', function(ev, suggestion) {
-        Meteor.call('friendRequests.insert', { requester: Meteor.userId(), requestee: suggestion._id }, (err, res)=>{
-            if (res){
+        Meteor.call('friendRequests.insert', { requester: Meteor.userId(), requestee: suggestion._id }, (err, res) => {
+            if (err) {
+                alert(err)
+            }
+            else {
                 alert('user requested')
             }
         })
@@ -54,8 +116,7 @@ Template.findFriend.helpers({
 
 });
 
-Template.findFriend.events({
-});
+Template.findFriend.events({});
 
 Template.findFriend.onDestroyed(function() {})
 
