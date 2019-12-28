@@ -1,4 +1,8 @@
 <template name="requests">
+    your friends
+    {{> friends}}
+    
+    
     Requests to you
 <ul>
     {{#each requests}}
@@ -6,7 +10,10 @@
         {{status}}
         {{dateSent}}
         {{dateReplied}}
-        {{user.profile.first}} {{user.profile.last}}
+        {{#with user.profile.avatar}}
+            {{> imageShow}}
+        {{/with}}
+        {{user.profile.first}} {{user.profile.last}} has invited to you join them.
         <button class='acceptJs'>accept</button>
         <button class='rejectJs'>reject</button>
         <button class='eraseJs'>erase</button>

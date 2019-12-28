@@ -5,7 +5,6 @@ import { Friends } from '/imports/api/cols.js'
 import '/imports/ui/layouts/body/body.js';
 import '/imports/ui/pages/home/home.js'
 import '/imports/ui/pages/requests/requests.js'
-import '/imports/ui/pages/friends/friends.js'
 import '/imports/ui/pages/dashboard/dashboard.js'
 import '/imports/ui/pages/findFriend/findFriend.js'
 import '/imports/ui/pages/friendsWall/friendsWall.js'
@@ -34,13 +33,6 @@ FlowRouter.route('/requests', {
   name: 'App.requests',
   action() {
     BlazeLayout.render('App_body', { main: 'requests' });
-  },
-});
-
-FlowRouter.route('/friends', {
-  name: 'App.friends',
-  action() {
-    BlazeLayout.render('App_body', { main: 'friends' });
   },
 });
 

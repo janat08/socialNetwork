@@ -1,5 +1,7 @@
 import './requests.html';
 import { FriendRequests, Users } from '/imports/api/cols.js'
+import '/imports/ui/components/imageShow/imageShow.js'
+import '/imports/ui/components/friends/friends.js'
 
 Template.requests.onCreated(function() {
     SubsCache.subscribe('friendRequests.all')
