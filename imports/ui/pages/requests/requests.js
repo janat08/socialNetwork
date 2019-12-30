@@ -10,7 +10,7 @@ Template.requests.onCreated(function() {
 
 Template.requests.helpers({
     requests() {
-        const requests = FriendRequests.find({ requestee: Meteor.userId(), status: { $ne: "erase" } }).fetch()
+        const requests = FriendRequests.find({ requestee: Meteor.userId(), erase: { $ne: true } }).fetch()
         return requests.map(x => {
             x.user = Users.findOne(x.requestee)
             return x
@@ -19,11 +19,12 @@ Template.requests.helpers({
         })
     },
     myRequests() {
-        const requests = FriendRequests.find({ requester: Meteor.userId(), status: { $ne: 'block' } }).fetch()
+        const requests = FriendRequests.find({ requester: Meteor.userId(), block: { $ne: true } }).fetch()
         return requests.map(x => {
             x.user = Users.findOne(x.requestee)
             if (['reject', 'erase'].indexOf(x.status) != -1) {
-                x.status = "pending"
+                delete x.reject
+                delete x.erase
                 delete x.dateReplied
             }
             return x

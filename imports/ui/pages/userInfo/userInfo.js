@@ -76,6 +76,8 @@ Template.userInfo.events({
                 street: sV,
                 city: ciV,
                 country: coV,
+            },
+            settings: {
             }
         }
 
@@ -83,7 +85,7 @@ Template.userInfo.events({
             document.avatar = images[0].doc._id
         }
         if (backgrounds[0]) {
-            document.background = backgrounds[0].doc._id
+            document.settings.background = backgrounds[0].doc._id
         }
 
         Meteor.call('users.updateProfile', document, (err, res) => {

@@ -35,7 +35,7 @@ less@2.7.11
 practicalmeteor:chai
 random@1.1.0
 
-konecty:user-presence
+mizzao:user-status 
 reywood:publish-composite
 # peerlibrary:reactive-mongo
 # peerlibrary:reactive-publish
@@ -45,7 +45,7 @@ coffeescript
 aldeed:collection2-core
 underscore@1.0.10
 
-twbs:bootstrap
+alexwine:bootstrap-4
 babrahams:constellation
 ccorcos:subs-cache
 manuel:reactivearray

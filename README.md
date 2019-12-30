@@ -1,8 +1,4 @@
-autocomplete doesn't work
 add autocomplete styles bootstrap 4
-
-
-
 
 make real images
 

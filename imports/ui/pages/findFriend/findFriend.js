@@ -12,10 +12,7 @@ Template.findFriend.onCreated(function() {
 });
 
 Template.findFriend.onRendered(function() {
-    console.log($('.typeahead').typeahead)
-    // { "profile.first": reg }, { "profile.last": reg }, { 'address.street': reg }, { 'address.city': reg }, { 'address.country': reg }, { 'work.occupation': reg }, { 'work.company': reg }, { 'work.startedWorkYear': reg }
-
-    function sourcesFactory(queryMod) {
+    function sourcesFactory(queryMod, value, value2) {
         return function(query, sync, aasync) {
             const username = query
 
@@ -32,7 +29,8 @@ Template.findFriend.onRendered(function() {
                     }]
                 }).fetch()
                 // .map(x => (x._id))
-                .map(x => ({ ...x, value: `${x.profile.first} ${x.profile.last}` }))
+                .map(x => ({ ...x, value: `${x[value[0]][value[1]]} ${value2 && (x[value2[0]][value2[1]])}` }))
+            console.log(res)
             sync(res)
         }
     }
@@ -66,37 +64,33 @@ Template.findFriend.onRendered(function() {
     //     display: 'value',
     // });
 
-    $('.typeahead ').typeahead({}, {
-        name: 'last',
-        source: sourcesFactory("profile.last"),
-        display: 'value',
-    }, {
+    $('.typeahead ').typeahead({},{
         name: 'first',
-        source: sourcesFactory("profile.first"),
+        source: sourcesFactory("profile.first", ['profile', 'first'], ['profile', 'last']),
         display: 'value',
     }, {
         name: 'street',
-        source: sourcesFactory("address.street"),
+        source: sourcesFactory("address.street", ['address', 'street']),
         display: 'value',
     }, {
         name: 'city',
-        source: sourcesFactory("address.city"),
+        source: sourcesFactory("address.city", ['address', 'city']),
         display: 'value',
     }, {
         name: 'country',
-        source: sourcesFactory("address.country"),
+        source: sourcesFactory("address.country", ['address', 'country']),
         display: 'value',
     }, {
         name: 'occupation',
-        source: sourcesFactory("work.occupation"),
+        source: sourcesFactory("work.occupation", ['work', 'occupation']),
         display: 'value',
     }, {
         name: 'company',
-        source: sourcesFactory("work.company"),
+        source: sourcesFactory("work.company", ['work', 'company']),
         display: 'value',
     }, {
         name: 'startedWorkYear',
-        source: sourcesFactory("work.startedWorkYear"),
+        source: sourcesFactory("work.startedWorkYear", ['work', 'startedWorkYear']),
         display: 'value',
     });
 
