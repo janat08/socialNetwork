@@ -13,7 +13,7 @@ const FRIEND_TYPES = friendTypes
 
 const createUser = (email, password, username) => {
     const userId = Accounts.createUser({ email, password, username });
-    Users.update(userId, {$set: {profile: {first: "first", last: "last"}}})
+    Users.update(userId, { $set: { profile: { first: "first", last: "last" } } })
     return Users.findOne(userId);
 };
 
@@ -25,7 +25,7 @@ Meteor.startup(() => {
         Users.remove({})
         Friends.remove({})
         FriendRequests.remove({})
-    
+
 
         let users = [];
         _.each(_.range(USERS), (idx) => {
@@ -52,17 +52,16 @@ Meteor.startup(() => {
                 }
                 else {
                     // written+=1
-                    if (i % 3 == 0) {
-                        Meteor.call('friends.insert', { firstId: target._id, requesteeId: user._id, type: _.sample(FRIEND_TYPES) })
-                    }
-                    else if (i % 3 == 1) {
+                    if (i % 3 == 1 || i % 3 == 0) {
                         const request = {
-                            status: "bad",
                             dateSent: new Date(),
                             requestee: target._id,
                             requester: user._id,
                         }
-                        Meteor.call('friendRequests.insert', request)
+                        const id = Meteor.call('friendRequests.insert', request)
+                        if (i % 3 == 0) {
+                            Meteor.call('friendRequests.accept', { _id: id })
+                        }
                     }
                     return asdf(i + 1)
                 }
@@ -70,11 +69,11 @@ Meteor.startup(() => {
         });
         users = Users.find().fetch()
         _.each(users, (idx, i) => {
-            if (idx.friendIds) {
+            if (idx.friends) {
                 let post = {
                     title: `User Post - ${idx._id}`,
                     content: _.sample(POSTS),
-                    friendIds: idx.friendIds,
+                    friendIds: idx.friends.map(x=>x.targetId),
                     authorId: idx._id,
                 };
                 post = Meteor.call('posts.insert', post)

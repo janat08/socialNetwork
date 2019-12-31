@@ -1,6 +1,6 @@
 import FriendRequestsSchema from './schema.js';
 
-const FriendFriendRequests = new Mongo.Collection('friendRequest');
-export default FriendFriendRequests;
+const FriendRequests = new Mongo.Collection('friendRequest');
+export default FriendRequests;
 
-FriendFriendRequests.attachSchema(FriendRequestsSchema);
+FriendRequests.attachSchema(FriendRequestsSchema);

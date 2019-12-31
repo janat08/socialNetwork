@@ -1,6 +1,4 @@
-add autocomplete styles bootstrap 4
-
-make real images
+test remove old requests function
 
 done:
 added avatar, message, to requests. added friends template to requests page
@@ -12,3 +10,4 @@ Schema
 user > post> owner> user
 user > friend > user
 
+make real images

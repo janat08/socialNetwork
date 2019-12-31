@@ -6,16 +6,13 @@ Meteor.methods({
             authorId = this.userId
         }
         const postId = Posts.insert({ authorId, ...rest })
-        const ids = Users.findOne(authorId).friendIds
+        const ids = Users.findOne(authorId).friends.map(x => x.targetId)
+        console.log(ids, friendIds)
         friendIds.filter(x => {
             return ids.indexOf(x) == -1 ? false : true
         }).map(x => {
-            console.log('inserting')
-            const friend = Friends.findOne(x)
-            if (friend.owner == this.userId || !this.connection) {
-                const user = Users.findOne(friend.target)._id
-                return Meteor.call('owners.insert', { ownerId: user, postId })
-            }
+            const user = Users.findOne(x)._id
+            return Meteor.call('owners.insert', { ownerId: user, postId })
         })
     },
 })
