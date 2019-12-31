@@ -22,18 +22,22 @@ Template.requests.helpers({
         const requests = FriendRequests.find({ requester: Meteor.userId(), block: { $ne: true } }).fetch()
         return requests.map(x => {
             x.user = Users.findOne(x.requestee)
-            if (['reject', 'erase'].indexOf(x.status) != -1) {
+            if (x.reject) {
                 delete x.reject
+                delete x.dateReplied
+            }
+            else if (x.erase) {
                 delete x.erase
                 delete x.dateReplied
             }
+
             return x
         }).sort((x, y) => {
             return x.status.localeCompare(y.status)
         })
     },
     myRequestsBlocked() {
-        const requests = FriendRequests.find({ requester: Meteor.userId(), status: 'block' }).fetch()
+        const requests = FriendRequests.find({ requester: Meteor.userId(), blocked: true }).fetch()
         return requests.map(x => {
             x.user = Users.findOne(x.requestee)
             return x

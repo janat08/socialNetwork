@@ -1,4 +1,5 @@
 test remove old requests function
+blocked
 
 done:
 added avatar, message, to requests. added friends template to requests page

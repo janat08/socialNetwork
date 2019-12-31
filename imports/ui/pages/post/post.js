@@ -1,6 +1,6 @@
 import './post.html';
 import { FlowRouter } from 'meteor/kadira:flow-router';
-import { Friends, Users, ImagesFiles } from '/imports/api/cols.js'
+import { Users, ImagesFiles } from '/imports/api/cols.js'
 
 Template.post.onCreated(function() {
     SubsCache.subscribe('images.all')
@@ -10,15 +10,10 @@ Template.post.onCreated(function() {
     //used to assign ids to files, so that there're unique ids between consequtive upload batches
     this.numberOfRuns = 0
 
-    this.friendship = new ReactiveVar()
     this.target = new ReactiveVar()
     this.autorun(() => {
         const friend = FlowRouter.getParam('friendId')
-        const target = Friends.findOne(friend)
-        if (target) {
-            this.friendship.set(target)
-            this.target.set(Users.findOne(target.target))
-        }
+        this.target.set(Users.findOne(friend))
     })
 });
 

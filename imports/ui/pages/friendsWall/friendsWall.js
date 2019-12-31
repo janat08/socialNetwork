@@ -1,25 +1,18 @@
 import './friendsWall.html';
 import { FlowRouter } from 'meteor/kadira:flow-router';
-import { Posts, Owners, Friends, Users } from '/imports/api/cols.js'
+import { Posts, Owners, Users } from '/imports/api/cols.js'
 
 Template.friendsWall.onCreated(function() {
-    SubsCache.subscribe('friends.all')
     SubsCache.subscribe('posts.all')
     SubsCache.subscribe('owners.all')
     SubsCache.subscribe('users.all')
-    this.friendship = new ReactiveVar()
-    this.target = new ReactiveVar()
+    
     this.autorun(() => {
-        const friend = FlowRouter.getParam('friendId')
-        const target = Friends.findOne(friend)
-        if (target) {
-            this.friendship.set(target)
-        }
-    })
-    this.autorun(() => {
-        const friend = Friends.findOne(FlowRouter.getParam('friendId'))
+        const user = Meteor.user()
         if (SubsCache.ready()) {
-            if (!friend || !Meteor.userId() || friend.owner != Meteor.userId()) {
+            const user = Users.findOne(FlowRouter.getParam('friendId'))
+            const blocked = user.friends.find(x=>x.targetId==Meteor.userId()).blocked
+            if (blocked || !user || user.friends.map(x => x.targetId).indexOf(FlowRouter.getParam('friendId')) == -1) {
                 FlowRouter.go('App.home')
                 return
             }
@@ -29,25 +22,23 @@ Template.friendsWall.onCreated(function() {
 
 Template.friendsWall.helpers({
     posts() {
-        const { friendship } = Template.instance()
-        if (friendship.get()) {
-            const owners = Owners.find({ ownerId: friendship.get().target, approved: true }).fetch()
-            const posts = Posts.find({ _id: { $in: owners.map(x => x.postId) } })
-            return posts.fetch().map((x, i) => {
-                const user = Users.findOne(x.authorId)
-                const { profile } = user
-                if (!profile || !profile.first) {
-                    x.name = user.username
-                }
-                else {
-                    x.name = profile.first + " " + profile.last
-                }
-                return x
-            })
-        }
+        const owners = Owners.find({ ownerId: FlowRouter.getParam('friendId'), approved: true }).fetch()
+        const posts = Posts.find({ _id: { $in: owners.map(x => x.postId) } })
+        return posts.fetch().map((x, i) => {
+            const user = Users.findOne(x.authorId)
+            const { profile } = user
+            if (!profile || !profile.first) {
+                x.name = user.username
+            }
+            else {
+                x.name = profile.first + " " + profile.last
+            }
+            return x
+        })
+
     },
     friendship() {
-        return Template.instance().friendship.get()
+        return FlowRouter.getParam('friendId')
     }
 });
 

@@ -1,7 +1,5 @@
 <template name="friendsWall">
-    {{#with friendship}}
-        <a href='/post/{{_id}}'>Post to this friend</a>
-        {{/with}}
+        <a href='/post/{{friendship}}'>Post to this friend</a>
     <ul>
         {{#each posts}}
         <li>

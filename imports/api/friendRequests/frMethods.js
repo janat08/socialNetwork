@@ -11,6 +11,7 @@ Meteor.methods({
         }
         doc.dateSent = new Date()
         doc.pending = true
+        console.log("inserting")
         return FriendRequests.insert(doc)
     },
     'friendRequests.reject' ({ _id }) {
@@ -33,7 +34,6 @@ Meteor.methods({
         FriendRequests.update(_id, { $set: { accepted: true, pending: false } })
         Users.update(FR.requestee, { $addToSet: { friends: { targetId: FR.requester, type: 'friends', startDate, blocked: false, request: _id } } })
         Users.update(FR.requester, { $addToSet: { friends: { targetId: FR.requestee, type: 'friends', startDate, blocked: false, request: _id } } })
-        
     },
     // "friendRequests.typeSelect" ({ targetId, selected }) {
     //     if (!this.userId) throw new Meteor.Error("logged out")

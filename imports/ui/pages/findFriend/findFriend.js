@@ -1,7 +1,7 @@
 import './findFriend.html';
-import { FriendRequests, Users, Friends } from '/imports/api/cols.js'
+import { FriendRequests, Users } from '/imports/api/cols.js'
 import 'corejs-typeahead'
-
+import './findFriend.css'
 //for some reason using the meteor package, list wont render if accepting input value parameter in helper
 Template.findFriend.onCreated(function() {
     SubsCache.subscribe('users.all')
@@ -20,49 +20,18 @@ Template.findFriend.onRendered(function() {
                 return []
             }
             const reg = new RegExp(escapeRegex(username), 'gi')
-            const nonRequested = FriendRequests.find({ requester: Meteor.userId() }).fetch().map(x => Users.findOne(x.requestee)._id)
-            const nonFriend = Friends.find({ owner: Meteor.userId() }).fetch().map(x => Users.findOne(x.target)._id)
+            const nonRequested = FriendRequests.find({ $or: [{requester: Meteor.userId()}, {requestee: Meteor.userId()}] }).fetch().map(x => Users.findOne(x.requestee)._id)
+            const nonFriended = Meteor.user().friends.map(x=>x.targetId)
             const res = Users.find({
-                    _id: { $nin: nonRequested.concat(nonFriend) },
+                    _id: { $nin: nonRequested.concat(nonFriended) },
                     $or: [{
                         [queryMod]: reg
                     }]
                 }).fetch()
-                // .map(x => (x._id))
                 .map(x => ({ ...x, value: `${x[value[0]][value[1]]} ${value2 && (x[value2[0]][value2[1]])}` }))
-            console.log(res)
             sync(res)
         }
     }
-
-    // function allSources(query, sync, aasync) {
-    //     const username = query
-
-    //     if (username == "") {
-    //         return []
-    //     }
-    //     const reg = new RegExp(escapeRegex(username), 'gi')
-    //     const nonRequested = FriendRequests.find({ requester: Meteor.userId() }).fetch().map(x => Users.findOne(x.requestee)._id)
-    //     const nonFriend = Friends.find({ owner: Meteor.userId() }).fetch().map(x => Users.findOne(x.target)._id)
-    //     const res = Users.find({
-    //             _id: { $nin: nonRequested.concat(nonFriend) },
-    //             $or: [{ "profile.first": reg }, { "profile.last": reg },
-    //                 { 'address.street': reg }, { 'address.city': reg },
-    //                 { 'address.country': reg }, { 'work.occupation': reg },
-    //                 { 'work.company': reg }, { 'work.startedWorkYear': reg }
-    //             ]
-    //         }).fetch()
-    //         // .map(x => (x._id))
-    //         .map(x => ({ ...x, value: `${x.profile.first} ${x.profile.last}` }))
-    //     sync(res)
-    // }
-
-
-    // $('.typeahead').typeahead({}, {
-    //     name: 'last',
-    //     source: allSources,
-    //     display: 'value',
-    // });
 
     $('.typeahead ').typeahead({},{
         name: 'first',

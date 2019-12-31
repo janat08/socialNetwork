@@ -35,7 +35,7 @@
 
 <template name="friendItem">
             {{type}}
-        <a href='friendsWall/{{_id}}'>{{target.username}}</a>
+        <a href='friendsWall/{{targetId}}'>{{target.username}}</a>
         <button class='blockJs'>{{blockStatus}}</button>
         {{target.profile.first}}{{target.profile.last}}
         {{#with target.profile.avatar}}
