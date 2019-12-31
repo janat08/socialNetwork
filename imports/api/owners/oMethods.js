@@ -1,14 +1,15 @@
-import { Owners } from '../cols.js'
+import { Owners, Users } from '../cols.js'
 
 Meteor.methods({
-    "owners.insert" ({ postId, ownerId }) {
-        console.log('inserting')
-        Owners.insert({ postId, ownerId, approved: false })
+    "owners.insert" ({ postId, ownerId, authorId }) {
+        if (!Users.findOne(ownerId).friends.find(x => x.targetId == authorId).blocked) {
+            Owners.insert({ postId, ownerId, approved: false })
+        }
     },
     'owners.approve' (post) {
         if (!this.userId) throw new Meteor.Error('logged off')
         const { _id } = post
-        Owners.update({ postId: _id, ownerId: this.userId }, {$set: {approved: true}})
+        Owners.update({ postId: _id, ownerId: this.userId }, { $set: { approved: true } })
     },
     'owners.reject' (post) {
         if (!this.userId) throw new Meteor.Error('logged off')

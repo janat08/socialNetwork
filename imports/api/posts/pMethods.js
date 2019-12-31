@@ -12,7 +12,7 @@ Meteor.methods({
             return ids.indexOf(x) == -1 ? false : true
         }).map(x => {
             const user = Users.findOne(x)._id
-            return Meteor.call('owners.insert', { ownerId: user, postId })
+            return Meteor.call('owners.insert', { ownerId: user, postId, authorId })
         })
     },
 })

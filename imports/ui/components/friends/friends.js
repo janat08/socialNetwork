@@ -66,5 +66,6 @@ Template.friends.onDestroyed(function() {})
 
 function mapUser(friend) {
     friend.target = Meteor.users.findOne(friend.targetId)
+    friend.target.blocking = !friend.target.friends.find(x=>x.targetId == Meteor.userId()).blocked
     return friend
 }

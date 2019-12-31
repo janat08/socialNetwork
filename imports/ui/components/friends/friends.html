@@ -34,6 +34,7 @@
 
 
 <template name="friendItem">
+        {{#if target.blocking}}
             {{type}}
         <a href='friendsWall/{{targetId}}'>{{target.username}}</a>
         <button class='blockJs'>{{blockStatus}}</button>
@@ -49,4 +50,5 @@
 </select>
     {{startDate}}
     <br>
+    {{/if}}
 </template>
