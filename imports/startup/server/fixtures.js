@@ -23,7 +23,6 @@ Meteor.startup(() => {
         Posts.remove({})
         Owners.remove({})
         Users.remove({})
-        Friends.remove({})
         FriendRequests.remove({})
 
 
@@ -41,13 +40,11 @@ Meteor.startup(() => {
                 const target = users[i]
                 if (i == users.length - 1) {
                     return
-                }
-
+                } 
+                const user1 = Users.findOne(target._id)
                 if (FriendRequests.find({ $or: [{ requestee: target._id }, { requestee: user._id }] }).count() ||
-                    Friends.find({ owner: target._id, target: user._id }).count() ||
+                    user1.friends && user1.friends.findIndex(x => x.targetId == user._id) != -1 ||
                     target._id == user._id) {
-                    //  skipped+=1
-                    // console.log('skipping', Friends.find({ owner: target._id, target: user._id}).count(), FriendRequests.find({ $or: [{ requestee: target._id }, { requestee: user._id }] }).count())
                     return asdf(i + 1)
                 }
                 else {
@@ -73,7 +70,7 @@ Meteor.startup(() => {
                 let post = {
                     title: `User Post - ${idx._id}`,
                     content: _.sample(POSTS),
-                    friendIds: idx.friends.map(x=>x.targetId),
+                    friendIds: idx.friends.map(x => x.targetId),
                     authorId: idx._id,
                 };
                 post = Meteor.call('posts.insert', post)

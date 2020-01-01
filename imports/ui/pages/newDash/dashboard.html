@@ -3,26 +3,8 @@
 <div id="gallery" class="fullscreen"></div>
 <div id="nav" class="navbar">
     <button id="preview">&lt; previous</button>
-    <button id="delete">delete</button>
-    <button id="approve">approve</button>
+    <button id="delete" class="rejectJs">delete</button>
+    <button id="approve" class="approveJs">approve</button>
     <button id="next">next &gt;</button>
-    <a id="copyright" href="http://www.glicer.com">
-        <small>Dev & Rock 'n' roll © Glicer</small>
-    </a>
 </div>
-
-<ul>
-    {{#each posts}}
-<li>
-    <button class='approveJs'>approve</button>
-    <button class='rejectJs'>reject</button>
-    {{title}}
-    {{content}}
-    {{imageId}}
-    {{username}}
-</li>
-    {{else}}
-    Loading
-{{/each}}
-    </ul>
 </template>

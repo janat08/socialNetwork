@@ -13,6 +13,7 @@ Meteor.methods({
     },
     'owners.reject' (post) {
         if (!this.userId) throw new Meteor.Error('logged off')
+        console.log('rejecting')
         const { _id } = post
         Owners.remove({ postId: _id, ownerId: this.userId })
     },

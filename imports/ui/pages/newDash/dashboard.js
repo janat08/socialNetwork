@@ -1,12 +1,10 @@
 import './dashboard.html';
-import { Posts, Owners, Users } from '/imports/api/cols.js'
-// import data from './data.json'
-// import './polaroid-gallery.js'
+import { Posts, Owners, Users, ImagesFiles } from '/imports/api/cols.js'
 import './polaroid-gallery.css'
 import './jqueryui.1.12.1.js'
-import sett from './data.json'
-
-var data = sett
+import './index.css'
+// import sett from './data.json'
+// var data = sett
 
 var dataSize = {};
 var dataLength = 0;
@@ -20,14 +18,13 @@ function polaroidGallery(data) {
     observe();
     setGallery(data)
     init()
-    console.log(dataSize, dataLength, currentData, navbarHeight, resizeTimeout)
 }
 
 function setGallery(arr) {
     var out = "";
     var i;
     for (i = 0; i < arr.length; i++) {
-        out += '<div class="photo" id="' + i + '"><div class="side side-front"><figure>' +
+        out += '<div class="photo" id="' + i + '" data-id="' + arr[i]._id + '"><div class="side side-front"><figure>' +
             '<img src="' + arr[i].name + '" alt="' + arr[i].name + '"/>' +
             '<figcaption>' + arr[i].caption + '</figcaption>' +
             '</figure></div><div class="side side-back"><div><p>' + arr[i].description + '</p></div></div></div>';
@@ -61,11 +58,9 @@ function observe() {
             var img = item.getElementsByTagName('img')[0];
             var fig = item.getElementsByTagName('figure')[0];
             var first = true;
-
             img.addEventListener('load', function() {
                 item.style.height = (fig.offsetHeight).toString() + 'px';
                 item.style.width = (fig.offsetWidth).toString() + 'px';
-
                 dataSize[item.id] = { item: item, width: item.offsetWidth, height: img.offsetHeight };
 
                 if (first) {
@@ -186,8 +181,7 @@ Template.dashboard.onCreated(function() {
 });
 
 Template.dashboard.onRendered(function() {
-
-    this.autorun(() => {
+    this.autorun((comp) => {
         const { query, handle } = this
         const owners = Owners.find({ ownerId: Meteor.userId(), approved: false }).fetch()
 
@@ -199,31 +193,32 @@ Template.dashboard.onRendered(function() {
             var user = Users.findOne(x.authorId)
             x.caption = `From: ${user.profile.first} ${user.profile.last}, ` + x.title
             x.description = x.content
-            x.name = "https://image.freepik.com/free-photo/image-human-brain_99433-298.jpg"
+            x.name = "https://upload.wikimedia.org/wikipedia/commons/6/6c/No_image_3x4.svg"
+            if (x.imageIds) {
+                const image = ImagesFiles.findOne(x.imageIds[0])
+                x.name = image.name
+            }
             return x
         })
 
-        var a = {
-            "name": "img/img02.jpg",
-            "caption": "Amis",
-            "description": "Le temps confirme l'amitié.<br> — Henri Lacordaire"
-        }
         if (res.length) {
             polaroidGallery(res)
             $(".photo").draggable();
             $("#delete").droppable({
                 drop: function(event, ui) {
-                    console.log('delete')
+                    const _id = deleteClick()
+                    Meteor.call('owners.reject', { _id })
                 }
             });
             $("#approve").droppable({
                 drop: function(event, ui) {
-                    //approve
+                    const _id = deleteClick()
+                    Meteor.call('owners.approve', { _id })
                 }
             });
+            comp.stop()
         }
     })
-
 })
 
 Template.dashboard.helpers({
@@ -232,27 +227,31 @@ Template.dashboard.helpers({
 
 Template.dashboard.events({
     'click .rejectJs' () {
-        Meteor.call('owners.reject', this)
+        const _id = deleteClick()
+        Meteor.call('owners.reject', { _id })
     },
     'click .approveJs' () {
-        Meteor.call('owners.approve', this)
+        const _id = deleteClick()
+        Meteor.call('owners.approve', { _id })
     },
-    'click #delete': function deleteClick() {
-        const prev = currentData
-        currentIndex = currentIndex*1 + 1;
-        if (typeof dataSize[currentIndex] == 'undefined') {
-            currentIndex = 0
-        }
-        if (Object.keys(dataSize).length == Object.keys(deleted).length) return
-        if (!!deleted[currentIndex]) return deleteClick()
-        select(dataSize[currentIndex]);
-        shuffleAll();
-        prev.item.remove()
-        deleted[prev.item.id] = true
-        console.log('finished delete')
-    }
+    'click #delete': deleteClick
 });
 
+function deleteClick() {
+    const prev = currentData
+    currentIndex = currentIndex * 1 + 1;
+    if (typeof dataSize[currentIndex] == 'undefined') {
+        currentIndex = 0
+    }
+    if (Object.keys(dataSize).length == Object.keys(deleted).length) return
+    if (!!deleted[currentIndex]) return deleteClick()
+    const id = $(prev.item).data('id')
+    select(dataSize[currentIndex]);
+    shuffleAll();
+    prev.item.remove()
+    deleted[prev.item.id] = true
 
+    return id
+}
 
 Template.dashboard.onDestroyed(function() {})

@@ -7,7 +7,6 @@ Meteor.methods({
         }
         const postId = Posts.insert({ authorId, ...rest })
         const ids = Users.findOne(authorId).friends.map(x => x.targetId)
-        console.log(ids, friendIds)
         friendIds.filter(x => {
             return ids.indexOf(x) == -1 ? false : true
         }).map(x => {

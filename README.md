@@ -1,6 +1,13 @@
 test remove old requests function
 blocked
 
+
+undone:
+background on walls
+
+
+
+
 done:
 added avatar, message, to requests. added friends template to requests page
 typeahead fixed except for css

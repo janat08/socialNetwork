@@ -1,21 +1,33 @@
 import './friendsWall.html';
 import { FlowRouter } from 'meteor/kadira:flow-router';
-import { Posts, Owners, Users } from '/imports/api/cols.js'
+import { Posts, Owners, Users, ImagesFiles } from '/imports/api/cols.js'
 
 Template.friendsWall.onCreated(function() {
     SubsCache.subscribe('posts.all')
     SubsCache.subscribe('owners.all')
     SubsCache.subscribe('users.all')
-    
+
     this.autorun(() => {
-        const user = Meteor.user()
         if (SubsCache.ready()) {
             const user = Users.findOne(FlowRouter.getParam('friendId'))
-            const blocked = user.friends.find(x=>x.targetId==Meteor.userId()).blocked
+            const blocked = user.friends.find(x => x.targetId == Meteor.userId()).blocked
             if (blocked || !user || user.friends.map(x => x.targetId).indexOf(FlowRouter.getParam('friendId')) == -1) {
                 FlowRouter.go('App.home')
                 return
             }
+        }
+    })
+});
+
+Template.friendsWall.onRendered(function() {
+    this.autorun(() => {
+        if (SubsCache.ready()) {
+            const user = Users.findOne(FlowRouter.getParam('friendId'))
+            if (user.settings.background) {
+                const link = ImagesFiles.findOne(user.settings.background).link
+                $('body').css('background-image', `url(${link})`);
+            }
+
         }
     })
 });

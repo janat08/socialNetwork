@@ -11,6 +11,7 @@ import '/imports/ui/pages/friendsWall/friendsWall.js'
 import '/imports/ui/pages/post/post.js'
 import '/imports/ui/pages/userInfo/userInfo.js'
 import '/imports/ui/pages/not-found/not-found.js'
+import '/imports/ui/pages/yourWall/yourWall.js'
 
 window.SubsCache = new SubsCache(5, 10);
 
@@ -49,6 +50,13 @@ FlowRouter.route('/friendsWall/:friendId', {
     BlazeLayout.render('App_body', { main: 'friendsWall' });
   },
 });
+
+FlowRouter.route('/yourWall', {
+  name: "App.yourWall",
+  action(){
+    BlazeLayout.render('App_body', { main: 'yourWall'})
+  },
+})
 
 FlowRouter.route('/post/:friendId', {
   name: 'App.post',
