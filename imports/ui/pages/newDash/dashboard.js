@@ -3,6 +3,7 @@ import { Posts, Owners, Users } from '/imports/api/cols.js'
 // import data from './data.json'
 // import './polaroid-gallery.js'
 import './polaroid-gallery.css'
+import './jqueryui.1.12.1.js'
 import sett from './data.json'
 
 var data = sett
@@ -185,6 +186,7 @@ Template.dashboard.onCreated(function() {
 });
 
 Template.dashboard.onRendered(function() {
+
     this.autorun(() => {
         const { query, handle } = this
         const owners = Owners.find({ ownerId: Meteor.userId(), approved: false }).fetch()
@@ -208,8 +210,20 @@ Template.dashboard.onRendered(function() {
         }
         if (res.length) {
             polaroidGallery(res)
+            $(".photo").draggable();
+            $("#delete").droppable({
+                drop: function(event, ui) {
+                    console.log('delete')
+                }
+            });
+            $("#approve").droppable({
+                drop: function(event, ui) {
+                    //approve
+                }
+            });
         }
     })
+
 })
 
 Template.dashboard.helpers({
@@ -225,19 +239,17 @@ Template.dashboard.events({
     },
     'click #delete': function deleteClick() {
         const prev = currentData
-        currentIndex = Number(currentData.item.id) + 1;
-        console.log(currentIndex, deleted[currentIndex], dataSize[currentIndex])
+        currentIndex = currentIndex*1 + 1;
         if (typeof dataSize[currentIndex] == 'undefined') {
             currentIndex = 0
         }
-        if (Object.keys(dataSize) == Object.keys(deleted)) return
-        if (deleted[currentIndex]) deleteClick()
-
+        if (Object.keys(dataSize).length == Object.keys(deleted).length) return
+        if (!!deleted[currentIndex]) return deleteClick()
         select(dataSize[currentIndex]);
         shuffleAll();
-        // prev.item.zIndex(-1)
         prev.item.remove()
         deleted[prev.item.id] = true
+        console.log('finished delete')
     }
 });
 

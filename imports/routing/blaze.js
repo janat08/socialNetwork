@@ -5,7 +5,7 @@ import { Friends } from '/imports/api/cols.js'
 import '/imports/ui/layouts/body/body.js';
 import '/imports/ui/pages/home/home.js'
 import '/imports/ui/pages/requests/requests.js'
-import '/imports/ui/pages/dashboard/dashboard.js'
+import '/imports/ui/pages/newDash/dashboard.js'
 import '/imports/ui/pages/findFriend/findFriend.js'
 import '/imports/ui/pages/friendsWall/friendsWall.js'
 import '/imports/ui/pages/post/post.js'
