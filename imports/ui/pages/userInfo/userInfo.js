@@ -17,7 +17,6 @@ Template.userInfo.onCreated(function() {
     this.insertedUploads1 = new ReactiveVar(0)
     //used to assign ids to files, so that there're unique ids between consequtive upload batches
     this.numberOfRuns1 = 0
-
 });
 
 Template.userInfo.helpers({

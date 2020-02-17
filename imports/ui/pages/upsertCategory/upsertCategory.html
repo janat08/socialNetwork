@@ -1,0 +1,10 @@
+<template name="upsertCategory">
+{{#with category}}
+<form id='upsertCategory'>
+    top: <input name='top' value="{{top}}"> 
+    bottom: <input name="bottom" value="{{bottom}}">
+    <input type='submit'  value="submit">
+</form>
+{{/with}}
+<button class='deleteJs'>Delete Category</button>
+</template>

@@ -30,13 +30,13 @@ Only the first image from left will be your background.
 first: <input name='first' value="{{user.profile.first}}">
 last: <input name='last'  value="{{user.profile.last}}">
 
-street: <input name='street' value="{{user.street}}">
-city: <input name="city" value="{{user.city}}">
-country: <input name="country" value="{{user.country}}">
+street: <input name='street' value="{{user.address.street}}">
+city: <input name="city" value="{{user.address.city}}">
+country: <input name="country" value="{{user.address.country}}">
 
-occupation: <input name="occupation" value="{{user.occupation}}">
-company: <input name="company" value="{{user.company}}">
-startedWork: <input name="startedWork" value="{{user.startedWork}}">
+occupation: <input name="occupation" value="{{user.work.occupation}}">
+company: <input name="company" value="{{user.work.company}}">
+startedWork: <input name="startedWork" value="{{user.work.startedWorkYear}}">
 
 <input type='submit' value='submit'>
 {{/with}}

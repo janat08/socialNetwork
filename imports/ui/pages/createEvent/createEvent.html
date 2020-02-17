@@ -1,0 +1,18 @@
+<template name="createEvent">
+
+<form id='post'>
+    title: <input name='title'>
+    category: <select name="top" class='selectTopJs'>
+        {{#each topCats}}
+            <option value="{{this}}">{{this}}</option>
+        {{/each}}
+    </select>
+    sub: <select name="bottom">
+        {{#each bottomCats}}
+            <option value="{{this}}">{{this}}</option>
+        {{/each}}
+    </select>
+    <input type='submit'  value="submit">
+</form>
+
+</template>

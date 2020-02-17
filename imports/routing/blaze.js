@@ -5,13 +5,16 @@ import { Friends } from '/imports/api/cols.js'
 import '/imports/ui/layouts/body/body.js';
 import '/imports/ui/pages/home/home.js'
 import '/imports/ui/pages/requests/requests.js'
-import '/imports/ui/pages/newDash/dashboard.js'
+import '/imports/ui/pages/dashboard/dashboard.js'
 import '/imports/ui/pages/findFriend/findFriend.js'
 import '/imports/ui/pages/friendsWall/friendsWall.js'
 import '/imports/ui/pages/post/post.js'
 import '/imports/ui/pages/userInfo/userInfo.js'
 import '/imports/ui/pages/not-found/not-found.js'
 import '/imports/ui/pages/yourWall/yourWall.js'
+import '/imports/ui/pages/upsertCategory/upsertCategory.js'
+import '/imports/ui/pages/browseEvents/browseEvents.js'
+import '/imports/ui/pages/createEvent/createEvent.js'
 
 window.SubsCache = new SubsCache(5, 10);
 
@@ -72,12 +75,35 @@ FlowRouter.route('/userInfo', {
   },
 });
 
-FlowRouter.route('/sentRequests', {
+FlowRouter.route('/browseEvents', {
   name: 'App.userInfo',
   action() {
-    BlazeLayout.render('App_body', { main: 'sentRequests' });
+    BlazeLayout.render('App_body', { main: 'browseEvents' });
   },
 });
+
+FlowRouter.route('/createEvent', {
+  name: 'App.userInfo',
+  action() {
+    BlazeLayout.render('App_body', { main: 'createEvent' });
+  },
+});
+
+
+FlowRouter.route('/upsertCategory', {
+  name: 'App.upsertCategory',
+  action() {
+    BlazeLayout.render('App_body', { main: 'upsertCategory' });
+  },
+});
+
+FlowRouter.route('/upsertCategory/:bottom', {
+  name: 'App.upsertCategoryBt',
+  action() {
+    BlazeLayout.render('App_body', { main: 'upsertCategory' });
+  },
+});
+
 
 FlowRouter.notFound = {
   action() {
