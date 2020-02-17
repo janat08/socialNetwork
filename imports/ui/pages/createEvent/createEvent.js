@@ -42,17 +42,13 @@ Template.createEvent.events({
             bottom: bV
         }
 
-        const { top, bottom } = document
-
-        const exists = Categories.findOne({ top, bottom })
-
-        if (exists) {
-            Meteor.call('events.create', { ...document }, (err, suc) => {
-                // if (suc) {
-                //     FlowRouter.go('App.upsertCategoryBt', { bottom: bV })
-                // }
-            })
-        }
+        console.log("calling", document)
+        Meteor.call('events.upsert', { ...document }, (err, suc) => {
+            console.log(suc, err)
+            if (suc) {
+                // FlowRouter.go('App.upsertCategoryBt', { bottom: bV })
+            }
+        })
 
     }
 });
