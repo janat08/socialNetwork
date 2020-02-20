@@ -52,3 +52,6 @@ manuel:reactivearray
 ostrio:files
 littledata:synced-cron
 #sergeyt:typeahead
+fullcalendar:fullcalendar
+dschulz:jquery-qrcode
+momentjs:moment

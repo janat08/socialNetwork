@@ -1,7 +1,23 @@
 <template name="browseEvents">
 
+<input class="mapJs">
+
 <form id='post'>
-<input type='submit'  value="submit">
+    category: <select name="top" class='selectTopJs'>
+        {{#each topCats}}
+            <option value="{{this}}">{{this}}</option>
+        {{/each}}
+    </select>
+    sub: <select name="bottom">
+        {{#each bottomCats}}
+            <option value="{{this}}">{{this}}</option>
+        {{/each}}
+    </select>
+    <input type='submit'  value="submit">
 </form>
+
+{{#each events}}
+    {{title}}{{top1}}{{bottom1}}{{top2}}{{bottom2}}{{top3}}{{bottom3}}
+{{/each}}
 
 </template>

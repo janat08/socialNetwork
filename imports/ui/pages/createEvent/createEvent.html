@@ -2,13 +2,33 @@
 
 <form id='post'>
     title: <input name='title'>
-    category: <select name="top" class='selectTopJs'>
+    category: <select name="top1" class='selectTopJs1'>
         {{#each topCats}}
             <option value="{{this}}">{{this}}</option>
         {{/each}}
     </select>
-    sub: <select name="bottom">
-        {{#each bottomCats}}
+    sub: <select name="bottom1">
+        {{#each bottomCats1}}
+            <option value="{{this}}">{{this}}</option>
+        {{/each}}
+    </select>
+    category 2: <select name="top2" class='selectTopJs2'>
+        {{#each topCats}}
+            <option value="{{this}}">{{this}}</option>
+        {{/each}}
+    </select>
+    sub 2: <select name="bottom2">
+        {{#each bottomCats2}}
+            <option value="{{this}}">{{this}}</option>
+        {{/each}}
+    </select>
+    category 3: <select name="top3" class='selectTopJs3'>
+        {{#each topCats}}
+            <option value="{{this}}">{{this}}</option>
+        {{/each}}
+    </select>
+    sub 3: <select name="bottom3">
+        {{#each bottomCats3}}
             <option value="{{this}}">{{this}}</option>
         {{/each}}
     </select>
