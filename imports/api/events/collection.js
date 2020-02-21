@@ -1,6 +1,7 @@
 import EventsSchema from './schema.js';
 
 const Events = new Mongo.Collection('events');
-export default Events;
+const Instances = new Mongo.Collection('instances')
 
+export {Instances, Events}
 Events.attachSchema(EventsSchema);

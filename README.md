@@ -1,11 +1,16 @@
 undone:
+frontCover selector needs testing
+test images
+start end fields sync
+instances collections no more, arrays instead
+
+backlog
 background on walls
-3 subcategories pick for event
-geomap
+billing for google project
 
 done:
 fixed the forms, everything else seems to be working (I logged in with account that had nothing, so assumed nothing works)
-
+3 subcategories pick for event
 
 Schema
 user > post> owner> user
@@ -45,14 +50,6 @@ To create an event we will need the following inputs:
 	invited, to family only - friends - family and close friends or all friends - in short - to the way we divided the friends earlier. Which means that we 
 	need some radio-buttons or some check-buttons, to make the dividing. Private Events will NOT be published on the Events Board.
 
-2 - title of the event:
-
-	This is nothing more than a input control.
-
-3 - describtion of the event:
-
-	 nothing more than a text-area control
-
 4 - address for the event:
 	
 	Here we are going to use the  'geocomplete.js' plugin - ref: and tut in the bottom. This plugin needs a Google map-key which also is to find at the bottom.
@@ -72,59 +69,6 @@ To create an event we will need the following inputs:
 
 	The 'Ongoing event' is i.e. museums - national buildings - theaters - galeries  etc.etc. Events that dont have a start or stop day.
 	This item require more data from the events-holders - so for now - we will just fill in some dummy-data where needed.
-
-6 - admission to the event.
-
-	Here we just set up some few inputs:
-	text-input: Adult Price - text-input: Adult Age -  text-input: Senior Price - text-input: Senior Age - text-input: Children Price - text-input: Adult Age.
-
-7 - photos of the event.
-
-	This is just an ordinary img/file upload as you have done before, however we need to be able to set/pick a front img.( we might have 6 images uploaded to cover the event -
-	but we need to be able to show the 'official' image, when only showing one. 
-	And we want to limit the numbers of uploaded photos to 10. (to avoid people uploade unreasonable amounts). 
-
-8 - category for the event.
-
-	There may be innumerable different type of events, and to address that we need to categories them with sub-categories - we could make that multi-level, with sub-cat and 
-	sub-sub-cat and so on, but I prefere 2 level - main and sub - something like this:
-
-	mainCategory	subCategory
-	
-	sport
-		Air-sport
-		Atheletics
-		Ball over net
-		Ball outdoor
-		Ball indoor
-		Bike
-		Combatsports
-		Dancing
-		Fishing
-		Horse-sports
-		etc. etc
-	Theater
-		DramaTheater
-		Kids Theater
-		Comedy Theater
-		Opera
-		Ballet
-		Concerts
-		etc.etc.
-	Fairs
-		Food fairs
-		Fashion fairs
-		Motor fairs
-	Music
-		...
-		...
-	Family
-		..
-		..
-	Museums
-		..
-I trust you get the pointe. There could be dozens of mainCategories and hundreds of subCategories. I dont want you to write all these items(of course not) - but I want you to make a template 
-with input-controls so we can make CRUD operations to mainCategories as well as subCategories and then save them in collection.
  
 ------------------------------------------------------------
 So much for creating events - now for searching our Events -- We  will use 2 approaches -- 1. Search for the category(subcategory)   2. Search for the the place(address).
