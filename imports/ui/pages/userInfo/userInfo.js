@@ -61,8 +61,8 @@ Template.userInfo.events({
             country: { value: coV },
         } = target
 
-        const images = templ.currentUpload
-        const backgrounds = templ.currentUpload1
+        const images = templ.currentUpload.array()
+        const backgrounds = templ.currentUpload1.array()
         var document = {
             first: fV,
             last: lV,

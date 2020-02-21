@@ -17,7 +17,7 @@ Template.createEvent.onCreated(function() {
   this.topSelect1 = new ReactiveVar()
   this.topSelect2 = new ReactiveVar()
   this.topSelect3 = new ReactiveVar()
-  this.templateType = new ReactiveVar()
+  this.publicity = new ReactiveVar(true)
   this.eventType = new ReactiveVar()
   this.autorun((c) => {
     if (SubsCache.ready()) {
@@ -73,12 +73,12 @@ Template.createEvent.helpers({
     if (uId) query.push({ "meta.userId": uId })
     return ImagesFiles.find({ $or: query }).each().concat(curUpload.filter(x => !x.doc));
   },
-  isFrontCover(ind){
+  isFrontCover(ind) {
     const t = Template.instance()
-    if(!t.frontCover.get()){
+    if (!t.frontCover.get()) {
       t.frontCover.set(this.doc._id)
     }
-    return ind == t.frontCover.get()? 'checked' : ''
+    return ind == t.frontCover.get() ? 'checked' : ''
   },
   topCats() {
     return r.uniqBy((x => x.top), Categories.find().fetch()).map(x => x.top)
@@ -96,7 +96,7 @@ Template.createEvent.helpers({
     return Categories.find({ top: topSelect3.get() }).fetch().map(x => x.bottom)
   },
   templateType() {
-    return Template.instance().templateType.get()
+    return Template.instance().publicity.get()
   },
   eventType() {
     return Template.instance().eventType.get() == "constant"
@@ -104,17 +104,14 @@ Template.createEvent.helpers({
 });
 
 Template.createEvent.events({
-  'click .pickFrontCoverJs'(e,t){
+  'click .pickFrontCoverJs' (e, t) {
     t.frontCover.set(this.doc._id)
   },
   'change input:radio[name=eventType]' (e, t) {
     t.eventType.set(e.target.value)
   },
-  'click .publicJs' (e, t) {
-    t.templateType.set(true)
-  },
-  'click .privateJs' (e, t) {
-    t.templateType.set(false)
+  'change input:radio[name=publicity]' (e, t) {
+    t.publicity.set(!!(e.target.value*1))
   },
   'change .selectTopJs1' (e, t) {
     t.topSelect1.set(e.target.value)
@@ -145,14 +142,16 @@ Template.createEvent.events({
       // bottom2: bV2,
       // top3: tV3,
       // bottom3: bV3,
-      type: t.templateType.get(),
-      images: t.currentUpload.get(),
+      type: t.publicity.get(),
+      images: t.currentUpload.array(),
       frontCover: t.frontCover.get(),
     }
 
     $.each($('#post').serializeArray(), function(i, field) {
       document[field.name] = field.value;
     });
+    
+    document.publicity = !!(document.publicity*1)
     console.log(document)
     Meteor.call('events.upsert', { ...document }, (err, suc) => {
       console.log(suc, err)

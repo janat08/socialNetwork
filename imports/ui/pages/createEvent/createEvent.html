@@ -1,13 +1,28 @@
 <template name="createEvent">
     {{> addEditEventModal }}
-<button class='publicJs'>Public</button>
-<button class='privateJs'>Private</button>
 
 <form id='post'>
+  <p>The type of event:</p>
+
+<div>
+  <input type="radio" id="constant" name="publicity" value=1
+         checked>
+  <label for="constant">Public Event</label>
+</div>
+
+<div>
+  <input type="radio" id="periodical" name="publicity" value=0>
+  <label for="periodical">Private Event</label>
+</div>
+
     {{#if templateType}}
-        publicJs
+        Anyone will be able to come.
     {{else}}
-        privateJs
+        Pick a circle of people to invite.
+        Family: <input type='checkbox' name='Family'>
+        Best Friends: <input type='checkbox' name='BF'>
+        Friends: <input type='checkbox' name='Friends'>
+        Colleagues: <input type='checkbox' name='Colleagues'>
     {{/if}}
     <input class='geocomplete'>
     Title: <input name='title'>

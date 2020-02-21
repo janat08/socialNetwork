@@ -73,9 +73,6 @@ To create an event we will need the following inputs:
 ------------------------------------------------------------
 So much for creating events - now for searching our Events -- We  will use 2 approaches -- 1. Search for the category(subcategory)   2. Search for the the place(address).
 
-1.	the category. When searching for the category you get all the events in that category - and we set up a filter with a date/interval. Lets say you are a chess geek and want to 
-	attend the next world champignon ship - you can search for this, find the location and then plan your holliday according to this. 
-
 2.	the place. This is likely a more usefull approach. When searching for a place - and filter with date - you get all the events that is happening in the place you seacrh for.
 	This can be handsom if you want to know whats going on in your own city naxt month - or if on holliday, find all the events going on where ever you may be, while you are there.
 
