@@ -1,7 +1,7 @@
 undone:
 frontCover selector needs testing
 test images
-start end fields sync
+start end field names sync
 instances collections no more, arrays instead
 
 backlog
