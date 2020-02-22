@@ -1,22 +1,27 @@
 undone:
-frontCover selector needs testing
-test images
+test images (images are bound during upload saved under user field)
 start end field names sync
 instances collections no more, arrays instead
-
 backlog
 background on walls
 billing for google project
+geolocation turned off
+ticket insert just takes all info
+
+backlog
+background images on users walls
+frontCover selector needs testing
+
 
 done:
 fixed the forms, everything else seems to be working (I logged in with account that had nothing, so assumed nothing works)
+qr code needs to be linked in email
 3 subcategories pick for event
 
 Schema
 user > post> owner> user
 user > friend > user
 
-make real images
 
 Hi jan
 
@@ -37,18 +42,6 @@ To create an event we will need the following inputs:
 	7 - photos of the event
 	8 - category for the event
 
-1 - access to the event:
-	
-	This is simple 2 buttons "Public" or "Private": The chosen template is visible - the other not visible!
-	
-	Public is i.e. an exibition, a conference, a theater-show or a football match etc. etc. 
-	When you set up an Event as PUBLIC it means that your Event will be published on the Events Board without any other restrictions 
-	than what is given by admission fee - admission age and normal public restrictions. The Event will be shown to everyone and accessible to
-        everyone - it will be an PUBLIC EVENT.
-
-	Private is i.e. a wedding or a birthday-party, a company-picnic etc. etc. Private Event is not open to the public.You have the opportunity to restrict the scope of people
-	invited, to family only - friends - family and close friends or all friends - in short - to the way we divided the friends earlier. Which means that we 
-	need some radio-buttons or some check-buttons, to make the dividing. Private Events will NOT be published on the Events Board.
 
 4 - address for the event:
 	

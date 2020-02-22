@@ -1,4 +1,4 @@
-import { ImagesFiles, Categories, Events } from '../cols.js'
+import { ImagesFiles, Categories, Events, Tickets } from '../cols.js'
 
 Meteor.methods({
     "events.upsert" ({ top1, bottom1, top2, bottom2, top3, bottom3, images, frontCover, ...rest }) {
@@ -36,5 +36,15 @@ Meteor.methods({
         catch (exception) {
             throw new Meteor.Error('500', `${ exception }`);
         }
+    },
+    "ticket.buy"(all){
+        all.eventId = all._id
+        delete all._id
+        if (!this.userId) throw new Meteor.Error('login')
+        return Tickets.insert({...all, userId: this.userId, paid: false})
+    },
+    "ticket.accept"(id){
+        console.log(id)
+        return Tickets.update(id, {$set: {paid: true}})
     }
 })

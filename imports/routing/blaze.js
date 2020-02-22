@@ -15,6 +15,7 @@ import '/imports/ui/pages/yourWall/yourWall.js'
 import '/imports/ui/pages/upsertCategory/upsertCategory.js'
 import '/imports/ui/pages/browseEvents/browseEvents.js'
 import '/imports/ui/pages/createEvent/createEvent.js'
+import '/imports/ui/pages/buyTickets/buyTickets.js'
 
 window.SubsCache = new SubsCache(5, 10);
 
@@ -101,6 +102,13 @@ FlowRouter.route('/upsertCategory/:bottom', {
   name: 'App.upsertCategoryBt',
   action() {
     BlazeLayout.render('App_body', { main: 'upsertCategory' });
+  },
+});
+
+FlowRouter.route('/buy/:id', {
+  name: 'App.upsertCategoryBt',
+  action() {
+    BlazeLayout.render('App_body', { main: 'buyTickets' });
   },
 });
 

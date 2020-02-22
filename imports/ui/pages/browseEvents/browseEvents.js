@@ -67,7 +67,7 @@ Template.browseEvents.helpers({
             ]
         }
         query.instances = { $elemMatch: { start: { $lte: timeE }, end: { $gte: timeS } } }
-
+        return Events.find()
         return Events.find(query)
     }
 });

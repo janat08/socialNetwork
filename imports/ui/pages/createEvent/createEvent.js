@@ -152,7 +152,7 @@ Template.createEvent.events({
     });
     
     document.publicity = !!(document.publicity*1)
-    console.log(document)
+
     Meteor.call('events.upsert', { ...document }, (err, suc) => {
       console.log(suc, err)
       if (suc) {

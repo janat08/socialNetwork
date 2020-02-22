@@ -21,7 +21,14 @@
 </form>
 
 {{#each events}}
-    {{title}}{{top1}}{{bottom1}}{{top2}}{{bottom2}}{{top3}}{{bottom3}}
+<div class="card" style="width: 18rem;">
+  <img src="..." class="card-img-top" alt="...">
+  <div class="card-body">
+    <h5 class="card-title">{{title}}</h5>
+    <p class="card-text">{{description}}</p>
+    <a href="/buy/{{_id}}" class="btn btn-primary">Buy ticket</a>
+  </div>
+</div>
 {{/each}}
 
 </template>

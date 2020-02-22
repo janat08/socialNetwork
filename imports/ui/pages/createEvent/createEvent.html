@@ -24,39 +24,10 @@
         Friends: <input type='checkbox' name='Friends'>
         Colleagues: <input type='checkbox' name='Colleagues'>
     {{/if}}
-    <input class='geocomplete'>
+    
     Title: <input name='title'>
     Description: <input type="textarea" name="description"/>
-    category: <select name="top1" class='selectTopJs1'>
-        {{#each topCats}}
-            <option value="{{this}}">{{this}}</option>
-        {{/each}}
-    </select>
-    sub: <select name="bottom1">
-        {{#each bottomCats1}}
-            <option value="{{this}}">{{this}}</option>
-        {{/each}}
-    </select>
-    category 2: <select name="top2" class='selectTopJs2'>
-        {{#each topCats}}
-            <option value="{{this}}">{{this}}</option>
-        {{/each}}
-    </select>
-    sub 2: <select name="bottom2">
-        {{#each bottomCats2}}
-            <option value="{{this}}">{{this}}</option>
-        {{/each}}
-    </select>
-    category 3: <select name="top3" class='selectTopJs3'>
-        {{#each topCats}}
-            <option value="{{this}}">{{this}}</option>
-        {{/each}}
-    </select>
-    sub 3: <select name="bottom3">
-        {{#each bottomCats3}}
-            <option value="{{this}}">{{this}}</option>
-        {{/each}}
-    </select>
+    Location: <input class='geocomplete'>
     
     <div class='events'></div>
 
@@ -97,6 +68,38 @@ Senior Age: <input name="seniorAge">
     {{/if}}
   {{/each}}
         <input id="fileInput" type="file" multiple/>
+
+    category: <select name="top1" class='selectTopJs1'>
+        {{#each topCats}}
+            <option value="{{this}}">{{this}}</option>
+        {{/each}}
+    </select>
+    sub: <select name="bottom1">
+        {{#each bottomCats1}}
+            <option value="{{this}}">{{this}}</option>
+        {{/each}}
+    </select>
+    category 2: <select name="top2" class='selectTopJs2'>
+        {{#each topCats}}
+            <option value="{{this}}">{{this}}</option>
+        {{/each}}
+    </select>
+    sub 2: <select name="bottom2">
+        {{#each bottomCats2}}
+            <option value="{{this}}">{{this}}</option>
+        {{/each}}
+    </select>
+    category 3: <select name="top3" class='selectTopJs3'>
+        {{#each topCats}}
+            <option value="{{this}}">{{this}}</option>
+        {{/each}}
+    </select>
+    sub 3: <select name="bottom3">
+        {{#each bottomCats3}}
+            <option value="{{this}}">{{this}}</option>
+        {{/each}}
+    </select>
+
 
 <input hidden name='route(street)'>
 <input hidden name='street_number'>
