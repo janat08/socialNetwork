@@ -30,26 +30,26 @@ Template.createEvent.onCreated(function() {
 });
 
 Template.createEvent.onRendered(function() {
-  $(".geocomplete").geocomplete({
-    details: 'form',
-    types: ['geocode']
-  })
+  // $(".geocomplete").geocomplete({
+  //   details: 'form',
+  //   types: ['geocode']
+  // })
   $('.events').fullCalendar({
-    // events(start, end, timezone, callback) {
-    // // let data = Events.find().fetch().map((event) => {
-    // //     event.editable = !isPast(event.start);
-    // //     return event;
-    // // });
+    events(start, end, timezone, callback) {
+      let data = Instances.find().fetch().map((event) => {
+        event.editable = !isPast(event.start);
+        return event;
+      });
 
-    // if (data) {
-    //     callback(data);
-    // }
+      if (data) {
+        callback(data);
+      }
 
-    //         Tracker.autorun(() => {
-    //             Events.find().fetch();
-    //             $('#events-calendar').fullCalendar('refetchEvents');
-    //         });
-    // }
+      Tracker.autorun(() => {
+        Instances.find().fetch();
+        $('#events-calendar').fullCalendar('refetchEvents');
+      });
+    },
     dayClick(date) {
       Session.set('eventModal', { type: 'add', date: date.format() });
       $('#add-edit-event-modal').modal('show');
@@ -111,7 +111,7 @@ Template.createEvent.events({
     t.eventType.set(e.target.value)
   },
   'change input:radio[name=publicity]' (e, t) {
-    t.publicity.set(!!(e.target.value*1))
+    t.publicity.set(!!(e.target.value * 1))
   },
   'change .selectTopJs1' (e, t) {
     t.topSelect1.set(e.target.value)
@@ -150,8 +150,8 @@ Template.createEvent.events({
     $.each($('#post').serializeArray(), function(i, field) {
       document[field.name] = field.value;
     });
-    
-    document.publicity = !!(document.publicity*1)
+
+    document.publicity = !!(document.publicity * 1)
 
     Meteor.call('events.upsert', { ...document }, (err, suc) => {
       console.log(suc, err)
@@ -159,7 +159,6 @@ Template.createEvent.events({
         // FlowRouter.go('App.upsertCategoryBt', { bottom: bV })
       }
     })
-
   }
 });
 

@@ -5,14 +5,14 @@
   <p>The type of event:</p>
 
 <div>
-  <input type="radio" id="constant" name="publicity" value=1
+  <input type="radio" id="public" name="publicity" value=1
          checked>
-  <label for="constant">Public Event</label>
+  <label for="Public">Public Event</label>
 </div>
 
 <div>
-  <input type="radio" id="periodical" name="publicity" value=0>
-  <label for="periodical">Private Event</label>
+  <input type="radio" id="private" name="publicity" value=0>
+  <label for="Private">Private Event</label>
 </div>
 
     {{#if templateType}}
@@ -29,18 +29,17 @@
     Description: <input type="textarea" name="description"/>
     Location: <input class='geocomplete'>
     
-    <div class='events'></div>
 
 <p>The type of event:</p>
 
 <div>
   <input type="radio" id="constant" name="eventType" value="constant"
-         checked>
+         >
   <label for="constant">Constant Event</label>
 </div>
 
 <div>
-  <input type="radio" id="periodical" name="eventType" value="periodical">
+  <input type="radio" id="periodical" name="eventType" value="periodical" checked>
   <label for="periodical">Periodical Event</label>
 </div>
 
@@ -48,7 +47,7 @@
 {{#if eventType}}
     dummy data
 {{else}}
-    
+    <div class='events'></div>
 {{/if}}
 
 Child Price: <input name="childrenPrice">

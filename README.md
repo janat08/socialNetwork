@@ -7,11 +7,12 @@ background on walls
 billing for google project
 geolocation turned off
 ticket insert just takes all info
+add times at ticket buy page
 
 backlog
 background images on users walls
 frontCover selector needs testing
-
+test that qr works
 
 done:
 fixed the forms, everything else seems to be working (I logged in with account that had nothing, so assumed nothing works)

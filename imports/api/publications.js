@@ -1,4 +1,4 @@
-import {Posts, Users, Owners, FriendRequests, ImagesCollection, Events, Categories } from './cols.js'
+import {Tickets, Posts, Users, Owners, FriendRequests, ImagesCollection, Events, Categories } from './cols.js'
 
 Meteor.publish('posts.all', function(){
     return Posts.find()
@@ -22,4 +22,8 @@ Meteor.publish('categories.all', function(){
 
 Meteor.publish('events.all', function(){
     return Events.find()
+})
+
+Meteor.publish('tickets.all', function(){
+    return Tickets.find()
 })

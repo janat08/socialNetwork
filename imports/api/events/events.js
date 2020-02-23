@@ -1,4 +1,4 @@
-import { ImagesFiles, Categories, Events, Tickets } from '../cols.js'
+import { ImagesFiles, Categories, Events, Tickets, Instances } from '../cols.js'
 
 Meteor.methods({
     "events.upsert" ({ top1, bottom1, top2, bottom2, top3, bottom3, images, frontCover, ...rest }) {
@@ -11,9 +11,10 @@ Meteor.methods({
         if (!Categories.findOne({ top: top3, bottom: bottom3 })) throw new Meteor.Error('category3 non-existent')
         Events.insert({ top1, bottom1, top2, bottom2, top3, bottom3, ...rest, limitedImages, frontCover, userId: this.userId })
     },
-    "instance.add" (event) {
+    "instance.add" (inst, eventId) {
+        const {top1, bottom1, top2, bottom2, top3, bottom3, lat, lng} = Events.findOne(eventId)
         try {
-            return Events.insert(event);
+            return Instances.insert({...inst, top1, bottom1, top2, bottom2, top3, bottom3, lat, lng});
         }
         catch (exception) {
             throw new Meteor.Error('500', `${ exception }`);
@@ -21,7 +22,7 @@ Meteor.methods({
     },
     "instance.edit" (event) {
         try {
-            return Events.update(event._id, {
+            return Instances.update(event._id, {
                 $set: event
             });
         }
@@ -31,7 +32,7 @@ Meteor.methods({
     },
     "instance.remove" (event) {
         try {
-            return Events.remove(event);
+            return Instances.remove(event);
         }
         catch (exception) {
             throw new Meteor.Error('500', `${ exception }`);
@@ -44,7 +45,10 @@ Meteor.methods({
         return Tickets.insert({...all, userId: this.userId, paid: false})
     },
     "ticket.accept"(id){
-        console.log(id)
+        const ticket = Tickets.findOne(id)
+        Meteor.call('mail.create', {recepients: [this.userId], body: `Thank you 
+        for purchasing the ticket, the tickets qr code can be found at: `+
+        Meteor.absoluteUrl('buy/'+id), subject: 'Ticket for '+ ticket.title})
         return Tickets.update(id, {$set: {paid: true}})
     }
 })

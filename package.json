@@ -19,6 +19,7 @@
     "corejs-typeahead": "^1.3.0",
     "flatpickr": "^4.6.3",
     "geocomplete": "^1.7.0",
+    "mailgun-js": "^0.22.0",
     "meteor-node-stubs": "^0.4.1",
     "moment": "^2.24.0",
     "ramda": "^0.27.0",
