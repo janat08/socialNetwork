@@ -1,7 +1,11 @@
 import { ImagesFiles, Categories, Events, Tickets, Instances } from '../cols.js'
-
+import moment from 'moment'
 Meteor.methods({
-    "events.upsert" ({ top1, bottom1, top2, bottom2, top3, bottom3, images, frontCover, ...rest }) {
+    'events.start'(){
+        console.log(Events.insert({userId: this.userId, start: true})  )
+        return Events.insert({userId: this.userId, start: true})  
+    },
+    "events.upsert" ({ _id, top1, bottom1, top2, bottom2, top3, bottom3, images, lat, lng, frontCover, ...rest }) {
         // images length
         console.log('remove excess images', images[0])
         const limitedImages = images.filter((x,i)=>i<11||x.doc._id==frontCover).map(x=>x.doc._id)
@@ -9,12 +13,14 @@ Meteor.methods({
         if (!Categories.findOne({ top: top1, bottom: bottom1 })) throw new Meteor.Error('category1 non-existent')
         if (!Categories.findOne({ top: top2, bottom: bottom2 })) throw new Meteor.Error('category2 non-existent')
         if (!Categories.findOne({ top: top3, bottom: bottom3 })) throw new Meteor.Error('category3 non-existent')
-        Events.insert({ top1, bottom1, top2, bottom2, top3, bottom3, ...rest, limitedImages, frontCover, userId: this.userId })
+        Events.upsert(_id, { $set: { start: false, lat, lng, top1, bottom1, top2, bottom2, top3, bottom3, ...rest, limitedImages, frontCover, userId: this.userId }})
+        Instances.update({eventId: _id}, {$set: {top1, bottom1, top2, bottom2, top3, bottom3, lat, lng}})
     },
-    "instance.add" (inst, eventId) {
-        const {top1, bottom1, top2, bottom2, top3, bottom3, lat, lng} = Events.findOne(eventId)
+    "instance.add" (i) {
+        i.totalStart = moment(i.start).hour(i.startTime.split(":")[0]).minute(i.startTime.split(":")[1]).toDate()
+        i.totalEnd = moment(i.end).hour(i.endTime.split(":")[0]).minute(i.endTime.split(":")[1]).toDate()
         try {
-            return Instances.insert({...inst, top1, bottom1, top2, bottom2, top3, bottom3, lat, lng});
+            return Instances.insert({...i});
         }
         catch (exception) {
             throw new Meteor.Error('500', `${ exception }`);

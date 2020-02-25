@@ -2,11 +2,28 @@ import './createEvent.html';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Categories, Instances, ImagesFiles } from '/imports/api/cols.js'
 import r from 'ramda'
+import moment from 'moment'
 import 'geocomplete'
+import flatpickr from "flatpickr";
+import 'flatpickr/dist/flatpickr.css';
+
+let isPast = (date) => {
+  let today = moment().format();
+  return moment(today).isAfter(date);
+};
 
 Template.createEvent.onCreated(function() {
   SubsCache.subscribe('categories.all')
-
+  SubsCache.subscribe('instances.all')
+  SubsCache.subscribe('events.all')
+  Meteor.call('events.start', (err, res) => {
+    if (err) {
+      alert('error, plz reload the page, or youre offline')
+    }
+    console.log(res)
+    this._id = res
+    Session.set('eventId', this._id)
+  })
   this.currentUpload = new ReactiveArray()
   //meant to cause reactivity on object updates in current upload
   this.insertedUploads = new ReactiveVar(0)
@@ -40,6 +57,7 @@ Template.createEvent.onRendered(function() {
         event.editable = !isPast(event.start);
         return event;
       });
+      console.log(123, data)
 
       if (data) {
         callback(data);
@@ -47,8 +65,16 @@ Template.createEvent.onRendered(function() {
 
       Tracker.autorun(() => {
         Instances.find().fetch();
+        console.log(Instances.find().fetch())
         $('#events-calendar').fullCalendar('refetchEvents');
       });
+    },
+    eventRender(event, element) {
+      element.find('.fc-content').html(
+        `
+        <p class="guest-count">${ event.startTime }-${ event.endTime } Guests</p>
+        `
+      );
     },
     dayClick(date) {
       Session.set('eventModal', { type: 'add', date: date.format() });
@@ -145,6 +171,7 @@ Template.createEvent.events({
       type: t.publicity.get(),
       images: t.currentUpload.array(),
       frontCover: t.frontCover.get(),
+      _id: this._id
     }
 
     $.each($('#post').serializeArray(), function(i, field) {
@@ -163,6 +190,13 @@ Template.createEvent.events({
 });
 
 Template.createEvent.onDestroyed(function() {})
+
+
+Template.addEditEventModal.onRendered(function() {
+  const instance = this
+  flatpickr(instance.find('.picker'), { noCalendar: true, enableTime: true, defaultDate: this.timeS });
+  flatpickr(instance.find('.pickerEnd'), { noCalendar: true, enableTime: true, defaultDate: this.timeE });
+})
 
 Template.addEditEventModal.helpers({
   modalType(type) {
@@ -208,11 +242,11 @@ Template.addEditEventModal.events({
     let eventModal = Session.get('eventModal'),
       submitType = eventModal.type === 'edit' ? 'instance.edit' : 'instance.add',
       eventItem = {
-        title: template.find('[name="title"]').value,
+        startTime: template.find('[name="picker"]').value,
+        endTime: template.find('[name="pickerEnd"]').value,
         start: template.find('[name="start"]').value,
         end: template.find('[name="end"]').value,
-        type: template.find('[name="type"] option:selected').value,
-        guests: parseInt(template.find('[name="guests"]').value, 10)
+        eventId: Session.get('eventId')
       };
 
     if (submitType === 'editEvent') {

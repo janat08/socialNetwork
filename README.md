@@ -2,6 +2,8 @@ undone:
 test images (images are bound during upload saved under user field)
 start end field names sync
 instances collections no more, arrays instead
+
+
 backlog
 background on walls
 billing for google project
@@ -13,6 +15,8 @@ backlog
 background images on users walls
 frontCover selector needs testing
 test that qr works
+add username and email fields to findFriends page
+calendar won't render events immidiately
 
 done:
 fixed the forms, everything else seems to be working (I logged in with account that had nothing, so assumed nothing works)

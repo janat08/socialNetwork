@@ -28,7 +28,10 @@ Template.findFriend.onRendered(function() {
                         [queryMod]: reg
                     }]
                 }).fetch()
-                .map(x => ({ ...x, value: `${x[value[0]][value[1]]} ${value2 && (x[value2[0]][value2[1]])}` }))
+                .map(x => {
+                    console.log(x, value)
+                    return ({ ...x, value: `${x[value[0]][value[1]]} ${value2 && (x[value2[0]][value2[1]])}` })
+                })
             sync(res)
         }
     }
