@@ -1,11 +1,17 @@
 <template name="buyTickets">
 <div id="qrcode"></div>
 {{#with event}}
+{{#with instance}}
     <h2>{{title}}</h2>
+    <h4>{{start}} {{startTime}}-{{endTime}}</h4>
     <p>{{description}}</p>
+    {{#each images}}
+        {{> imageShow}}
+    {{/each}}
     Categories:    
     {{top1}}{{bottom1}}{{top2}}{{bottom2}}{{top3}}{{bottom3}}
     <button class='buyJs'>Purchase</button>
     <button class='acceptJs'>Accept</button>
+{{/with}}
 {{/with}}
 </template>

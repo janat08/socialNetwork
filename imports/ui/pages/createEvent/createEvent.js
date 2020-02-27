@@ -3,7 +3,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Categories, Instances, ImagesFiles } from '/imports/api/cols.js'
 import r from 'ramda'
 import moment from 'moment'
-import 'geocomplete'
+import './geocomplete.js'
 import flatpickr from "flatpickr";
 import 'flatpickr/dist/flatpickr.css';
 
@@ -16,11 +16,11 @@ Template.createEvent.onCreated(function() {
   SubsCache.subscribe('categories.all')
   SubsCache.subscribe('instances.all')
   SubsCache.subscribe('events.all')
+  SubsCache.subscribe('images.all')
   Meteor.call('events.start', (err, res) => {
     if (err) {
       alert('error, plz reload the page, or youre offline')
     }
-    console.log(res)
     this._id = res
     Session.set('eventId', this._id)
   })
@@ -47,27 +47,16 @@ Template.createEvent.onCreated(function() {
 });
 
 Template.createEvent.onRendered(function() {
-  // $(".geocomplete").geocomplete({
-  //   details: 'form',
-  //   types: ['geocode']
-  // })
-  $('.events').fullCalendar({
+  $('#eventsCalendar').fullCalendar({
     events(start, end, timezone, callback) {
-      let data = Instances.find().fetch().map((event) => {
+      let data = Instances.find({ eventId: Session.get('eventId') }).fetch().map((event) => {
         event.editable = !isPast(event.start);
         return event;
       });
-      console.log(123, data)
 
       if (data) {
         callback(data);
       }
-
-      Tracker.autorun(() => {
-        Instances.find().fetch();
-        console.log(Instances.find().fetch())
-        $('#events-calendar').fullCalendar('refetchEvents');
-      });
     },
     eventRender(event, element) {
       element.find('.fc-content').html(
@@ -86,6 +75,14 @@ Template.createEvent.onRendered(function() {
     }
 
   })
+  Tracker.autorun((c) => {
+    Instances.find({ eventId: this._id }).fetch();
+    $('#eventsCalendar').fullCalendar('refetchEvents');
+  });
+  $(".geocomplete").geocomplete({
+    details: 'form',
+    types: ['geocode']
+  })
 });
 
 Template.createEvent.helpers({
@@ -102,7 +99,7 @@ Template.createEvent.helpers({
   isFrontCover(ind) {
     const t = Template.instance()
     if (!t.frontCover.get()) {
-      t.frontCover.set(this.doc._id)
+      t.frontCover.set(this._id)
     }
     return ind == t.frontCover.get() ? 'checked' : ''
   },
@@ -126,12 +123,59 @@ Template.createEvent.helpers({
   },
   eventType() {
     return Template.instance().eventType.get() == "constant"
-  }
+  },
 });
 
 Template.createEvent.events({
+  'click .jsRemovePic' (e, templ) {
+    console.log(this, "removing")
+    Meteor.call('images.remove', this._id)
+    const st = templ.currentUpload
+    st.splice(st.findIndex(x => x.doc._id == this._id), 1)
+  },
+  'change #fileInput' (e, template) {
+    const st = template.currentUpload
+    const stRuns = template.numberOfRuns + ""
+    template.numberOfRuns += 1
+    window.ab = template.currentUpload
+    if (e.currentTarget.files && e.currentTarget.files[0]) {
+      Array.from(e.currentTarget.files).forEach((x, i) => {
+        // We upload only one file, in case
+        // multiple files were selected
+        const upload = ImagesFiles.insert({
+          file: e.currentTarget.files[i],
+          streams: 'dynamic',
+          chunkSize: 'dynamic',
+          meta: {
+            uploader: Meteor.userId(),
+            eventId: template._id
+          },
+        }, false);
+
+        const itemId = stRuns + i
+
+        upload.on('start', function() {
+          st.push({ upload: this, _id: itemId })
+        });
+
+        upload.on('end', function(error, fileObj) {
+          if (error) {
+            alert('Error during upload: ' + error);
+          }
+          else {
+            // alert('File "' + fileObj.name + '" successfully uploaded');
+          }
+          st[st.findIndex(x => x._id == itemId)].doc = fileObj
+          template.insertedUploads.set(stRuns + i)
+        });
+
+        upload.start();
+      })
+
+    }
+  },
   'click .pickFrontCoverJs' (e, t) {
-    t.frontCover.set(this.doc._id)
+    t.frontCover.set(this._id)
   },
   'change input:radio[name=eventType]' (e, t) {
     t.eventType.set(e.target.value)
@@ -175,6 +219,7 @@ Template.createEvent.events({
     }
 
     $.each($('#post').serializeArray(), function(i, field) {
+      console.log(field.name)
       document[field.name] = field.value;
     });
 
@@ -249,7 +294,7 @@ Template.addEditEventModal.events({
         eventId: Session.get('eventId')
       };
 
-    if (submitType === 'editEvent') {
+    if (submitType === 'instance.edit') {
       eventItem._id = eventModal.event;
     }
     console.log(submitType, eventItem)

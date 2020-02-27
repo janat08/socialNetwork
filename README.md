@@ -1,24 +1,20 @@
 undone:
-test images (images are bound during upload saved under user field)
+geolocation search
+add username and email fields to findFriends page
+submit with images wont work on createevent
 images on create event
-instances wont edit
-background on walls
-ticket insert just takes all info
-add times at ticket buy page
-images on ticket page and browse events
-
+test that images are limited to 10, frontcover exists
+check frontCover on browseEvents, make sure that the link is also duplicated
+remove old instances and tickets unbought
 
 backlog
+wall background doesn't save on form
 billing for google project
 geolocation turned off
-
-backlog
+background on walls
 background images on users walls
-frontCover selector needs testing
-test that qr works
-add username and email fields to findFriends page
-calendar won't render events immidiately
-remove old instances and tickets unbought
+make tickets go through email, and delete images after instance is over
+syncedCron wont work
 
 done:
 fixed the forms, everything else seems to be working (I logged in with account that had nothing, so assumed nothing works)

@@ -5,6 +5,7 @@ import r from 'ramda'
 import flatpickr from "flatpickr";
 import 'flatpickr/dist/flatpickr.css';
 import moment from 'moment'
+import '/imports/ui/components/imageShow/imageShow.js'
 
 var getNumber = (function() {
     var previous = NaN;
@@ -68,10 +69,8 @@ Template.browseEvents.helpers({
                 },
             ]
         }
-        // query.instances = { start: { $lte: timeE }, end: { $gte: timeS } } 
-        // const instances = Instances.find(query, {fields: {eventId: 1}}).fetch().map(x=>x.eventId)
-        // console.log(instances)
-        // return Events.find({_id: {$in: instances}})
+        Object.assign(query, { totalStart: { $lte: timeE }, totalEnd: { $gte: timeS } })
+        
         return Instances.find(query)
     }
 });

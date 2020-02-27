@@ -47,7 +47,7 @@
 {{#if eventType}}
     dummy data
 {{else}}
-    <div class='events'></div>
+    <div id='eventsCalendar'></div>
 {{/if}}
 
 Child Price: <input name="childrenPrice">
@@ -56,17 +56,19 @@ Adult Age: <input name="adultAge">
 Senior Price: <input name="seniorPrice">
 Senior Age: <input name="seniorAge">
 
-    {{#each currentUpload}}
-        {{#if upload}}
+
+  {{#each currentUpload}}
+    {{#if upload}}
     Uploading <b>{{upload.file.name}}</b>:
     <span id="progress">{{upload.progress.get}}%</span>
     {{else}}
         <img src="{{link}}" alt="{{name}}" />
-        <input class='pickFrontCoverJs' {{isFrontCover}} type='checkbox'>
+        <input class='pickFrontCoverJs' {{isFrontCover _id}} type='checkbox'>
         <button type="button" class='jsRemovePic'>Remove</button>
     {{/if}}
   {{/each}}
         <input id="fileInput" type="file" multiple/>
+
 
     category: <select name="top1" class='selectTopJs1'>
         {{#each topCats}}

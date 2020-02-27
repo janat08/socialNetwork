@@ -1,24 +1,37 @@
 import './buyTickets.html';
 import { FlowRouter } from 'meteor/kadira:flow-router';
-import { Tickets, Events } from '/imports/api/cols.js'
+import { Tickets, Events, Instances } from '/imports/api/cols.js'
 import r from 'ramda'
 import moment from 'moment'
+import '/imports/ui/components/imageShow/imageShow.js'
 
 
 Template.buyTickets.onCreated(function() {
     SubsCache.subscribe('events.all')
+    SubsCache.subscribe('instances.all')
     SubsCache.subscribe('tickets.all')
+
+    this.autorun(() => {
+        if (SubsCache.ready()) {
+            this.event = Events.findOne(Instances.findOne(FlowRouter.getParam('id')).eventId)
+            this.instance = Instances.findOne(FlowRouter.getParam('id'))
+        }
+    })
 });
 
 Template.buyTickets.helpers({
     event() {
-        return Events.findOne(FlowRouter.getParam('id'))
+        const a = Events.findOne(Instances.findOne(FlowRouter.getParam('id')).eventId)
+        return a
+    },
+    instance() {
+        return Instances.findOne(FlowRouter.getParam('id'))
     }
 });
 
 Template.buyTickets.events({
     'click .buyJs' (e, t) {
-        Meteor.call('ticket.buy', this, (err, res) => {
+        Meteor.call('ticket.buy', t.instance, (err, res) => {
             if (res) {
                 Session.set('purchasingTicket', res)
             }
@@ -43,8 +56,8 @@ Template.buyTickets.onDestroyed(function() {})
 Template.buyTickets.onRendered(function() {
     this.autorun(() => {
         if (SubsCache.ready()) {
-            const tk = Tickets.findOne({ userId: Meteor.userId(), eventId: FlowRouter.getParam('id'), paid: true })
-            if (tk._id) {
+            const tk = Tickets.findOne({ userId: Meteor.userId(), instanceId: FlowRouter.getParam('id'), paid: true })
+            if (tk) {
                 $('#qrcode').qrcode({
                     size: 400,
                     text: tk._id
