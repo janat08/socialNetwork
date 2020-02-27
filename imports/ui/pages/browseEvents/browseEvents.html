@@ -22,11 +22,12 @@
 
 {{#each events}}
 <div class="card" style="width: 18rem;">
-  <img src="..." class="card-img-top" alt="...">
+  <img src="{{frontCover}}" class="card-img-top" alt="...">
   <div class="card-body">
     <h5 class="card-title">{{title}}</h5>
+    <h7>{{startTime}}-{{endTime}}</h7>
     <p class="card-text">{{description}}</p>
-    <a href="/buy/{{_id}}" class="btn btn-primary">Buy ticket</a>
+    <a href="/buy/{{eventId}}" class="btn btn-primary">Buy ticket</a>
   </div>
 </div>
 {{/each}}

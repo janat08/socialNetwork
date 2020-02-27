@@ -14,9 +14,10 @@ Meteor.methods({
         if (!Categories.findOne({ top: top2, bottom: bottom2 })) throw new Meteor.Error('category2 non-existent')
         if (!Categories.findOne({ top: top3, bottom: bottom3 })) throw new Meteor.Error('category3 non-existent')
         Events.upsert(_id, { $set: { start: false, lat, lng, top1, bottom1, top2, bottom2, top3, bottom3, ...rest, limitedImages, frontCover, userId: this.userId }})
-        Instances.update({eventId: _id}, {$set: {top1, bottom1, top2, bottom2, top3, bottom3, lat, lng}})
+        Instances.update({eventId: _id}, {$set: {top1, bottom1, top2, bottom2, top3, bottom3, lat, lng, frontCover}}, {multi: true})
     },
     "instance.add" (i) {
+        if (!i.startTime || !i.endTime) throw new Meteor.Error('specify time')
         i.totalStart = moment(i.start).hour(i.startTime.split(":")[0]).minute(i.startTime.split(":")[1]).toDate()
         i.totalEnd = moment(i.end).hour(i.endTime.split(":")[0]).minute(i.endTime.split(":")[1]).toDate()
         try {

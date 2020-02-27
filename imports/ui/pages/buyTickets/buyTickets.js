@@ -43,11 +43,11 @@ Template.buyTickets.onDestroyed(function() {})
 Template.buyTickets.onRendered(function() {
     this.autorun(() => {
         if (SubsCache.ready()) {
-            const {_id} = Tickets.findOne({ userId: Meteor.userId(), eventId: FlowRouter.getParam('id') })
-            if (_id) {
+            const tk = Tickets.findOne({ userId: Meteor.userId(), eventId: FlowRouter.getParam('id'), paid: true })
+            if (tk._id) {
                 $('#qrcode').qrcode({
                     size: 400,
-                    text: _id
+                    text: tk._id
                 });
             }
         }

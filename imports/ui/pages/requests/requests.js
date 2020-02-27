@@ -10,7 +10,7 @@ Template.requests.onCreated(function() {
 
 Template.requests.helpers({
     requests() {
-        const requests = FriendRequests.find({ requestee: Meteor.userId(), erase: { $ne: true } }).fetch()
+        const requests = FriendRequests.find({ requestee: Meteor.userId(), pending: true, erase: { $ne: true } }).fetch()
         return requests.map(x => {
             x.user = Users.findOne(x.requestee)
             return x

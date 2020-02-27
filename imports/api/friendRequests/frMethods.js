@@ -25,8 +25,9 @@ Meteor.methods({
     },
     'friendRequests.accept' ({ _id }) {
         const FR = FriendRequests.findOne(_id)
+        console.log(FR, this.userId)
         if (this.connection) {
-            if (this.userId != FR.requester) {
+            if (this.userId != FR.requestee) {
                 throw new Meteor.Error('500')
             }
         }

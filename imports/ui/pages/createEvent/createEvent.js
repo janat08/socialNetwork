@@ -236,7 +236,7 @@ let closeModal = () => {
 };
 
 Template.addEditEventModal.events({
-  'submit form' (event, template) {
+  'submit #add-edit-event-form' (event, template) {
     event.preventDefault();
 
     let eventModal = Session.get('eventModal'),
@@ -252,7 +252,7 @@ Template.addEditEventModal.events({
     if (submitType === 'editEvent') {
       eventItem._id = eventModal.event;
     }
-
+    console.log(submitType, eventItem)
     Meteor.call(submitType, eventItem, (error) => {
       if (error) {
         // Bert.alert( error.reason, 'danger' );

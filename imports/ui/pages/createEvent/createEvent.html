@@ -131,12 +131,12 @@ Senior Age: <input name="seniorAge">
               <div class="col-xs-12 col-sm-3">
                 <label for="start">Event Starts</label>
                 <input disabled type="text" name="start" class="form-control" value="{{event.start}}">
-                <input class='picker' name="picker" placeholder="Pick Start">
+                <input class='picker' name="picker" placeholder="Pick Start" value="{{event.startTime}}">
               </div>
               <div class="col-xs-12 col-sm-3">
                 <label for="end">Event End</label>
                 <input disabled type="text" name="end" class="form-control" value="{{#if event.end}}{{event.end}}{{else}}{{event.start}}{{/if}}">
-                <input class='pickerEnd' name="pickerEnd" placeholder="Pick End">
+                <input class='pickerEnd' name="pickerEnd" placeholder="Pick End" value="{{event.endTime}}">
               </div>
             </div>
           </div>

@@ -1,6 +1,6 @@
 import './browseEvents.html';
 import { FlowRouter } from 'meteor/kadira:flow-router';
-import { Categories, Events } from '/imports/api/cols.js'
+import { Categories, Events, Instances } from '/imports/api/cols.js'
 import r from 'ramda'
 import flatpickr from "flatpickr";
 import 'flatpickr/dist/flatpickr.css';
@@ -22,8 +22,10 @@ var getNumber = (function() {
 
 Template.browseEvents.onCreated(function() {
     SubsCache.subscribe('events.all')
+    SubsCache.subscribe('instances.all')
     SubsCache.subscribe('categories.all')
-    this.gen = getNumber()
+    SubsCache.subscribe('images.all')
+    this.gen = getNumber
     this.timeS = new Date()
     this.timeE = moment().add(3, 'months').toDate()
     this.timeCha = new ReactiveVar(this.get())
@@ -66,9 +68,11 @@ Template.browseEvents.helpers({
                 },
             ]
         }
-        query.instances = { $elemMatch: { start: { $lte: timeE }, end: { $gte: timeS } } }
-        return Events.find()
-        return Events.find(query)
+        // query.instances = { start: { $lte: timeE }, end: { $gte: timeS } } 
+        // const instances = Instances.find(query, {fields: {eventId: 1}}).fetch().map(x=>x.eventId)
+        // console.log(instances)
+        // return Events.find({_id: {$in: instances}})
+        return Instances.find(query)
     }
 });
 
