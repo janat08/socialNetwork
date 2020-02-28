@@ -6,6 +6,9 @@ Template.imageShow.onCreated(function(){
 
 Template.imageShow.helpers({
   images(){
+    if (typeof this == 'object'){
+      return Object.assign(ImagesFiles.findOne(this.image), {class: this.class})
+    }
     return ImagesFiles.findOne(this+"")
   },
 })

@@ -1,19 +1,14 @@
 undone:
+fix geolocation
+css styles
 geolocation search
-add username and email fields to findFriends page
-submit with images wont work on createevent
-images on create event
-test that images are limited to 10, frontcover exists
-check frontCover on browseEvents, make sure that the link is also duplicated
-remove old instances and tickets unbought
+make tickets go through email, and delete images after instance is over
+
 
 backlog
 wall background doesn't save on form
 billing for google project
-geolocation turned off
-background on walls
 background images on users walls
-make tickets go through email, and delete images after instance is over
 syncedCron wont work
 
 done:

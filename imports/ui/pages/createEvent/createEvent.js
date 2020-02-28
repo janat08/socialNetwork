@@ -213,16 +213,17 @@ Template.createEvent.events({
       // top3: tV3,
       // bottom3: bV3,
       type: t.publicity.get(),
-      images: t.currentUpload.array(),
       frontCover: t.frontCover.get(),
-      _id: this._id
+      images: t.currentUpload.array().map(x=>x.doc._id),
+      _id: t._id
     }
 
     $.each($('#post').serializeArray(), function(i, field) {
-      console.log(field.name)
       document[field.name] = field.value;
     });
-
+    
+    //bugs out otherwise; if images are not declared here
+    document.images= t.currentUpload.array().map(x=>x.doc._id),
     document.publicity = !!(document.publicity * 1)
 
     Meteor.call('events.upsert', { ...document }, (err, suc) => {

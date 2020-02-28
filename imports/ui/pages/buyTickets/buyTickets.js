@@ -26,6 +26,10 @@ Template.buyTickets.helpers({
     },
     instance() {
         return Instances.findOne(FlowRouter.getParam('id'))
+    },
+    images() {
+        const a = Events.findOne(Instances.findOne(FlowRouter.getParam('id')).eventId).images
+        return a
     }
 });
 

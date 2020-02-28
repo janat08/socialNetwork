@@ -12,7 +12,7 @@ Template.findFriend.onCreated(function() {
 });
 
 Template.findFriend.onRendered(function() {
-    function sourcesFactory(queryMod, value, value2) {
+    function sourcesFactory(queryMod, value, value2, single = false, email = false) {
         return function(query, sync, aasync) {
             const username = query
 
@@ -20,8 +20,8 @@ Template.findFriend.onRendered(function() {
                 return []
             }
             const reg = new RegExp(escapeRegex(username), 'gi')
-            const nonRequested = FriendRequests.find({ $or: [{requester: Meteor.userId()}, {requestee: Meteor.userId()}] }).fetch().map(x => Users.findOne(x.requestee)._id)
-            const nonFriended = Meteor.user().friends.map(x=>x.targetId)
+            const nonRequested = FriendRequests.find({ $or: [{ requester: Meteor.userId() }, { requestee: Meteor.userId() }] }).fetch().map(x => Users.findOne(x.requestee)._id)
+            const nonFriended = Meteor.user().friends.map(x => x.targetId)
             const res = Users.find({
                     _id: { $nin: nonRequested.concat(nonFriended) },
                     $or: [{
@@ -30,19 +30,33 @@ Template.findFriend.onRendered(function() {
                 }).fetch()
                 .map(x => {
                     console.log(x, value)
+                    if (email){
+                        return ({...x, value: `${x.emails[0].address}`})
+                    }
+                    if (single) {
+                        return ({ ...x, value: `${x[value[0]]}` })
+                    }
                     return ({ ...x, value: `${x[value[0]][value[1]]} ${value2 && (x[value2[0]][value2[1]])}` })
                 })
             sync(res)
         }
     }
 
-    $('.typeahead ').typeahead({},{
+    $('.typeahead ').typeahead({}, {
         name: 'first',
         source: sourcesFactory("profile.first", ['profile', 'first'], ['profile', 'last']),
         display: 'value',
     }, {
         name: 'street',
         source: sourcesFactory("address.street", ['address', 'street']),
+        display: 'value',
+    }, {
+        name: 'username',
+        source: sourcesFactory("username", ['username'], [], true),
+        display: 'value',
+    }, {
+        name: 'email',
+        source: sourcesFactory("emails.address", ['emails', 'address'], [], false, true),
         display: 'value',
     }, {
         name: 'city',

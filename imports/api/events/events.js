@@ -7,8 +7,9 @@ Meteor.methods({
     "events.upsert" ({ _id, top1, bottom1, top2, bottom2, top3, bottom3, images, lat, lng, frontCover, ...rest }) {
         // images length
         console.log('upsert', 'remove excess images', images[0])
-        const limitedImages = images.filter((x, i) => i < 11 || x.doc._id == frontCover).map(x => x.doc._id)
-        images.filter((x, i) => i > 10 || x.doc._id != frontCover).forEach(x => ImagesFiles.remove(x.doc._id))
+        const limitedImages = images.filter((x, i) => i < 11 || x == frontCover)
+        images.filter((x, i) => i > 10 || x != frontCover).forEach(x => ImagesFiles.remove(x))
+        console.log(limitedImages, limitedImages.length)
         if (!Categories.findOne({ top: top1, bottom: bottom1 })) throw new Meteor.Error('category1 non-existent')
         if (!Categories.findOne({ top: top2, bottom: bottom2 })) throw new Meteor.Error('category2 non-existent')
         if (!Categories.findOne({ top: top3, bottom: bottom3 })) throw new Meteor.Error('category3 non-existent')
@@ -26,7 +27,7 @@ Meteor.methods({
                 top3,
                 bottom3,
                 ...rest,
-                limitedImages,
+                images: limitedImages,
                 frontCover,
                 userId: this.userId
             }
@@ -77,9 +78,9 @@ Meteor.methods({
             throw new Meteor.Error('500', `${ exception }`);
         }
     },
-    "ticket.buy" ({ eventId, totalStart }) {
+    "ticket.buy" ({ _id, totalStart }) {
         if (!this.userId) throw new Meteor.Error('login')
-        return Tickets.insert({ eventId, totalStart, userId: this.userId, paid: false, date: new Date() })
+        return Tickets.insert({ instanceId: _id, totalStart, userId: this.userId, paid: false, date: new Date() })
     },
     "ticket.accept" (id) {
         const ticket = Tickets.findOne(id)

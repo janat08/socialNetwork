@@ -22,9 +22,9 @@
 
 {{#each events}}
 <div class="card" style="width: 18rem;">
-    {{#with frontCover}}
-        {{> imageShow class="card-img-top"}}
-    {{/with}}
+    <!--{{#with frontCover}}-->
+        {{> imageShow image=frontCover class="card-img-top"}}
+    <!--{{/with}}-->
   <div class="card-body">
     <h5 class="card-title">{{title}}</h5>
     <h7>{{startTime}}-{{endTime}}</h7>
