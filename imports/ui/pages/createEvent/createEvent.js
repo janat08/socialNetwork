@@ -81,7 +81,8 @@ Template.createEvent.onRendered(function() {
   });
   $(".geocomplete").geocomplete({
     details: 'form',
-    types: ['geocode']
+    map: '.map_canvas',
+    // types: ['geocode']
   })
 });
 

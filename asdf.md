@@ -1,29 +1,3 @@
-undone:
-show admission info
-invite friends
-css specs
-control acces for private events
-make tickets go through email, and delete images after instance is over
-fix geolocation plugin- incorrect loading, and plugin wont work maybe change script import, test jquery 1.7.1 as per example view-source:http://ubilabs.github.io/geocomplete/examples/map.html
-geolocation search
-
-
-backlog
-wall background doesn't save on form
-billing for google project
-background images on users walls
-syncedCron wont work
-
-done:
-fixed the forms, everything else seems to be working (I logged in with account that had nothing, so assumed nothing works)
-qr code needs to be linked in email
-3 subcategories pick for event
-
-Schema
-user > post> owner> user
-user > friend > user
-
-
 Hi jan
 
 We are going to create an Events app, this is not an independent app but more a module in the sociaty app we started eralier.
@@ -43,6 +17,26 @@ To create an event we will need the following inputs:
 	7 - photos of the event
 	8 - category for the event
 
+1 - access to the event:
+	
+	This is simple 2 buttons "Public" or "Private": The chosen template is visible - the other not visible!
+	
+	Public is i.e. an exibition, a conference, a theater-show or a football match etc. etc. 
+	When you set up an Event as PUBLIC it means that your Event will be published on the Events Board without any other restrictions 
+	than what is given by admission fee - admission age and normal public restrictions. The Event will be shown to everyone and accessible to
+        everyone - it will be an PUBLIC EVENT.
+
+	Private is i.e. a wedding or a birthday-party, a company-picnic etc. etc. Private Event is not open to the public.You have the opportunity to restrict the scope of people
+	invited, to family only - friends - family and close friends or all friends - in short - to the way we divided the friends earlier. Which means that we 
+	need some radio-buttons or some check-buttons, to make the dividing. Private Events will NOT be published on the Events Board.
+
+2 - title of the event:
+
+	This is nothing more than a input control.
+
+3 - describtion of the event:
+
+	 nothing more than a text-area control
 
 4 - address for the event:
 	
@@ -63,9 +57,67 @@ To create an event we will need the following inputs:
 
 	The 'Ongoing event' is i.e. museums - national buildings - theaters - galeries  etc.etc. Events that dont have a start or stop day.
 	This item require more data from the events-holders - so for now - we will just fill in some dummy-data where needed.
+
+6 - admission to the event.
+
+	Here we just set up some few inputs:
+	text-input: Adult Price - text-input: Adult Age -  text-input: Senior Price - text-input: Senior Age - text-input: Children Price - text-input: Adult Age.
+
+7 - photos of the event.
+
+	This is just an ordinary img/file upload as you have done before, however we need to be able to set/pick a front img.( we might have 6 images uploaded to cover the event -
+	but we need to be able to show the 'official' image, when only showing one. 
+	And we want to limit the numbers of uploaded photos to 10. (to avoid people uploade unreasonable amounts). 
+
+8 - category for the event.
+
+	There may be innumerable different type of events, and to address that we need to categories them with sub-categories - we could make that multi-level, with sub-cat and 
+	sub-sub-cat and so on, but I prefere 2 level - main and sub - something like this:
+
+	mainCategory	subCategory
+	
+	sport
+		Air-sport
+		Atheletics
+		Ball over net
+		Ball outdoor
+		Ball indoor
+		Bike
+		Combatsports
+		Dancing
+		Fishing
+		Horse-sports
+		etc. etc
+	Theater
+		DramaTheater
+		Kids Theater
+		Comedy Theater
+		Opera
+		Ballet
+		Concerts
+		etc.etc.
+	Fairs
+		Food fairs
+		Fashion fairs
+		Motor fairs
+	Music
+		...
+		...
+	Family
+		..
+		..
+	Museums
+		..
+I trust you get the pointe. There could be dozens of mainCategories and hundreds of subCategories. I dont want you to write all these items(of course not) - but I want you to make a template 
+with input-controls so we can make CRUD operations to mainCategories as well as subCategories and then save them in collection.
  
+It might be difficult to point/fasten a event to ONE exact subcategory - so I want the creator of an event, to be able to pick up to 3 subcategories for each event ( i.e. think of a mannequin-show. Is it
+an exibition, is it a fashion-show, or is it a dress-show, or maybe a charity event or ...)
 ------------------------------------------------------------
 So much for creating events - now for searching our Events -- We  will use 2 approaches -- 1. Search for the category(subcategory)   2. Search for the the place(address).
+
+1.	the category. When searching for the category you get all the events in that category - and we set up a filter with a date/interval. Lets say you are a chess geek and want to 
+	attend the next world champignon ship - you can search for this, find the location and then plan your holliday according to this. 
 
 2.	the place. This is likely a more usefull approach. When searching for a place - and filter with date - you get all the events that is happening in the place you seacrh for.
 	This can be handsom if you want to know whats going on in your own city naxt month - or if on holliday, find all the events going on where ever you may be, while you are there.
@@ -120,3 +172,6 @@ about the geocomplete-plugin:
 	I belive this is my Google-key for the maps:(please dont abuse it)
 
 	   <script async defer src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAl1Duwvw3RESUu4paACSua-UA5Ey5fryE&libraries=places"></script>
+
+
+

@@ -67,7 +67,8 @@ Template.browseEvents.helpers({
                     top3: t,
                     bottom3: b,
                 },
-            ]
+            ],
+            publicity: true,
         }
         Object.assign(query, { totalStart: { $lte: timeE }, totalEnd: { $gte: timeS } })
         

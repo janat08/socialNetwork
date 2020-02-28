@@ -4,7 +4,7 @@ Meteor.methods({
     'events.start' () {
         return Events.insert({ userId: this.userId, start: true, startDate: new Date() })
     },
-    "events.upsert" ({ _id, top1, bottom1, top2, bottom2, top3, bottom3, images, lat, lng, frontCover, ...rest }) {
+    "events.upsert" ({ publicity, _id, top1, bottom1, top2, bottom2, top3, bottom3, images, lat, lng, frontCover, ...rest }) {
         // images length
         console.log('upsert', 'remove excess images', images[0])
         const limitedImages = images.filter((x, i) => i < 11 || x == frontCover)
@@ -21,6 +21,7 @@ Meteor.methods({
                     coordinates: [lng, lat]
                 },
                 top1,
+                publicity,
                 bottom1,
                 top2,
                 bottom2,
@@ -44,7 +45,8 @@ Meteor.methods({
                     type: "Point",
                     coordinates: [lng, lat]
                 },
-                frontCover
+                frontCover,
+                publicity,
             }
         }, { multi: true })
     },
