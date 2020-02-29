@@ -71,18 +71,15 @@ Template.browseEvents.helpers({
             publicity: true,
         }
         Object.assign(query, { totalStart: { $lte: timeE }, totalEnd: { $gte: timeS } })
-        
         return Instances.find(query)
     }
 });
 
 Template.browseEvents.events({
     'change .picker' (ev, templ) {
-        templ.selected = ev.target.value
-        templ.timeCha.set(templ.gen())
-    },
-    'change .pickerEnd' (ev, templ) {
-        templ.selected = ev.target.value
+        const selected = ev.target.value.split(' to ')
+        templ.timeS = moment(selected[0]).toDate()
+        templ.timeE = moment(selected[1]).toDate()
         templ.timeCha.set(templ.gen())
     },
     'change .selectTopJs' (e, t) {
@@ -112,6 +109,11 @@ Template.browseEvents.onDestroyed(function() {})
 Template.browseEvents.onRendered(function() {
     // $(".mapJs").geocomplete()
     const instance = this
-    flatpickr(instance.find('.picker'), { defaultDate: this.timeS });
-    flatpickr(instance.find('.pickerEnd'), { defaultDate: this.timeE });
+    flatpickr(instance.find('.picker'), {
+        defaultDate: this.timeS,
+        mode: 'range',
+        minDate: "today",
+        defaultDate: [this.timeS, this.timeE]
+
+    });
 })

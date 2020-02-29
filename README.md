@@ -1,4 +1,5 @@
 undone:
+use calendar instead of datepicker
 show admission info
 invite friends
 css specs
@@ -21,6 +22,7 @@ fixed the forms, everything else seems to be working (I logged in with account t
 qr code needs to be linked in email
 3 subcategories pick for event
 fixed upsertCategory
+change browseEvents to use datePicker in range mode
 
 Schema
 user > post> owner> user
