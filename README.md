@@ -1,21 +1,16 @@
 undone:
-use calendar instead of datepicker
-show admission info
 invite friends
 css specs
 control acces for private events
 make tickets go through email, and delete images after instance is over
-fix geolocation plugin- incorrect loading, and plugin wont work maybe change script import, test jquery 1.7.1 as per example view-source:http://ubilabs.github.io/geocomplete/examples/map.html
+ view-source:http://ubilabs.github.io/geocomplete/examples/map.html
 geolocation search
 
 backlog
-wall background doesn't save on form
-syncedCron wont work
-
 wontfix
 background images on users walls (literally no money to rent or buy computer or credit since im freelancer)
 billing for google project (trial is used up, and there's no tricking them, as I already tried)
-
+fix geolocation plugin- incorrect loading, and plugin wont work maybe change script import, test jquery 1.7.1 as per example, or the google key is gone
 
 done:
 fixed the forms, everything else seems to be working (I logged in with account that had nothing, so assumed nothing works)
@@ -23,6 +18,9 @@ qr code needs to be linked in email
 3 subcategories pick for event
 fixed upsertCategory
 change browseEvents to use datePicker in range mode
+syncedCron wont work
+wall background doesn't save on form
+show admission info
 
 Schema
 user > post> owner> user

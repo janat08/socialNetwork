@@ -30,7 +30,7 @@ Template.buyTickets.helpers({
     images() {
         const a = Events.findOne(Instances.findOne(FlowRouter.getParam('id')).eventId).images
         return a
-    }
+    },
 });
 
 Template.buyTickets.events({

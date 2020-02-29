@@ -163,6 +163,7 @@ Template.userInfo.events({
                     chunkSize: 'dynamic',
                     meta: {
                         uploader: Meteor.userId(),
+                        backgroundUserId: Meteor.userId(),
                     },
                 }, false);
 

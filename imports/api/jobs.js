@@ -36,3 +36,5 @@ SyncedCron.add({
         })
     }
 });
+
+SyncedCron.start()
