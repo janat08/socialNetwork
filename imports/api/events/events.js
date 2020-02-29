@@ -1,4 +1,4 @@
-import { ImagesFiles, Categories, Events, Tickets, Instances } from '../cols.js'
+import { ImagesFiles, Categories, Events, Tickets, Instances, Users } from '../cols.js'
 import moment from 'moment'
 Meteor.methods({
     'events.start' () {
@@ -49,6 +49,25 @@ Meteor.methods({
                 publicity,
             }
         }, { multi: true })
+        const {friends, besties, colleague, family} = rest
+        if (publicity == false){
+            function invite (us, event){
+                
+            }
+            const u = Users.findOne(this.userId)
+            u.friends.forEach(x=>{
+                const t = x.type
+                if (friends && t == 'friends'){
+                    
+                } else if (besties && t == 'besties'){
+                    
+                } else if (colleague && t == 'colleague'){
+                    
+                } else if (family){
+                    
+                }
+            })
+        }
     },
     "instance.add" (i) {
         if (!i.startTime || !i.endTime) throw new Meteor.Error('specify time')

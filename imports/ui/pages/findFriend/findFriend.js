@@ -21,7 +21,11 @@ Template.findFriend.onRendered(function() {
             }
             const reg = new RegExp(escapeRegex(username), 'gi')
             const nonRequested = FriendRequests.find({ $or: [{ requester: Meteor.userId() }, { requestee: Meteor.userId() }] }).fetch().map(x => Users.findOne(x.requestee)._id)
-            const nonFriended = Meteor.user().friends.map(x => x.targetId)
+            if (Meteor.user().friends){
+                var nonFriended = Meteor.user().friends.map(x => x.targetId)
+            } else {
+                var nonFriended = []
+            }
             const res = Users.find({
                     _id: { $nin: nonRequested.concat(nonFriended) },
                     $or: [{

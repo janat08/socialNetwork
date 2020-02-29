@@ -106,7 +106,7 @@ FlowRouter.route('/upsertCategory/:bottom', {
 });
 
 FlowRouter.route('/buy/:id', {
-  name: 'App.upsertCategoryBt',
+  name: 'App.asdf',
   action() {
     BlazeLayout.render('App_body', { main: 'buyTickets' });
   },

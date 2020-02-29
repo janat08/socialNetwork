@@ -7,17 +7,20 @@ make tickets go through email, and delete images after instance is over
 fix geolocation plugin- incorrect loading, and plugin wont work maybe change script import, test jquery 1.7.1 as per example view-source:http://ubilabs.github.io/geocomplete/examples/map.html
 geolocation search
 
-
 backlog
 wall background doesn't save on form
-billing for google project
-background images on users walls
 syncedCron wont work
+
+wontfix
+background images on users walls (literally no money to rent or buy computer or credit since im freelancer)
+billing for google project (trial is used up, and there's no tricking them, as I already tried)
+
 
 done:
 fixed the forms, everything else seems to be working (I logged in with account that had nothing, so assumed nothing works)
 qr code needs to be linked in email
 3 subcategories pick for event
+fixed upsertCategory
 
 Schema
 user > post> owner> user
