@@ -33,14 +33,18 @@ Template.findFriend.onRendered(function() {
                     }]
                 }).fetch()
                 .map(x => {
-                    console.log(x, value)
                     if (email){
                         return ({...x, value: `${x.emails[0].address}`})
                     }
                     if (single) {
                         return ({ ...x, value: `${x[value[0]]}` })
                     }
-                    return ({ ...x, value: `${x[value[0]][value[1]]} ${value2 && (x[value2[0]][value2[1]])}` })
+                    let res = ({ ...x, value: `${x[value[0]][value[1]]}` })
+                    if (value2 && (x[value2[0]][value2[1]])){
+                        console.log(x[value2[0]][value2[1]], value, x)
+                        res.value+= x[value2[0]][value2[1]]
+                    }
+                    return res
                 })
             sync(res)
         }
