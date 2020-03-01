@@ -1,4 +1,4 @@
-import {Instances, Tickets, Posts, Users, Owners, FriendRequests, ImagesCollection, Events, Categories } from './cols.js'
+import {Places, Instances, Tickets, Posts, Users, Owners, FriendRequests, ImagesCollection, Events, Categories } from './cols.js'
 
 Meteor.publish('posts.all', function(){
     return Posts.find()
@@ -30,4 +30,7 @@ Meteor.publish('instances.all', function(){
 
 Meteor.publish('tickets.all', function(){
     return Tickets.find()
+})
+Meteor.publish('places.all', function(){
+    return Places.find()
 })

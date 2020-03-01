@@ -1,4 +1,4 @@
-import { ImagesFiles, Categories, Events, Tickets, Instances, Users } from '../cols.js'
+import { ImagesFiles, Categories, Events, Tickets, Instances, Users, Places } from '../cols.js'
 import moment from 'moment'
 import qr from 'qr-image'
 
@@ -8,22 +8,17 @@ Meteor.methods({
     'events.start' () {
         return Events.insert({ userId: this.userId, start: true, startDate: new Date() })
     },
-    "events.upsert" ({ publicity, _id, top1, bottom1, top2, bottom2, top3, bottom3, images, lat, lng, frontCover, ...rest }) {
+    "events.upsert" ({ publicity, _id, top1, bottom1, top2, bottom2, top3, bottom3, images, administrative_area_level_2, frontCover, ...rest }) {
         // images length
         console.log('upsert', 'remove excess images', images[0])
         const limitedImages = images.filter((x, i) => i < 11 || x == frontCover)
         images.filter((x, i) => i > 10 || x != frontCover).forEach(x => ImagesFiles.remove(x))
-        console.log(limitedImages, limitedImages.length)
         if (!Categories.findOne({ top: top1, bottom: bottom1 })) throw new Meteor.Error('category1 non-existent')
         if (!Categories.findOne({ top: top2, bottom: bottom2 })) throw new Meteor.Error('category2 non-existent')
         if (!Categories.findOne({ top: top3, bottom: bottom3 })) throw new Meteor.Error('category3 non-existent')
         Events.upsert(_id, {
             $set: {
                 start: false,
-                location: {
-                    type: "Point",
-                    coordinates: [lng, lat]
-                },
                 top1,
                 publicity,
                 bottom1,
@@ -31,6 +26,7 @@ Meteor.methods({
                 bottom2,
                 top3,
                 bottom3,
+                administrative_area_level_2,
                 ...rest,
                 images: limitedImages,
                 frontCover,
@@ -45,18 +41,19 @@ Meteor.methods({
                 bottom2,
                 top3,
                 bottom3,
-                city: rest.administrative_area_level_2,
+                city: administrative_area_level_2,
                 frontCover,
                 publicity,
             }
         }, { multi: true })
+        Places.insert({_id: administrative_area_level_2})
         const { friends, besties, colleague, family, title, description } = rest
-        const linksToEvents = Instances.find({ eventId: _id }).fetch().map(x=>{
+        const linksToEvents = Instances.find({ eventId: _id }).fetch().map(x => {
             return `<a href="/buy/${x._id}> ${x.totalStart}-${x.totalEnd} </a>`
-        }).reduce((a,x)=>a+x, " ")
+        }).reduce((a, x) => a + x, " ")
         if (publicity == false) {
             function invite(t) {
-                Meteor.call('posts.insert', { friendIds: [t], title, content: description+linksToEvents, imageIds: limitedImages.sort((x,y)=>x == frontCover? -1: 1) })
+                Meteor.call('posts.insert', { friendIds: [t], title, content: description + linksToEvents, imageIds: limitedImages.sort((x, y) => x == frontCover ? -1 : 1) })
             }
             const u = Users.findOne(this.userId)
             u.friends.forEach(x => {
@@ -110,35 +107,38 @@ Meteor.methods({
         if (!this.userId) throw new Meteor.Error('login')
         return Tickets.insert({ instanceId: _id, totalStart, userId: this.userId, paid: false, date: new Date() })
     },
-    'test' () {
-        const qrr = qr.imageSync('asdff')
-
-        ImagesFiles.write(qrr, {
-            // fileName: 'qr.png',
-            // fielId: 'abc123myId', //optional
-            // type: 'image/png'
-        }, function(writeError, fileRef) {
+    "ticket.accept" (id) {
+        const ticket = Tickets.findOne(id)
+        const qrr = qr.imageSync(id)
+        ImagesFiles.write(qrr, {}, function(writeError, fileRef) {
             if (writeError) {
                 throw writeError;
             }
             else {
-                console.log(fileRef.name + ' is successfully saved to FS. _id: ' + fileRef._id, ImagesFiles.findOne(fileRef._id).link());
-                ImagesFiles.findOne(fileRef._id).link()
-            }
-        });
-        return 'asdf'
-    },
-    "ticket.accept" (id) {
-        const ticket = Tickets.findOne(id)
-        Meteor.call('mail.create', {
-            recepients: [this.userId],
-            body: `Thank you 
+                const image = ImagesFiles.findOne(fileRef._id)
+                const iLink = image.link()
+                const inst = Instances.findOne(ticket.instanceId)
+                SyncedCron.add({
+                    name: 'deleteTicket'+ticket._id,
+                    schedule: function(parser) {
+                        return parser.recur().on(inst.totalEnd).fullDate()
+                    },
+                    job: function() {
+                        ImagesFiles.remove(fileRef._id)
+                    }
+                });
+                Meteor.call('mail.create', {
+                    recepients: [this.userId],
+                    body: `Thank you 
         for purchasing the ticket, the tickets qr code can be found at: ` +
-                Meteor.absoluteUrl('buy/' + id),
-            subject: 'Ticket for ' + ticket.title
-        })
+                        Meteor.absoluteUrl('buy/' + id) + `your ticket is:  <img src="${{iLink}}"" />`,
+                    subject: 'Ticket for ' + ticket.title
+                })
+            }
+
+
+        });
+
         return Tickets.update(id, { $set: { paid: true } })
     }
 })
-
-Meteor.call('test')

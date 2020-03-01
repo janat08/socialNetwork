@@ -16,14 +16,17 @@
             <option value="{{this}}">{{this}}</option>
         {{/each}}
     </select>
+    place: <select name="place">
+        {{#each places}}
+            <option value="{{this}}">{{this}}</option>
+        {{/each}}
+    </select>
     <input type='submit'  value="submit">
 </form>
 
 {{#each events}}
 <div class="card" style="width: 18rem;">
-    <!--{{#with frontCover}}-->
-        {{> imageShow image=frontCover class="card-img-top"}}
-    <!--{{/with}}-->
+  {{> imageShow image=frontCover class="card-img-top"}}
   <div class="card-body">
     <h5 class="card-title">{{title}}</h5>
     <h7>{{startTime}}-{{endTime}}</h7>

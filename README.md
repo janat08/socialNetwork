@@ -1,18 +1,20 @@
 undone:
-https://www.npmjs.com/package/qr-image
-https://newcodingera.com/generate-qr-code-images-using-nodejs/
-css specs
 control acces for private events
-make tickets go through email, and delete images after instance is over
-view-source:http://ubilabs.github.io/geocomplete/examples/map.html
-city search using administrative_area_level_2 https://developers.google.com/maps/documentation/geocoding/start?csw=1#Types
+control acces for private events test
 test invite friends
+test that the event instances are listed in invitation, refractor it so that they're reactive on the post
+css specs
+test qr code in email
 
 backlog
 
+warning
+there's no city field in google maps, therefore counties are used, it might make sense to use higher level field which is states for US https://developers.google.com/maps/documentation/geocoding/start?csw=1#Types
+
 wontfix
 billing for google project (trial is used up, and there's no tricking them, as I already tried)
-fix geolocation plugin- incorrect loading, and plugin wont work maybe change script import, test jquery 1.7.1 as per example, or the google key is gone
+fix geolocation plugin- the google key is gone
+test city based search
 
 done:
 fixed the forms, everything else seems to be working (I logged in with account that had nothing, so assumed nothing works)
@@ -25,6 +27,10 @@ wall background doesn't save on form
 show admission info
 background images on users walls (so computer I used to use for testing images, is no longer able to install meteor for testing, but according to css the image should be there)
 invite friends
+fixed the bug where visiting friends wall will kick you out
+fixed post to all
+make tickets go through email, and delete images after instance is over
+city search using administrative_area_level_2 
 
 
 Schema

@@ -1,6 +1,6 @@
 import './browseEvents.html';
 import { FlowRouter } from 'meteor/kadira:flow-router';
-import { Categories, Events, Instances } from '/imports/api/cols.js'
+import { Places, Categories, Events, Instances } from '/imports/api/cols.js'
 import r from 'ramda'
 import flatpickr from "flatpickr";
 import 'flatpickr/dist/flatpickr.css';
@@ -26,6 +26,8 @@ Template.browseEvents.onCreated(function() {
     SubsCache.subscribe('instances.all')
     SubsCache.subscribe('categories.all')
     SubsCache.subscribe('images.all')
+    SubsCache.subscribe('places.all')
+    
     this.gen = getNumber
     this.timeS = new Date()
     this.timeE = moment().add(3, 'months').toDate()
@@ -33,6 +35,7 @@ Template.browseEvents.onCreated(function() {
     this.topSelect = new ReactiveVar()
     this.topSel = new ReactiveVar()
     this.botSel = new ReactiveVar()
+    this.place = new ReactiveVar()
     this.autorun((c) => {
         if (SubsCache.ready()) {
             this.topSelect.set(r.uniqBy((x => x.top), Categories.find().fetch()).map(x => x.top)[0])
@@ -49,10 +52,14 @@ Template.browseEvents.helpers({
         const { topSelect } = Template.instance()
         return Categories.find({ top: topSelect.get() }).fetch().map(x => x.bottom)
     },
+    places(){
+      return Places.find().fetch().map(x=>x._id)  
+    },
     events() {
-        const { topSel, botSel, timeS, timeE, timeCha } = Template.instance()
+        const { topSel, botSel, timeS, timeE, timeCha, place } = Template.instance()
         const t = topSel.get()
         const b = botSel.get()
+        const p = place.get()
         timeCha.get()
         const query = {
             $or: [{
@@ -71,6 +78,9 @@ Template.browseEvents.helpers({
             publicity: true,
         }
         Object.assign(query, { totalStart: { $lte: timeE }, totalEnd: { $gte: timeS } })
+        if (p){
+            Object.assign(query, {city: p})
+        }
         return Instances.find(query)
     }
 });
@@ -92,15 +102,18 @@ Template.browseEvents.events({
         const {
             top: { value: tV },
             bottom: { value: bV },
+            place: {value: pV}
         } = target
 
         var document = {
             top: tV,
-            bottom: bV
+            bottom: bV,
+            place: pV,
         }
 
         t.topSel.set(tV)
         t.botSel.set(bV)
+        t.place.set(pV)
     }
 });
 
