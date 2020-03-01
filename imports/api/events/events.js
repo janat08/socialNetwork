@@ -1,5 +1,6 @@
 import { ImagesFiles, Categories, Events, Tickets, Instances, Users } from '../cols.js'
 import moment from 'moment'
+import qr from 'qr-image'
 Meteor.methods({
     'events.start' () {
         return Events.insert({ userId: this.userId, start: true, startDate: new Date() })
@@ -105,6 +106,9 @@ Meteor.methods({
     },
     "ticket.accept" (id) {
         const ticket = Tickets.findOne(id)
+        
+        
+        
         Meteor.call('mail.create', {
             recepients: [this.userId],
             body: `Thank you 

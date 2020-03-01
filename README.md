@@ -1,4 +1,7 @@
 undone:
+https://www.npmjs.com/package/qr-image
+https://newcodingera.com/generate-qr-code-images-using-nodejs/
+
 invite friends
 css specs
 control acces for private events
