@@ -52,6 +52,11 @@ Template.buyTickets.events({
                 Session.set('purchasingTicket', false)
             }
         })
+    },
+    'click .testJs'(){
+        Meteor.call('test', (err,res)=>{
+            console.log(res)
+        })
     }
 });
 

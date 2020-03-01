@@ -1,6 +1,9 @@
 import { ImagesFiles, Categories, Events, Tickets, Instances, Users } from '../cols.js'
 import moment from 'moment'
 import qr from 'qr-image'
+
+
+
 Meteor.methods({
     'events.start' () {
         return Events.insert({ userId: this.userId, start: true, startDate: new Date() })
@@ -42,30 +45,33 @@ Meteor.methods({
                 bottom2,
                 top3,
                 bottom3,
-                location: {
-                    type: "Point",
-                    coordinates: [lng, lat]
-                },
+                city: rest.administrative_area_level_2,
                 frontCover,
                 publicity,
             }
         }, { multi: true })
-        const {friends, besties, colleague, family} = rest
-        if (publicity == false){
-            function invite (us, event){
-                
+        const { friends, besties, colleague, family, title, description } = rest
+        const linksToEvents = Instances.find({ eventId: _id }).fetch().map(x=>{
+            return `<a href="/buy/${x._id}> ${x.totalStart}-${x.totalEnd} </a>`
+        }).reduce((a,x)=>a+x, " ")
+        if (publicity == false) {
+            function invite(t) {
+                Meteor.call('posts.insert', { friendIds: [t], title, content: description+linksToEvents, imageIds: limitedImages.sort((x,y)=>x == frontCover? -1: 1) })
             }
             const u = Users.findOne(this.userId)
-            u.friends.forEach(x=>{
+            u.friends.forEach(x => {
                 const t = x.type
-                if (friends && t == 'friends'){
-                    
-                } else if (besties && t == 'besties'){
-                    
-                } else if (colleague && t == 'colleague'){
-                    
-                } else if (family){
-                    
+                if (friends && t == 'friends') {
+                    invite('friends')
+                }
+                else if (besties && t == 'besties') {
+                    invite('besties')
+                }
+                else if (colleague && t == 'colleague') {
+                    invite('colleague')
+                }
+                else if (family) {
+                    invite('family')
                 }
             })
         }
@@ -104,11 +110,26 @@ Meteor.methods({
         if (!this.userId) throw new Meteor.Error('login')
         return Tickets.insert({ instanceId: _id, totalStart, userId: this.userId, paid: false, date: new Date() })
     },
+    'test' () {
+        const qrr = qr.imageSync('asdff')
+
+        ImagesFiles.write(qrr, {
+            // fileName: 'qr.png',
+            // fielId: 'abc123myId', //optional
+            // type: 'image/png'
+        }, function(writeError, fileRef) {
+            if (writeError) {
+                throw writeError;
+            }
+            else {
+                console.log(fileRef.name + ' is successfully saved to FS. _id: ' + fileRef._id, ImagesFiles.findOne(fileRef._id).link());
+                ImagesFiles.findOne(fileRef._id).link()
+            }
+        });
+        return 'asdf'
+    },
     "ticket.accept" (id) {
         const ticket = Tickets.findOne(id)
-        
-        
-        
         Meteor.call('mail.create', {
             recepients: [this.userId],
             body: `Thank you 
@@ -119,3 +140,5 @@ Meteor.methods({
         return Tickets.update(id, { $set: { paid: true } })
     }
 })
+
+Meteor.call('test')

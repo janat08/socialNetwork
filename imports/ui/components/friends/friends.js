@@ -52,7 +52,7 @@ Template.friends.events({
         messageAll('family')
     },
     'click .colleaguesJs' (e, t) {
-        messageAll('colleagues')
+        messageAll('colleague')
     },
     'click .friendsJs' (e, t) {
         messageAll('friends')

@@ -11,5 +11,8 @@ var config = {
 if (!Meteor.isProduction) {
     Object.assign(config, { storagePath: "C:\shop_pix" })
 }
+// if (!Meteor.isProduction) {
+//     Object.assign(config, { storagePath: "/home/ubuntu/environment/images" })
+// }
 export const ImagesFiles = new FilesCollection(config);
 

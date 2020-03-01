@@ -6,12 +6,13 @@ Template.friendsWall.onCreated(function() {
     SubsCache.subscribe('posts.all')
     SubsCache.subscribe('owners.all')
     SubsCache.subscribe('users.all')
+    SubsCache.subscribe('images.all')
 
     this.autorun(() => {
         if (SubsCache.ready()) {
             const user = Users.findOne(FlowRouter.getParam('friendId'))
             const blocked = user.friends.find(x => x.targetId == Meteor.userId()).blocked
-            if (blocked || !user || user.friends.map(x => x.targetId).indexOf(FlowRouter.getParam('friendId')) == -1) {
+            if (blocked || !user || user.friends.map(x => x.targetId).indexOf(Meteor.userId()) == -1) {
                 FlowRouter.go('App.home')
                 return
             }
@@ -24,7 +25,7 @@ Template.friendsWall.onRendered(function() {
         if (SubsCache.ready()) {
             const user = Users.findOne(FlowRouter.getParam('friendId'))
             if (user.settings.background) {
-                const link = ImagesFiles.findOne(user.settings.background).link
+                const link = ImagesFiles.findOne(user.settings.background).link()
                 $('body').css('background-image', `url(${link})`);
             }
 

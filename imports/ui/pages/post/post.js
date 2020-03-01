@@ -4,6 +4,7 @@ import { Users, ImagesFiles } from '/imports/api/cols.js'
 
 Template.post.onCreated(function() {
     SubsCache.subscribe('images.all')
+    SubsCache.subscribe('users.all')
     this.currentUpload = new ReactiveArray()
     //meant to cause reactivity on object updates in current upload
     this.insertedUploads = new ReactiveVar(0)
@@ -39,10 +40,10 @@ Template.post.events({
         } = target
 
         const images = templ.currentUpload
-
+        var id = FlowRouter.getParam('friendId')
         var document = {
             imageIds: images.map(x => x.doc._id),
-            friendId: FlowRouter.getParam('friendId'),
+            friendIds: [id],
             title: tV,
             content: cV
         }
@@ -52,7 +53,7 @@ Template.post.events({
                 alert(err)
             }
             else {
-                FlowRouter.go('App.friends')
+                // FlowRouter.go('App.friends')
             }
         });
     },

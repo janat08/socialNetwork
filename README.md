@@ -1,17 +1,16 @@
 undone:
 https://www.npmjs.com/package/qr-image
 https://newcodingera.com/generate-qr-code-images-using-nodejs/
-
-invite friends
 css specs
 control acces for private events
 make tickets go through email, and delete images after instance is over
- view-source:http://ubilabs.github.io/geocomplete/examples/map.html
-geolocation search
+view-source:http://ubilabs.github.io/geocomplete/examples/map.html
+city search using administrative_area_level_2 https://developers.google.com/maps/documentation/geocoding/start?csw=1#Types
+test invite friends
 
 backlog
+
 wontfix
-background images on users walls (literally no money to rent or buy computer or credit since im freelancer)
 billing for google project (trial is used up, and there's no tricking them, as I already tried)
 fix geolocation plugin- incorrect loading, and plugin wont work maybe change script import, test jquery 1.7.1 as per example, or the google key is gone
 
@@ -24,10 +23,13 @@ change browseEvents to use datePicker in range mode
 syncedCron wont work
 wall background doesn't save on form
 show admission info
+background images on users walls (so computer I used to use for testing images, is no longer able to install meteor for testing, but according to css the image should be there)
+invite friends
+
 
 Schema
 user > post> owner> user
-user > friend > user
+user > user
 
 
 Hi jan
