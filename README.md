@@ -1,10 +1,11 @@
 undone:
 control acces for private events
 control acces for private events test
-test invite friends
+test invite friends/post all
 test that the event instances are listed in invitation, refractor it so that they're reactive on the post
 css specs
 test qr code in email
+refractor post to friends/family so that it may simultaneously post to several types of circles at once, without requiring 4 posts to post to all circles
 
 backlog
 
