@@ -94,7 +94,7 @@ Template.createEvent.helpers({
     const ids = curUpload.filter(x => x.doc).map(x => x.doc._id)
     const uId = Meteor.userId()
     const query = [{ _id: { $in: ids } }]
-    if (uId) query.push({ "meta.userId": uId })
+    if (uId) query.push({ "meta.eventId": Session.get('eventId') })
     return ImagesFiles.find({ $or: query }).each().concat(curUpload.filter(x => !x.doc));
   },
   isFrontCover(ind) {
@@ -215,17 +215,17 @@ Template.createEvent.events({
       // bottom3: bV3,
       type: t.publicity.get(),
       frontCover: t.frontCover.get(),
-      images: t.currentUpload.array().map(x=>x.doc._id),
+      images: t.currentUpload.array().map(x => x.doc._id),
       _id: t._id
     }
 
     $.each($('#post').serializeArray(), function(i, field) {
       document[field.name] = field.value;
     });
-    
+
     //bugs out otherwise; if images are not declared here
-    document.images= t.currentUpload.array().map(x=>x.doc._id),
-    document.publicity = !!(document.publicity * 1)
+    document.images = t.currentUpload.array().map(x => x.doc._id),
+      document.publicity = !!(document.publicity * 1)
     console.log(document)
     Meteor.call('events.upsert', { ...document }, (err, suc) => {
       console.log(suc, err)
@@ -299,7 +299,9 @@ Template.addEditEventModal.events({
     if (submitType === 'instance.edit') {
       eventItem._id = eventModal.event;
     }
-    console.log(submitType, eventItem)
+    eventItem.totalStart = moment(eventItem.start).hour(eventItem.startTime.split(":")[0]).minute(eventItem.startTime.split(":")[1]).toDate()
+    eventItem.totalEnd = moment(eventItem.end).hour(eventItem.endTime.split(":")[0]).minute(eventItem.endTime.split(":")[1]).toDate()
+
     Meteor.call(submitType, eventItem, (error) => {
       if (error) {
         console.log(error)

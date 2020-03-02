@@ -1,14 +1,8 @@
 undone:
-test control acces for private events
-test invite friends/post all
-test that the event instances are listed in invitation, refractor it so that they're reactive on the post, delete link to events from upsert
-css specs
-test qr code in email
-image picker in create event wont reset between page refreshes
-convert the totalStart/totalEnd on clientSide so that tz changes are recorded
 
 backlog
 do something about top category batched edits, and sync them with events
+css specs
 
 warning
 there's no city field in google maps, therefore counties are used, it might make sense to use higher level field which is states for US https://developers.google.com/maps/documentation/geocoding/start?csw=1#Types
@@ -19,6 +13,7 @@ billing for google project (trial is used up, and there's no tricking them, as I
 fix geolocation plugin- the google key is gone
 test city based search
 there's no way for event creator to reach event created to edit it
+test qr code in email (no computer)
 
 done:
 fixed the forms, everything else seems to be working (I logged in with account that had nothing, so assumed nothing works)
@@ -39,6 +34,11 @@ calendar work for span of days
 control acces for private events
 refractor post to friends/family so that it may simultaneously post to several types of circles at once, without requiring 4 posts to post to all circles
 refractor browseEvents to not use totalEnd/Start since instances span days now
+convert the totalStart/totalEnd on clientSide so that tz changes are recorded
+test that the event instances are listed in invitation, refractor it so that they're reactive on the post, delete link to events from upsert, test invite friends/post all
+test control acces for private events
+remove unused images for events
+image picker in create event wont reset between page refreshes
 
 Schema
 user > post> owner> user

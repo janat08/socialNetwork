@@ -13,16 +13,18 @@ Template.buyTickets.onCreated(function() {
     SubsCache.subscribe('users.all')
 
     this.autorun(() => {
+        Users.findOne(event.userId)
         if (SubsCache.ready()) {
             this.event = Events.findOne(Instances.findOne(FlowRouter.getParam('id')).eventId)
             this.instance = Instances.findOne(FlowRouter.getParam('id'))
             const {event: e, instance: i} = this
             if (!e || !e.publicity){
-                const u = Users.findOne(event.userId)
+                const u = Users.findOne(e.userId)
+                console.log(u, e)
                 const f = u.friends.filter(x=>{
                     return x.targetId == Meteor.userId() && !!event[x.type]
                 })
-                if (f.length = 0){
+                if (f.length == 0){                
                     FlowRouter.go('App.home')
                 }
             }

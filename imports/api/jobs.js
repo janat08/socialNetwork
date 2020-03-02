@@ -8,7 +8,10 @@ SyncedCron.add({
     },
     job: function() {
         console.log('removing')
-        Events.remove({start: true, date: {$lte: moment().subtract(1, 'days').toDate()}})
+        const query = {start: true, date: {$lte: moment().subtract(1, 'days').toDate()}}
+        const ids = Events.find(query).fetch().map(x=>x._id)
+        ImagesFiles.remove({"meta.eventId": {$in: ids}})
+        Events.remove(query)
     }
 });
 

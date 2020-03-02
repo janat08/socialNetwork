@@ -79,26 +79,6 @@ Meteor.methods({
                 imageIds: limitedImages.sort((x, y) => x == frontCover ? -1 : 1),
                 instanceIds
             })
-            // function invite(t) {
-            //     Meteor.call('posts.insert', { friendIds: [t], title, content: description + linksToEvents, imageIds: limitedImages.sort((x, y) => x == frontCover ? -1 : 1) })
-            // }
-            // const u = Users.findOne(this.userId)
-            // u.friends.forEach(x => {
-            //     const t = x.type
-            //     const ar = []
-            //     if (friends && t == 'friends') {
-            //         invite('friends')
-            //     }
-            //     else if (besties && t == 'besties') {
-            //         invite('besties')
-            //     }
-            //     else if (colleague && t == 'colleague') {
-            //         invite('colleague')
-            //     }
-            //     else if (family) {
-            //         invite('family')
-            //     }
-            // })
         }
     },
     "instance.add" (i) {
