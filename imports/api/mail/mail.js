@@ -26,7 +26,7 @@ Meteor.methods({
       from: 'Excited User <me@samples.mailgun.org>',
       to: recepient,
       subject: subject,
-      text: body
+      html: body
     };
     mg.messages().send(data, function(error, body) {
       console.log('response', body, error);

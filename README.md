@@ -7,6 +7,7 @@ css specs
 warning
 there's no city field in google maps, therefore counties are used, it might make sense to use higher level field which is states for US https://developers.google.com/maps/documentation/geocoding/start?csw=1#Types
 editing event will create new post
+I supposedly should have base64 encoded image, instead of linking the image with href for QR image
 
 wontfix
 billing for google project (trial is used up, and there's no tricking them, as I already tried)
