@@ -40,6 +40,7 @@ test that the event instances are listed in invitation, refractor it so that the
 test control acces for private events
 remove unused images for events
 image picker in create event wont reset between page refreshes
+double check that qr email should work
 
 Schema
 user > post> owner> user

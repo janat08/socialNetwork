@@ -34,6 +34,7 @@ Meteor.methods({
                 userId: this.userId
             }
         })
+        const {title, description} = rest
         Instances.update({ eventId: _id }, {
             $set: {
                 top1,
@@ -45,6 +46,8 @@ Meteor.methods({
                 city: administrative_area_level_2,
                 frontCover,
                 publicity,
+                title,
+                description
             }
         }, { multi: true })
         if (administrative_area_level_2) {
@@ -140,7 +143,7 @@ Meteor.methods({
                     body: `Thank you 
         for purchasing the ticket, the tickets qr code can be found at: ` +
                         Meteor.absoluteUrl('buy/' + id) + `your ticket is:  <img src="${{iLink}}"" />`,
-                    subject: 'Ticket for ' + ticket.title
+                    subject: 'Ticket for ' + inst.title
                 })
             }
 
