@@ -1,21 +1,24 @@
 undone:
-control acces for private events
-control acces for private events test
+test control acces for private events
 test invite friends/post all
-test that the event instances are listed in invitation, refractor it so that they're reactive on the post
+test that the event instances are listed in invitation, refractor it so that they're reactive on the post, delete link to events from upsert
 css specs
 test qr code in email
-refractor post to friends/family so that it may simultaneously post to several types of circles at once, without requiring 4 posts to post to all circles
+image picker in create event wont reset between page refreshes
+convert the totalStart/totalEnd on clientSide so that tz changes are recorded
 
 backlog
+do something about top category batched edits, and sync them with events
 
 warning
 there's no city field in google maps, therefore counties are used, it might make sense to use higher level field which is states for US https://developers.google.com/maps/documentation/geocoding/start?csw=1#Types
+editing event will create new post
 
 wontfix
 billing for google project (trial is used up, and there's no tricking them, as I already tried)
 fix geolocation plugin- the google key is gone
 test city based search
+there's no way for event creator to reach event created to edit it
 
 done:
 fixed the forms, everything else seems to be working (I logged in with account that had nothing, so assumed nothing works)
@@ -32,7 +35,10 @@ fixed the bug where visiting friends wall will kick you out
 fixed post to all
 make tickets go through email, and delete images after instance is over
 city search using administrative_area_level_2 
-
+calendar work for span of days
+control acces for private events
+refractor post to friends/family so that it may simultaneously post to several types of circles at once, without requiring 4 posts to post to all circles
+refractor browseEvents to not use totalEnd/Start since instances span days now
 
 Schema
 user > post> owner> user

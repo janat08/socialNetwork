@@ -1,6 +1,6 @@
 import './buyTickets.html';
 import { FlowRouter } from 'meteor/kadira:flow-router';
-import { Tickets, Events, Instances } from '/imports/api/cols.js'
+import { Tickets, Events, Instances, Users } from '/imports/api/cols.js'
 import r from 'ramda'
 import moment from 'moment'
 import '/imports/ui/components/imageShow/imageShow.js'
@@ -10,11 +10,22 @@ Template.buyTickets.onCreated(function() {
     SubsCache.subscribe('events.all')
     SubsCache.subscribe('instances.all')
     SubsCache.subscribe('tickets.all')
+    SubsCache.subscribe('users.all')
 
     this.autorun(() => {
         if (SubsCache.ready()) {
             this.event = Events.findOne(Instances.findOne(FlowRouter.getParam('id')).eventId)
             this.instance = Instances.findOne(FlowRouter.getParam('id'))
+            const {event: e, instance: i} = this
+            if (!e || !e.publicity){
+                const u = Users.findOne(event.userId)
+                const f = u.friends.filter(x=>{
+                    return x.targetId == Meteor.userId() && !!event[x.type]
+                })
+                if (f.length = 0){
+                    FlowRouter.go('App.home')
+                }
+            }
         }
     })
 });

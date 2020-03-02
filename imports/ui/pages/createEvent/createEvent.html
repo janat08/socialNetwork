@@ -131,15 +131,15 @@ Senior Age: <input name="seniorAge">
         <div class="modal-body">
           <div class="form-group">
             <div class="row">
-              <div class="col-xs-12 col-sm-3">
+              <div class="col-xs-12 col-sm-6">
                 <label for="start">Event Starts</label>
-                <input disabled type="text" name="start" class="form-control" value="{{event.start}}">
-                <input class='picker' name="picker" placeholder="Pick Start" value="{{event.startTime}}">
+                <input type="text" name="start" class="form-control" value="{{event.start}}">
+                <input class='picker form-control' name="picker" placeholder="Pick Time" value="{{event.startTime}}">
               </div>
-              <div class="col-xs-12 col-sm-3">
+              <div class="col-xs-12 col-sm-6">
                 <label for="end">Event End</label>
-                <input disabled type="text" name="end" class="form-control" value="{{#if event.end}}{{event.end}}{{else}}{{event.start}}{{/if}}">
-                <input class='pickerEnd' name="pickerEnd" placeholder="Pick End" value="{{event.endTime}}">
+                <input type="text" name="end" class="form-control" value="{{#if event.end}}{{event.end}}{{else}}{{event.start}}{{/if}}">
+                <input class='pickerEnd form-control' name="pickerEnd" placeholder="Pick Time" value="{{event.endTime}}">
               </div>
             </div>
           </div>

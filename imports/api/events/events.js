@@ -10,6 +10,7 @@ Meteor.methods({
     },
     "events.upsert" ({ publicity, _id, top1, bottom1, top2, bottom2, top3, bottom3, images, administrative_area_level_2, frontCover, ...rest }) {
         // images length
+        if (!rest.title) throw new Meteor.Error('add title')
         console.log('upsert', 'remove excess images', images[0])
         const limitedImages = images.filter((x, i) => i < 11 || x == frontCover)
         images.filter((x, i) => i > 10 || x != frontCover).forEach(x => ImagesFiles.remove(x))
@@ -46,31 +47,58 @@ Meteor.methods({
                 publicity,
             }
         }, { multi: true })
-        Places.insert({_id: administrative_area_level_2})
-        const { friends, besties, colleague, family, title, description } = rest
-        const linksToEvents = Instances.find({ eventId: _id }).fetch().map(x => {
-            return `<a href="/buy/${x._id}> ${x.totalStart}-${x.totalEnd} </a>`
-        }).reduce((a, x) => a + x, " ")
-        if (publicity == false) {
-            function invite(t) {
-                Meteor.call('posts.insert', { friendIds: [t], title, content: description + linksToEvents, imageIds: limitedImages.sort((x, y) => x == frontCover ? -1 : 1) })
-            }
-            const u = Users.findOne(this.userId)
-            u.friends.forEach(x => {
-                const t = x.type
-                if (friends && t == 'friends') {
-                    invite('friends')
-                }
-                else if (besties && t == 'besties') {
-                    invite('besties')
-                }
-                else if (colleague && t == 'colleague') {
-                    invite('colleague')
-                }
-                else if (family) {
-                    invite('family')
-                }
+        if (administrative_area_level_2) {
+            Places.insert({ _id: administrative_area_level_2 }, (err, res) => {
             })
+        }
+
+        const { friends, besties, colleague, family, title, description } = rest
+        const instanceIds = Instances.find({ eventId: _id }).fetch().map(x => {
+            return x._id
+        })
+
+        if (publicity == false) {
+            const u = Users.findOne(this.userId)
+            const ar = []
+            if (friends) {
+                ar.push('friends')
+            }
+            if (besties) {
+                ar.push('besties')
+            }
+            if (colleague) {
+                ar.push('colleague')
+            }
+            if (family) {
+                ar.push('family')
+            }
+            Meteor.call('posts.insert', {
+                friendIds: ar,
+                title,
+                content: description,
+                imageIds: limitedImages.sort((x, y) => x == frontCover ? -1 : 1),
+                instanceIds
+            })
+            // function invite(t) {
+            //     Meteor.call('posts.insert', { friendIds: [t], title, content: description + linksToEvents, imageIds: limitedImages.sort((x, y) => x == frontCover ? -1 : 1) })
+            // }
+            // const u = Users.findOne(this.userId)
+            // u.friends.forEach(x => {
+            //     const t = x.type
+            //     const ar = []
+            //     if (friends && t == 'friends') {
+            //         invite('friends')
+            //     }
+            //     else if (besties && t == 'besties') {
+            //         invite('besties')
+            //     }
+            //     else if (colleague && t == 'colleague') {
+            //         invite('colleague')
+            //     }
+            //     else if (family) {
+            //         invite('family')
+            //     }
+            // })
         }
     },
     "instance.add" (i) {
@@ -119,7 +147,7 @@ Meteor.methods({
                 const iLink = image.link()
                 const inst = Instances.findOne(ticket.instanceId)
                 SyncedCron.add({
-                    name: 'deleteTicket'+ticket._id,
+                    name: 'deleteTicket' + ticket._id,
                     schedule: function(parser) {
                         return parser.recur().on(inst.totalEnd).fullDate()
                     },

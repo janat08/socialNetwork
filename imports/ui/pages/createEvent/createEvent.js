@@ -61,7 +61,7 @@ Template.createEvent.onRendered(function() {
     eventRender(event, element) {
       element.find('.fc-content').html(
         `
-        <p class="guest-count">${ event.startTime }-${ event.endTime } Guests</p>
+        <p class="guest-count">${ event.startTime }-${ event.endTime }</p>
         `
       );
     },
@@ -226,7 +226,7 @@ Template.createEvent.events({
     //bugs out otherwise; if images are not declared here
     document.images= t.currentUpload.array().map(x=>x.doc._id),
     document.publicity = !!(document.publicity * 1)
-
+    console.log(document)
     Meteor.call('events.upsert', { ...document }, (err, suc) => {
       console.log(suc, err)
       if (suc) {
@@ -302,6 +302,7 @@ Template.addEditEventModal.events({
     console.log(submitType, eventItem)
     Meteor.call(submitType, eventItem, (error) => {
       if (error) {
+        console.log(error)
         // Bert.alert( error.reason, 'danger' );
       }
       else {

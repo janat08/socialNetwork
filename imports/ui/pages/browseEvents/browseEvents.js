@@ -81,6 +81,7 @@ Template.browseEvents.helpers({
         if (p){
             Object.assign(query, {city: p})
         }
+        console.log(query)
         return Instances.find(query)
     }
 });
@@ -88,6 +89,7 @@ Template.browseEvents.helpers({
 Template.browseEvents.events({
     'change .picker' (ev, templ) {
         const selected = ev.target.value.split(' to ')
+        console.log(selected)
         templ.timeS = moment(selected[0]).toDate()
         templ.timeE = moment(selected[1]).toDate()
         templ.timeCha.set(templ.gen())

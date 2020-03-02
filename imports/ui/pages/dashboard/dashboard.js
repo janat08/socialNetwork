@@ -1,11 +1,12 @@
 import './dashboard.html';
-import { Posts, Owners, Users } from '/imports/api/cols.js'
+import { Posts, Owners, Users, Instances } from '/imports/api/cols.js'
 
 Template.dashboard.onCreated(function() {
     this.autorun(() => {
         SubsCache.subscribe('posts.all')
         SubsCache.subscribe('owners.all')
         SubsCache.subscribe('users.all')
+        SubsCache.subscribe('instances.all')
 
     })
 });
@@ -24,8 +25,13 @@ Template.dashboard.helpers({
         }).fetch().map((x, i) => {
             x.username = Users.findOne(x.authorId).username
             return x
+        }).map(x=>{
+            if (x.instanceIds){
+                x.links = Instances.find({_id: {$in: x.instanceIds}}).fetch()
+            }
+            return x
         })
-
+console.log(res)
         return res
     }
 });
