@@ -3,7 +3,6 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Categories, Instances, ImagesFiles } from '/imports/api/cols.js'
 import r from 'ramda'
 import moment from 'moment'
-import './geocomplete.js'
 import flatpickr from "flatpickr";
 import 'flatpickr/dist/flatpickr.css';
 
@@ -79,10 +78,14 @@ Template.createEvent.onRendered(function() {
     Instances.find({ eventId: this._id }).fetch();
     $('#eventsCalendar').fullCalendar('refetchEvents');
   });
-  $(".geocomplete").geocomplete({
-    details: 'form',
-    map: '.map_canvas',
-    // types: ['geocode']
+  this.autorun(() => {
+    if (Session.get('googleApiLoaded')) {
+      $(".geocomplete").geocomplete({
+        details: 'form',
+        map: '.map_canvas',
+        // types: ['geocode']
+      })
+    }
   })
 });
 

@@ -1,7 +1,17 @@
 <body>
     <!--<script src="jquery.geocomplete.js"></script>-->
+
     <head>
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAl1Duwvw3RESUu4paACSua-UA5Ey5fryE&libraries=places"></script>
+        <script onload="apiLoaded()" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDrTAqCWaumnLiOF4-wQDAU_Xv4kNcnkWo&libraries=places"></script>
+        <script>
+            function apiLoaded() {
+                var el = document.createElement('script');
+                document.body.appendChild(el);
+                el.onload = function() {
+                    Session.set('googleApiLoaded', true)
+                };
+                el.src = 'geocomplete.js';
+            }
+        </script>
     </head>
 </body>
-
