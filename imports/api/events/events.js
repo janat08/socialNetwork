@@ -55,7 +55,7 @@ Meteor.methods({
             })
         }
 
-        const { friends, besties, colleague, family, title, description } = rest
+        const { friends, besties, colleague, family } = rest
         const instanceIds = Instances.find({ eventId: _id }).fetch().map(x => {
             return x._id
         })
