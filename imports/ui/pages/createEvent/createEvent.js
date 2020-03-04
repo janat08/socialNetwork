@@ -82,7 +82,7 @@ Template.createEvent.onRendered(function() {
     if (Session.get('googleApiLoaded')) {
       $(".geocomplete").geocomplete({
         details: 'form',
-        map: '.map_canvas',
+        map: '#map_canvas',
         // types: ['geocode']
       })
     }

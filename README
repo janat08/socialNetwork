@@ -1,21 +1,18 @@
 undone:
-get the developer key
-https://console.developers.google.com/apis/credentials?project=justdo-259609
 
 backlog
 do something about top category batched edits, and sync them with events
-css specs
-
+there's no way for event creator to reach event created to edit it
 warning
 there's no city field in google maps, therefore counties are used, it might make sense to use higher level field which is states for US https://developers.google.com/maps/documentation/geocoding/start?csw=1#Types
-editing event will create new post
+editing event will create new post - since upsert/singular method is used
 I supposedly should have base64 encoded image, instead of linking the image with href for QR image
 
 wontfix
+get api keys- https://console.developers.google.com/apis/credentials?project=justdo-259609
 billing for google project (trial is used up, and there's no tricking them, as I already tried)
 fix geolocation plugin- the google key is gone
 test city based search
-there's no way for event creator to reach event created to edit it
 test qr code in email (no computer)
 
 done:
@@ -43,6 +40,8 @@ test control acces for private events
 remove unused images for events
 image picker in create event wont reset between page refreshes
 double check that qr email should work
+make sure that the loading order once visiting create event of api key, lib, and rendering is correct
+css specs- card events
 
 Schema
 user > post> owner> user
