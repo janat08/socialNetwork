@@ -1,12 +1,14 @@
 undone:
 
 backlog
-do something about top category batched edits, and sync them with events
-there's no way for event creator to reach event created to edit it
+there's no way for event creator to reach event created to edit it, which is somewhat hairy, since tickets could be already bought,
+
 warning
+select breaks when updating categories
 there's no city field in google maps, therefore counties are used, it might make sense to use higher level field which is states for US https://developers.google.com/maps/documentation/geocoding/start?csw=1#Types
 editing event will create new post - since upsert/singular method is used
 I supposedly should have base64 encoded image, instead of linking the image with href for QR image
+deleting category will sync the events/instances, and may leave them without any filterable fields
 
 wontfix
 get api keys- https://console.developers.google.com/apis/credentials?project=justdo-259609
@@ -42,6 +44,12 @@ image picker in create event wont reset between page refreshes
 double check that qr email should work
 make sure that the loading order once visiting create event of api key, lib, and rendering is correct
 css specs- card events
+unique index on category to prevent duplicate categories
+fix delete category
+test/do sync category updates with events/instances
+top category batched edits
+stop redirecting after create category
+upsertCategory now just lists all categories in plain text with links, to avoid bugs associated with how select works, use browser finder.
 
 Schema
 user > post> owner> user

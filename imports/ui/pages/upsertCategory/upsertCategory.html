@@ -1,22 +1,16 @@
 <template name="upsertCategory">
-    category: <select name="top" class='selectTopJs'>
-        {{#each topCats}}
-            <option value="{{this}}">{{this}}</option>
-        {{/each}}
-    </select>
-    sub: <select name="bottom" class="selectBotJs">
-        {{#each bottomCats}}
-            <option value="{{this}}">{{this}}</option>
-        {{/each}}
-    </select>
-    <input type='submit'  value="submit">
-    
+
 {{#with category}}
 <form id='upsertCategory'>
-    top: <input name='top' value="{{top}}"> 
-    bottom: <input name="bottom" value="{{bottom}}">
+    top: <input name='top' class='topJs' value="{{top}}"> 
+    bottom: <input name="bottom" class='botJs' value="{{bottom}}">
     <input type='submit'  value="submit">
 </form>
 {{/with}}
 <button class='deleteJs'>Delete Category</button>
+<button class='updateAllTop'>Update all similar categories</button>
+<button><a href='/upsertCategory'>New category</a></button>
+{{#each cats}}
+    <a href='/upsertCategory/{{bottom}}'>{{top}} - {{bottom}}</a> // 
+{{/each}}
 </template>

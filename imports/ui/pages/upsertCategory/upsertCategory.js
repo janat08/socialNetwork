@@ -5,19 +5,6 @@ import r from 'ramda'
 
 Template.upsertCategory.onCreated(function() {
     SubsCache.subscribe('categories.all')
-    this.topSelect = new ReactiveVar()
-
-    this.autorun((c) => {
-        if (SubsCache.ready()) {
-            this.topSelect.set(r.uniqBy((x => x.top), Categories.find().fetch()).map(x => x.top)[0])
-            c.stop()
-        }
-    })
-    
-    this.autorun(()=>{
-        const bot = Categories.find({ top: this.topSelect.get() }).fetch().map(x => x.bottom)[0]
-        FlowRouter.go('App.upsertCategoryBt', { bottom: bot })
-    })
 });
 
 Template.upsertCategory.helpers({
@@ -25,25 +12,17 @@ Template.upsertCategory.helpers({
         const bottom = FlowRouter.getParam('bottom')
         return Categories.findOne({ bottom }) || {}
     },
-    topCats() {
-        return r.uniqBy((x => x.top), Categories.find().fetch()).map(x => x.top)
-    },
-    bottomCats() {
-        const { topSelect } = Template.instance()
-        return Categories.find({ top: topSelect.get() }).fetch().map(x => x.bottom)
-    },
+    cats(){
+        return Categories.find().fetch()
+    }
 });
 
 Template.upsertCategory.events({
-    'change .selectTopJs' (e, t) {
-        t.topSelect.set(e.target.value)
+    'click .updateAllTop' (e,t){
+        Meteor.call('categories.updateAllTop', {bot: FlowRouter.getParam('bottom'), val: $('.topJs').val()})
     },
-    'change .selectBotJs' (e,t){
-        console.log(e.target.value)
-        FlowRouter.go('App.upsertCategoryBt', { bottom: e.target.value })
-    },
-    'deleteJs' (e, t) {
-        Meteor.call('category.remove', FlowRouter.getParam('bottom'))
+    'click .deleteJs' (e, t) {
+        Meteor.call('categories.remove', FlowRouter.getParam('bottom'))
     },
     'submit #upsertCategory' (e, t) {
         e.preventDefault();
@@ -61,7 +40,8 @@ Template.upsertCategory.events({
 
         Meteor.call('categories.upsert', { oldBot: FlowRouter.getParam('bottom'), ...document }, (err, suc) => {
             if (suc) {
-                FlowRouter.go('App.upsertCategoryBt', { bottom: bV })
+                $('.topJs').val("")
+                $('.botJs').val('')
             }
         })
     }
