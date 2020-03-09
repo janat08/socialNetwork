@@ -15,7 +15,8 @@ export default new SimpleSchema({
         type: String,
     },
     instanceIds: {
-        type: Array
+        type: Array,
+        optional: true,
     },
     "instanceIds.$": {
         type: String
